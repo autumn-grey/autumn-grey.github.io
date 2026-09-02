@@ -46,7 +46,7 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .user-status .us-diag{margin-top:8px;border-top:1px solid var(--line);padding-top:7px}
 .user-status .us-diag summary{cursor:pointer;color:var(--muted)}
 .user-status .us-diag .us-line{color:#8f98a3;word-break:break-word;margin-top:3px}
-.api-key-wrap{display:flex;gap:7px}.api-key-wrap input{flex:1;min-width:0}.api-key-toggle{flex:0 0 auto;padding:8px 10px;border:1px solid #3a4048;background:#252a31;color:var(--text);border-radius:6px;cursor:pointer}.api-key-toggle:hover{background:#30363d}.help{font-size:11px;color:var(--muted);margin-top:5px}.panel-desc{margin:0 0 12px;line-height:1.7}.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}.check{display:flex;align-items:center;gap:8px;margin:8px 0;color:#d7dbe0}.check input{width:auto}.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #49515a;background:#252a31;color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer}.btn.primary{background:var(--accent);border-color:var(--accent);color:#17120c;font-weight:700}
+.api-key-wrap{display:flex;gap:7px}.api-key-wrap input{flex:1;min-width:0}.api-key-toggle{flex:0 0 auto;padding:8px 10px;border:1px solid #3a4048;background:#252a31;color:var(--text);border-radius:6px;cursor:pointer}.api-key-toggle:hover{background:#30363d}.help{font-size:11px;color:var(--muted);margin-top:5px}.panel-desc{margin:0 0 12px;line-height:1.7}.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-items:start}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;align-items:start}.check{display:flex;align-items:center;gap:8px;margin:8px 0;color:#d7dbe0}.check input{width:auto}.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #49515a;background:#252a31;color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer}.btn.primary{background:var(--accent);border-color:var(--accent);color:#17120c;font-weight:700}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn:disabled:hover{border-color:#49515a}
 /* Every control answers the same way: the outline picks up the accent and the
@@ -71,6 +71,17 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .plan-nav .pg-arrow:not([disabled]):active{transform:scale(.97)}
 /* Rows are big, so they dip less than a button would. */
 #tbody tr:active>td,#tbodyPlan tr:active>td,#tbodyUndefined tr:active>td{transform:scale(.998)}.status{margin-top:12px;padding:9px;border-radius:6px;background:#111417;color:var(--muted);font-size:12px}.status.good{color:var(--good)}.status.bad{color:var(--bad)}
+.debug-log{margin-top:9px;padding:9px;border-radius:6px;background:#1a1214;border:1px solid #6b3a3a}
+.debug-log>summary{cursor:pointer;user-select:none;list-style:none;font-size:12px;font-weight:700;color:var(--bad);display:flex;align-items:center;gap:7px}
+.debug-log>summary::-webkit-details-marker{display:none}
+.debug-log>summary::before{content:"▸";font-size:11px}
+.debug-log[open]>summary::before{content:"▾"}
+.debug-log-body{margin-top:8px;max-height:220px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.5;color:var(--bad)}
+.debug-log-body div{padding:3px 0;border-bottom:1px solid #3a2426;white-space:pre-wrap;word-break:break-word}
+.debug-log-body div:last-child{border-bottom:0}
+.debug-log-time{color:var(--muted);margin-right:6px}
+.debug-log-actions{display:flex;gap:7px;margin-top:8px}
+.debug-log-actions .btn{padding:4px 9px;font-size:11px}
 .toolbar .toolbar label{white-space:nowrap}.toolbar label:nth-of-type(1){grid-column:1}.toolbar label:nth-of-type(2){grid-column:4}.toolbar label:nth-of-type(3){grid-column:6}.toolbar .grow{flex:1}.toolbar select,.toolbar input{background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:7px}
 .tablewrap{overflow:auto;border:1px solid var(--line);border-radius:8px}.table{width:100%;border-collapse:separate;border-spacing:0;min-width:1400px}.table.table-compact{min-width:0}.table td.benefit-cell{text-align:left;white-space:normal;min-width:190px}
 #tbodyPlan td:nth-child(3),#tbodyPlan td:nth-child(4){text-align:center}
@@ -399,6 +410,11 @@ Some things might still be broken, currently only open to members of AutumnGrey'
   <div class="buttons"><button class="btn primary" id="refresh">Refresh all API data</button><button class="btn" id="refreshMarket">Refresh market data only</button><button class="btn" id="save">Save Key/Settings</button><button class="btn" id="clear">Clear Saved Key/Settings</button></div>
 <div id="status" class="status">Not loaded.</div>
 <div id="userStatus" class="status user-status" hidden></div>
+<details id="debugLog" class="debug-log" hidden>
+  <summary><span id="debugLogCount">0</span> <span id="debugLogNoun">problems</span> logged</summary>
+  <div id="debugLogBody" class="debug-log-body"></div>
+  <div class="debug-log-actions"><button type="button" class="btn" id="debugLogCopy">Copy</button><button type="button" class="btn" id="debugLogClear">Clear</button></div>
+</details>
   </details>
 </section><section class="panel money-panel adv-only">
 <details>
@@ -738,7 +754,7 @@ Some things might still be broken, currently only open to members of AutumnGrey'
     <summary>Your Position</summary>
     <div class="row2">
       <div class="field"><label>Available Capital</label><input id="capital" class="money-input" type="text" inputmode="numeric" value="$10,000,000"></div>
-      <div class="field"><label>Daily Income</label><input id="dailyIncome" class="money-input" type="text" inputmode="numeric" value="$1,000,000"></div>
+      <div class="field"><label>Daily Investment Budget</label><input id="dailyBudget" class="money-input" type="text" inputmode="numeric" value="$1,000,000"><div class="help">This is only your starting daily budget. This budget will grow as your portfolio expands.</div></div>
     </div>
     <div class="row3">
       <div class="field"><label>City Bank Payout</label><input id="planBankAmount" class="money-input" type="text" inputmode="numeric" value="$0"></div>
@@ -829,7 +845,7 @@ Some things might still be broken, currently only open to members of AutumnGrey'
 
 // Bumped on every publish. Written in one place, shown in the banner and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.9.118";
+const APP_VERSION="v0.9.123";
 // ======================================================================
 // DATA  ·  Stock table, benefit metadata, tag lists, game constants
 // ======================================================================
@@ -1116,7 +1132,7 @@ const esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g
 const boolVal=id=>!!$(id)?.checked;
 const setBool=(id,v)=>{const el=$(id);if(el)el.checked=!!v};
 // Money-formatted text inputs: stored as "$1,234,567" but read as a number.
-const MONEY_INPUTS=["piRent","piIncome","cayman","bankDeposit","capital","dailyIncome","planBankAmount"];
+const MONEY_INPUTS=["piRent","piIncome","cayman","bankDeposit","capital","dailyBudget","planBankAmount"];
 function numVal(id){const el=$(id);if(!el)return 0;const n=parseFloat(String(el.value).replace(/[^0-9.\-]/g,""));return isFinite(n)?n:0}
 function formatMoneyInput(el){
   const n=parseFloat(String(el.value).replace(/[^0-9.\-]/g,""));
@@ -1148,6 +1164,46 @@ function toggleApiKeyVisibility(){
 const money=v=>v==null||!isFinite(v)?"—":new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(v);
 const pct=v=>v==null||!isFinite(v)?"—":(v*100).toFixed(2)+"%";
 function setStatus(t,cls=""){ window.freshnessLive=false; $("status").className="status "+cls; $("status").textContent=t; }
+// ----------------------------------------------------------------------
+// DEBUG LOG  ·  A red panel under the API status that stays hidden until
+// something actually goes wrong, then collects every problem in one place.
+// Nothing here should ever fire in normal use; if it does, the entry is the
+// bug report. Kept as text nodes rather than innerHTML because the messages
+// can carry arbitrary API strings.
+// ----------------------------------------------------------------------
+window.debugEntries=[];
+function logProblem(where,err){
+  const detail=err&&err.message?err.message:(err==null?"":String(err));
+  const line=detail?where+" · "+detail:where;
+  const time=new Date().toLocaleTimeString("en-GB",{hour12:false});
+  window.debugEntries.push(time+"  "+line);
+  const box=$("debugLog"), body=$("debugLogBody"), count=$("debugLogCount");
+  if(!box||!body) return;
+  const row=document.createElement("div");
+  const stamp=document.createElement("span");
+  stamp.className="debug-log-time"; stamp.textContent=time;
+  row.appendChild(stamp);
+  row.appendChild(document.createTextNode(line));
+  body.appendChild(row);
+  if(count) count.textContent=String(window.debugEntries.length);
+  const noun=$("debugLogNoun");
+  if(noun) noun.textContent=window.debugEntries.length===1?"problem":"problems";
+  // Open itself the first time only. A panel that has to be found is a panel
+  // that gets missed, but re-opening it after it has been collapsed would be
+  // fighting the user every time another entry lands.
+  const first=box.hidden;
+  box.hidden=false;
+  if(first) box.open=true;
+}
+function clearProblems(){
+  window.debugEntries=[];
+  const box=$("debugLog"), body=$("debugLogBody"), count=$("debugLogCount");
+  if(body) body.textContent="";
+  if(count) count.textContent="0";
+  const noun=$("debugLogNoun");
+  if(noun) noun.textContent="problems";
+  if(box){ box.hidden=true; box.open=false }
+}
 // Elapsed time since a fetch, as m:ss (or h:mm:ss past an hour).
 function fmtAgo(ts){
   if(!ts) return "—";
@@ -1232,19 +1288,17 @@ function resetPrefsTab(){
 // ======================================================================
 // PERSISTENCE  ·  Save, load and clear localStorage
 // ======================================================================
-// Fields that should fall back to their built-in default when the saved
-// value is empty or zero (e.g. settings saved before the default existed).
-const DEFAULT_IF_BLANK = ["piRent","piIncome"];
 // Restores saved settings, selections and course ticks from this browser.
+// Each group is restored independently: a corrupt entry for one should not
+// take the others down with it, and every failure is named in the debug log
+// rather than being swallowed.
 function loadLocal(){
-  // Restore saved education course selections when available.
   try{
     const s=JSON.parse(localStorage.getItem("tornInvSettings")||"{}");
     Object.entries(s).forEach(([k,v])=>{
       if(!$(k)) return;
       const isMoney=MONEY_INPUTS.includes(k);
       const num=isMoney?parseFloat(String(v).replace(/[^0-9.\-]/g,"")):null;
-      if(DEFAULT_IF_BLANK.includes(k) && (v===""||v===null||!isFinite(num)||num===0)) return;
       // The three item dropdowns are empty until data loads, so remember the
       // saved choice and re-apply it after the first refresh fills them.
       if(["happyItem","energyItem","nerveItem"].includes(k)&&v){
@@ -1255,37 +1309,48 @@ function loadLocal(){
       else if(isMoney){ if(isFinite(num)) setMoneyInput(k,num); }
       else $(k).value=v;
     });
+  }catch(e){ logProblem("Saved settings could not be read — defaults used",e) }
+
+  try{
     $("apiKey").value=localStorage.getItem("tornInvApiKey")||"";
     MONEY_INPUTS.forEach(id=>{const el=$(id);if(el&&el.value)formatMoneyInput(el)});
-    // Prioritised tickers are stored separately from the field values.
-    try{
-      const raw=localStorage.getItem("tornInvStockPrio");
-      if(raw){
-        const d=JSON.parse(raw);
-        if(Array.isArray(d)) document.querySelectorAll(".pref-prio").forEach(cb=>{cb.checked=d.includes(cb.dataset.ticker)});
-        syncPrioAll();
-      }
-    }catch{}
-    // Owned and selected rows are saved with the settings, not automatically.
-    try{
-      const o=JSON.parse(localStorage.getItem("tornInvOwned")||"[]");
-      if(Array.isArray(o)){window.ownedRows.clear();o.forEach(k=>window.ownedRows.add(k))}
-      const sk=JSON.parse(localStorage.getItem("tornInvSkipped")||"[]");
-      if(Array.isArray(sk)){window.skippedRows.clear();sk.forEach(k=>window.skippedRows.add(k))}
-      const sel=JSON.parse(localStorage.getItem("tornInvSelected")||"[]");
-      if(Array.isArray(sel)){window.selectedRows.clear();sel.forEach(k=>window.selectedRows.add(k))}
-      restoreEducationCourseState(JSON.parse(localStorage.getItem("tornInvCourses")||"null"));
-      // Absent means "never saved", which should leave the defaults alone.
-      const rawPrio=localStorage.getItem("tornInvPrio");
-      if(rawPrio){
-        const prio=JSON.parse(rawPrio);
-        if(Array.isArray(prio)) document.querySelectorAll(".plan-prio").forEach(cb=>{cb.checked=prio.includes(cb.dataset.ticker)});
-      }
-      syncPlanPrioAll();
-      const pd=JSON.parse(localStorage.getItem("tornInvPlanDone")||"[]");
-      if(Array.isArray(pd)){window.planDone.clear();pd.forEach(k=>window.planDone.add(k))}
-    }catch{}
-  }catch{}
+  }catch(e){ logProblem("Saved API key could not be read",e) }
+
+  // Prioritised tickers are stored separately from the field values.
+  try{
+    const raw=localStorage.getItem("tornInvStockPrio");
+    if(raw){
+      const d=JSON.parse(raw);
+      if(Array.isArray(d)) document.querySelectorAll(".pref-prio").forEach(cb=>{cb.checked=d.includes(cb.dataset.ticker)});
+      syncPrioAll();
+    }
+  }catch(e){ logProblem("Saved stock priorities could not be read",e) }
+
+  // Owned and selected rows are saved with the settings, not automatically.
+  try{
+    const o=JSON.parse(localStorage.getItem("tornInvOwned")||"[]");
+    if(Array.isArray(o)){window.ownedRows.clear();o.forEach(k=>window.ownedRows.add(k))}
+    const sk=JSON.parse(localStorage.getItem("tornInvSkipped")||"[]");
+    if(Array.isArray(sk)){window.skippedRows.clear();sk.forEach(k=>window.skippedRows.add(k))}
+    const sel=JSON.parse(localStorage.getItem("tornInvSelected")||"[]");
+    if(Array.isArray(sel)){window.selectedRows.clear();sel.forEach(k=>window.selectedRows.add(k))}
+  }catch(e){ logProblem("Saved row marks could not be read",e) }
+
+  try{
+    restoreEducationCourseState(JSON.parse(localStorage.getItem("tornInvCourses")||"null"));
+  }catch(e){ logProblem("Saved education courses could not be read",e) }
+
+  try{
+    // Absent means "never saved", which should leave the defaults alone.
+    const rawPrio=localStorage.getItem("tornInvPrio");
+    if(rawPrio){
+      const prio=JSON.parse(rawPrio);
+      if(Array.isArray(prio)) document.querySelectorAll(".plan-prio").forEach(cb=>{cb.checked=prio.includes(cb.dataset.ticker)});
+    }
+    syncPlanPrioAll();
+    const pd=JSON.parse(localStorage.getItem("tornInvPlanDone")||"[]");
+    if(Array.isArray(pd)){window.planDone.clear();pd.forEach(k=>window.planDone.add(k))}
+  }catch(e){ logProblem("Saved plan progress could not be read",e) }
 }
 function educationCourseState(){
   const state={};
@@ -1303,7 +1368,7 @@ function restoreEducationCourseState(state){
 // Persists settings, selections, course ticks and the current view.
 function saveLocal(){
   const s={};
-  ["merits","educationMerits","tciOwned","fatCat","wsuOwned","eduJob","happyItem","energyItem","nerveItem","piRent","piIncome","cayman","bankDeposit","cayFaction","oilRig","piPerYear","adsPerMonth","bannerDays","piYacht","eltOwned","incMode","incMax","capital","dailyIncome","planGoal","planTarget","planTci","planIncMax","planPiOwn","planPiRent","planCayman","planCityBank","planTargetBlock","planBankAmount","planBankDays","planBankTermSel","compareTermTable","returnPeriodTable","returnPeriodPlan"].forEach(k=>{const el=$(k);if(el)s[k]=el.type==="checkbox"?el.checked:el.value});
+  ["merits","educationMerits","tciOwned","fatCat","wsuOwned","eduJob","happyItem","energyItem","nerveItem","piRent","piIncome","cayman","bankDeposit","cayFaction","oilRig","piPerYear","adsPerMonth","bannerDays","piYacht","eltOwned","incMode","incMax","capital","dailyBudget","planGoal","planTarget","planTci","planIncMax","planPiOwn","planPiRent","planCayman","planCityBank","planTargetBlock","planBankAmount","planBankDays","planBankTermSel","compareTermTable","returnPeriodTable","returnPeriodPlan"].forEach(k=>{const el=$(k);if(el)s[k]=el.type==="checkbox"?el.checked:el.value});
   localStorage.setItem("tornInvSettings",JSON.stringify(s));
   localStorage.setItem("tornInvStockPrio",JSON.stringify([...prioritised()]));
   localStorage.setItem("tornInvOwned",JSON.stringify([...window.ownedRows]));
@@ -1321,7 +1386,7 @@ function saveLocal(){
 }
 // Wipes everything this page has stored, on screen and in localStorage.
 function clearLocal(){
-  ["tornInvSettings","tornInvApiKey","tornInvDefaultsSet","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal",MARKET_CACHE_KEY]
+  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal",MARKET_CACHE_KEY]
     .forEach(k=>localStorage.removeItem(k));
   window.ownedRows.clear();
   window.skippedRows.clear();
@@ -1367,7 +1432,7 @@ function cacheMarket(){
       educationIndex:window.educationIndex||null,
       pointsMarket:window.pointsMarket||null
     }));
-  }catch{ /* quota or private mode — the cache is an optimisation, not a need */ }
+  }catch(e){ logProblem("Market cache could not be written — storage may be full or private mode is on",e) }
 }
 // Age of the cached market data, in hours, or null if there is none.
 function marketCacheAge(){
@@ -1376,7 +1441,8 @@ function marketCacheAge(){
 }
 function restoreMarket(){
   let c=null;
-  try{ c=JSON.parse(localStorage.getItem(MARKET_CACHE_KEY)||"null") }catch{}
+  try{ c=JSON.parse(localStorage.getItem(MARKET_CACHE_KEY)||"null") }
+  catch(e){ logProblem("Market cache could not be read — a refresh will rebuild it",e) }
   if(!c||c.v!==1) return false;
   if(c.prices&&Object.keys(c.prices).length) prices=c.prices;
   if(c.rates&&Object.keys(c.rates).length) rates=c.rates;
@@ -1476,6 +1542,7 @@ async function fetchPoints(){
   }catch(e){
     window.pointsMarket=[];
     window.pointsMarketError=e.message||"Unknown error fetching points market";
+    logProblem("Points market price unavailable — point-valued benefits can't be priced",e);
   }
 }
 async function fetchStocks(){
@@ -1515,7 +1582,10 @@ const USER_SELECTION_LIST=["stocks","education","merits","money","properties","p
 // permission can't take down the whole refresh.
 async function tornTry(url){
   try{ return await torn(url) }
-  catch(e){ return {__error:e.message||String(e)} }
+  catch(e){
+    logProblem("API request failed — that section was skipped ("+url.split("?")[0]+")",e);
+    return {__error:e.message||String(e)};
+  }
 }
 function factionNameOf(profile){
   return (profile?.faction?.faction_name||profile?.faction?.name||"").trim();
@@ -1814,16 +1884,18 @@ function bankTermLeftFrom(d){
 // time can only mean a new deposit, which starts the record again.
 function noteBankTermSeen(days){
   let st={max:0,last:0};
-  try{ st=JSON.parse(localStorage.getItem("tornInvBankTerm")||"null")||st }catch{}
+  try{ st=JSON.parse(localStorage.getItem("tornInvBankTerm")||"null")||st }
+  catch(e){ logProblem("Bank term history could not be read — term length restarts from this refresh",e) }
   if(!(days>0)) st={max:0,last:0};
   else if(days>st.last+0.5) st={max:days,last:days};
   else st={max:Math.max(st.max,days),last:days};
-  try{ localStorage.setItem("tornInvBankTerm",JSON.stringify(st)) }catch{}
+  try{ localStorage.setItem("tornInvBankTerm",JSON.stringify(st)) }
+  catch(e){ logProblem("Bank term history could not be saved",e) }
   return st.max;
 }
 function bankTermSeenMax(){
   try{ return (JSON.parse(localStorage.getItem("tornInvBankTerm")||"null")||{}).max||0 }
-  catch{ return 0 }
+  catch(e){ logProblem("Bank term history could not be read",e); return 0 }
 }
 // The shortest term that fits everything known about this deposit. Torn never
 // reports the term a deposit was taken out on — only the time left — so this
@@ -1959,6 +2031,11 @@ function renderDiagnostics(d){
     :`fields ${Object.keys(v2).join(", ")||"(empty)"}`
       +(v2.city_bank&&typeof v2.city_bank==="object"
         ?` · city_bank ${Object.keys(v2.city_bank).join(", ")}`:" · no city_bank object")}`);
+  // The raw bank payload, so a suspicious interest figure can be traced back to
+  // what Torn actually sent rather than to what the app made of it.
+  rows.push(`bank rates (raw): ${Object.keys(rates).length
+    ?Object.entries(rates).map(([k,v])=>`${k}=${v}`).join(" · "):"none loaded"}`);
+  rows.push(`bank rates (used): ${bankRows().map(r=>`${r.days}d ${(r.roi*100).toFixed(2)}%`).join(" · ")}`);
   const props=Object.values(d.properties||{});
   rows.push(`properties: ${props.length} · fields ${props.length?Object.keys(props[0]).join(", "):"—"}`);
   return `<details class="us-diag"><summary>Diagnostics · what your key returned</summary>${
@@ -3397,7 +3474,7 @@ function planCandidates(){
   // could ever reach is not generated at all. Tripled to leave room for
   // interest and for the returns of everything bought along the way; a count
   // the user asked for explicitly is never pruned.
-  const reach=(numVal("capital")+Math.max(0,numVal("dailyIncome"))*PLAN_MAX_DAYS)*3;
+  const reach=(numVal("capital")+Math.max(0,numVal("dailyBudget"))*PLAN_MAX_DAYS)*3;
   const positives=base.filter(r=>r.roi!=null&&isFinite(r.roi)&&r.roi>0).map(r=>r.roi);
   const floor=Math.max(positives.length?Math.min(...positives):Infinity,passiveFloor());
   const deferred=deferredTickers();
@@ -3572,7 +3649,7 @@ function simulatePlan(){
                             &&window.ownedRows.has(rowKey(r)));
   seeded.forEach(r=>owned.add(rowKey(r)));
   let cash=numVal("capital");
-  const baseIncome=numVal("dailyIncome");
+  const baseIncome=numVal("dailyBudget");
   let day=0;
   const steps=[];
   // Two different endings: outOfRoom means the simulation itself ran out of
@@ -3713,9 +3790,11 @@ function simulatePlan(){
                                  &&t.roi!=null&&isFinite(t.roi)&&t.roi>0)
                         .map(t=>t.roi);
     let bar=wanted.length?Math.min(...wanted):0;
+    // Cayman is the only rate that can raise the bar, for the same reason it
+    // is the only passive floor: it takes any amount, at any time. The City
+    // Bank is capped and locks for a term, so it cannot absorb the proceeds of
+    // a sale on demand and must not be used to judge a holding as dead weight.
     if(useCayman&&isFinite(caymanRoi)) bar=Math.max(bar,caymanRoi);
-    const startBank=bankRowAt(0);
-    if(startBank) bar=Math.max(bar,startBank.roi);
     seeded.filter(r=>r.kind==="stock"&&r.roi!=null&&isFinite(r.roi)&&r.roi<bar)
           .forEach(r=>{
       const proceeds=r.cost*(1-SELL_FEE);
@@ -3858,6 +3937,10 @@ function simulatePlan(){
       // payout inside the term is still worth buying while we wait.
       for(const t of remaining){
         if(owned.has(rowKey(t))||t.kind!=="stock") continue;
+        // A deprioritised situational stock is deliberately left to the end of
+        // the plan. Being cheap enough to afford mid-term is not a reason to
+        // jump it ahead of everything the user actually asked for.
+        if(deferred.has(t.ticker)) continue;
         if(!(t.days>0)||t.days>term||t.cost>cash) continue;
         if(steps.length>=PLAN_MAX_ACTIONS){outOfRoom=true;return false}
         cash-=t.cost;
@@ -4333,7 +4416,7 @@ function exportPlanTable(){
   out.push(["Path",$("planGoal")?.selectedOptions[0]?.textContent||""]);
   out.push(["Increments",$("planIncMax")?.value||""]);
   out.push(["Available capital",outNum(numVal("capital"))]);
-  out.push(["Daily income",outNum(numVal("dailyIncome"))]);
+  out.push(["Daily investment budget",outNum(numVal("dailyBudget"))]);
   // Enough of the configuration to rebuild the same run from the file alone,
   // which is what makes a plan export usable as a bug report.
   out.push(["City Bank",cityBankEnabled()?"on":"off"]);
@@ -4481,9 +4564,9 @@ function liveFormatMoney(el){
 MONEY_INPUTS.forEach(id=>{
   const el=$(id);
   if(!el) return;
-  // Capital and daily income only feed the planner, so they never rebuild the
+  // Capital and daily budget only feed the planner, so they never rebuild the
   // investment rows — they just mark the plan as out of date.
-  const planOnly=(id==="capital"||id==="dailyIncome"||id==="planBankAmount");
+  const planOnly=(id==="capital"||id==="dailyBudget"||id==="planBankAmount");
   const after=()=>{ if(planOnly){ updatePlanBankHelp(); markPlanStale() } else calculate() };
   el.addEventListener("input",()=>{liveFormatMoney(el);if(id==="bankDeposit")clampBankDeposit();after()});
   el.addEventListener("blur",()=>{formatMoneyInput(el);if(id==="bankDeposit")clampBankDeposit();after()});
@@ -4675,11 +4758,31 @@ $("refreshMarket").onclick=()=>refresh(false);$("save").onclick=saveLocal;$("cle
 // Collapse the configuration column to a vertical tab, giving the table full width.
 function setConfigCollapsed(collapsed){
   $("grid").classList.toggle("config-collapsed",collapsed);
-  try{localStorage.setItem("tornInvConfigCollapsed",collapsed?"1":"0")}catch{}
+  try{localStorage.setItem("tornInvConfigCollapsed",collapsed?"1":"0")}
+  catch(e){ logProblem("Configuration panel state could not be saved",e) }
 }
 $("collapseConfig")?.addEventListener("click",()=>setConfigCollapsed(true));
 $("configTab")?.addEventListener("click",()=>setConfigCollapsed(false));
-try{if(localStorage.getItem("tornInvConfigCollapsed")==="1")setConfigCollapsed(true)}catch{}
+
+// Debug log wiring. Copy hands over the whole log as plain text so a bug
+// report can be pasted straight into a message, and the two global handlers
+// catch the failures no local try/catch was expecting.
+$("debugLogClear")?.addEventListener("click",clearProblems);
+$("debugLogCopy")?.addEventListener("click",()=>{
+  const text=window.debugEntries.join("\n");
+  if(!text) return;
+  navigator.clipboard?.writeText(APP_VERSION+"\n"+text)
+    .then(()=>setStatus("Debug log copied to the clipboard.","good"))
+    .catch(()=>setStatus("Couldn't copy — select the log text and copy it by hand.","bad"));
+});
+window.addEventListener("error",e=>{
+  logProblem("Unexpected error"+(e.filename?" (line "+e.lineno+")":""),e.error||e.message);
+});
+window.addEventListener("unhandledrejection",e=>{
+  logProblem("Unhandled background failure",e.reason);
+});
+try{if(localStorage.getItem("tornInvConfigCollapsed")==="1")setConfigCollapsed(true)}
+catch(e){ logProblem("Configuration panel state could not be read",e) }
 
 $("viewBasic")?.addEventListener("click",()=>setView(true));
 $("viewAdvanced")?.addEventListener("click",()=>setView(false));
@@ -4769,7 +4872,8 @@ addEventListener("scroll",syncToTop,{passive:true});
 addEventListener("resize",syncToTop);
 
 // Basic is the default view; Advanced only sticks if it was saved.
-try{setView(localStorage.getItem("tornInvView")!=="advanced")}catch{setView(true)}
+try{setView(localStorage.getItem("tornInvView")!=="advanced")}
+catch(e){ logProblem("Saved view mode could not be read — Basic used",e); setView(true) }
 setPage(location.hash==="#planner"?"planner":"investments");
 syncToTop();
 </script>
