@@ -12,7 +12,7 @@ import re, markdown
 
 PAGES = [
     ("README.md",         "site-info.html",      "Site Info"),
-    ("planner-logic.md",  "planner-logic.html",  "Planner Logic"),
+    ("invLogic.md",       "invLogic.html",       "Investment Logic"),
     ("changelog.md",      "changelog.html",      "Changelog"),
     ("LICENCE.md",        "licence.html",        "Licence"),
 ]
@@ -46,6 +46,13 @@ th,td{border:1px solid var(--muted);padding:8px 10px;text-align:left;vertical-al
 th{font-weight:700}
 blockquote{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--line);
            color:var(--muted)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+        padding:10px 14px;margin:16px 0}
+details[open]{padding-bottom:4px}
+summary{cursor:pointer;color:var(--muted);font-size:13px}
+summary:hover{color:var(--text)}
+details>*:not(summary){font-size:13.5px}
+h2[id],h3[id]{scroll-margin-top:12px}
 hr{border:0;border-top:1px solid var(--line);margin:26px 0}
 .mermaid{background:var(--panel);border:1px solid var(--line);border-radius:8px;
          padding:12px 14px;overflow-x:auto;white-space:pre;
@@ -70,7 +77,7 @@ TEMPLATE = """<!doctype html>
     <span class="sep">|</span>
     <a href="site-info.html">Site Info</a>
     <span class="sep">|</span>
-    <a href="planner-logic.html">Planner Logic</a>
+    <a href="invLogic.html">Investment Logic</a>
     <span class="sep">|</span>
     <a href="changelog.html">Changelog</a>
     <span class="sep">|</span>
@@ -105,7 +112,10 @@ def convert(src_path, out_path, title):
     text = re.sub(r"```mermaid\n(.*?)```", stash, text, flags=re.S)
 
     html = markdown.markdown(
-        text, extensions=["tables", "fenced_code", "sane_lists", "attr_list"]
+        text,
+        extensions=["tables", "fenced_code", "sane_lists", "attr_list",
+                    "md_in_html", "toc"],
+        extension_configs={"toc": {"permalink": False}},
     )
 
     for i, code in enumerate(blocks):
@@ -115,7 +125,7 @@ def convert(src_path, out_path, title):
         )
 
     # Links between the two docs should point at the built pages, not the source.
-    html = html.replace('href="planner-logic.md"', 'href="planner-logic.html"')
+    html = html.replace('href="invLogic.md"', 'href="invLogic.html"')
     html = html.replace('href="README.md"', 'href="site-info.html"')
     html = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", html)
 
