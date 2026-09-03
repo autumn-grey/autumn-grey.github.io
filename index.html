@@ -250,6 +250,12 @@ a:hover,.site-footer a:hover{text-decoration:underline;filter:brightness(1.15)}
   .tos-wrap .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 .tos-ok-wrap{margin:26px 0 8px;text-align:center}
+.docs-list{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.docs-card{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);text-decoration:none;color:inherit}
+.docs-card:hover{border-color:var(--accent)}
+.docs-name{display:block;font-weight:700;font-size:15px;color:var(--accent);text-decoration:underline}
+.docs-blurb{display:block;margin-top:4px;font-size:13px;color:var(--muted);line-height:1.55}
 .kudos{position:relative;max-width:1000px;margin:30px auto 0;padding:22px 0}
 /* Centred behind the text and scaled to the block, so it stays a backdrop
    whatever the names wrap to. */
@@ -915,6 +921,29 @@ details.banner[open]>summary::before{margin-right:8px}
   </section>
 
 </div>
+<div class="page" id="pageDocs" hidden>
+  <h2 class="tos-title">Docs</h2>
+  <p class="tos-sub">How it works, and why it decides what it decides</p>
+  <div class="docs-list">
+    <a class="docs-card" href="site-info.html">
+      <span class="docs-name">Site Info</span>
+      <span class="docs-blurb">What the app does, getting a key set up, what each page and path is for, and the known limitations.</span>
+    </a>
+    <a class="docs-card" href="planner-logic.html">
+      <span class="docs-name">Planner Logic</span>
+      <span class="docs-blurb">The full reasoning: how an investment is valued, how the buy order is chosen, and what the simulation does day by day.</span>
+    </a>
+    <a class="docs-card" href="changelog.html">
+      <span class="docs-name">Changelog</span>
+      <span class="docs-blurb">What changed in each version, and what's planned next.</span>
+    </a>
+    <a class="docs-card" href="licence.html">
+      <span class="docs-name">Licence</span>
+      <span class="docs-blurb">What you may do with this, and what to ask about first.</span>
+    </a>
+  </div>
+  <div class="tos-ok-wrap"><button type="button" id="docsOk" class="plan-go">OK</button></div>
+</div>
 <div class="page" id="pageTos" hidden>
   <h2 class="tos-title">Terms of Service</h2>
   <p class="tos-sub">Updated <span id="tosUpdated"></span></p>
@@ -983,7 +1012,7 @@ details.banner[open]>summary::before{margin-right:8px}
 
 <button type="button" id="toTop" class="to-top" hidden>Jump to top ↑</button>
 <footer class="site-footer">
-  <p class="footer-tos"><a href="#tos" id="tosLink">Terms of Service</a></p>
+  <p class="footer-tos"><a href="https://www.torn.com" target="_blank" rel="noopener noreferrer">Go to Torn</a> | <a href="#docs" id="docsLink">Docs</a> | <a href="#tos" id="tosLink">Terms of Service</a></p>
   <p>🍂 <span id="footerVersion"></span> | Last updated <span id="footerUpdated"></span> by
   <a class="footer-me" href="https://www.torn.com/profiles.php?XID=4386333" target="_blank" rel="noopener noreferrer">AutumnGrey</a> 🍂</p>
   <p>🩶 P.S. This is totes free to use but in game donations are always welcome, this took ages 🩶</p>
@@ -998,7 +1027,7 @@ details.banner[open]>summary::before{margin-right:8px}
 //
 // Bumped on every publish. Written in one place, shown in the footer and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.5.1";
+const APP_VERSION="v0.5.6";
 // ISO date of that publish, shown in the footer exactly as written. ISO reads
 // the same everywhere, so no locale formatting is applied to it.
 const APP_UPDATED="2026-09-03";
@@ -5543,15 +5572,17 @@ if(hadCache){
 }
 // Page switching. Basic/Advanced applies to the Investments page only, so the
 // view toggle is hidden while the Planner is open.
-const PAGES=["investments","planner","tos"];
+const PAGES=["investments","planner","tos","docs"];
 function setPage(page){
   if(!PAGES.includes(page)) page="investments";
-  const planner=page==="planner", tos=page==="tos";
+  const planner=page==="planner", tos=page==="tos", docs=page==="docs";
   document.body.classList.toggle("planner",planner);
-  document.body.classList.toggle("tos",tos);
+  // Docs shares the ToS page's stripped-back chrome.
+  document.body.classList.toggle("tos",tos||docs);
   $("pageInvestments").hidden=page!=="investments";
   $("pagePlanner").hidden=!planner;
   $("pageTos").hidden=!tos;
+  $("pageDocs").hidden=!docs;
   // The switch offers the other of the two working pages. From the ToS it
   // returns to Investments, which is where a first-time reader started.
   $("pageSwitch").textContent=planner?"Investments":"Planner";
@@ -5593,6 +5624,19 @@ $("pageSwitch")?.addEventListener("click",()=>{
 });
 // The ToS is reached by the footer link and left by the back button, so the
 // hash is the single source of truth for which page is showing.
+$("docsLink")?.addEventListener("click",e=>{
+  e.preventDefault();
+  window.tosReturnTo=document.body.classList.contains("planner")?"planner":"investments";
+  history.pushState(null,"","#docs");
+  setPage("docs");
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+$("docsOk")?.addEventListener("click",()=>{
+  const back=window.tosReturnTo||"investments";
+  history.pushState(null,"","#"+back);
+  setPage(back);
+  window.scrollTo({top:0,behavior:"smooth"});
+});
 $("tosLink")?.addEventListener("click",e=>{
   e.preventDefault();
   // Remembered so OK can return here. A direct link to #tos has no previous
@@ -5614,7 +5658,8 @@ $("tosOk")?.addEventListener("click",()=>{
 addEventListener("hashchange",()=>setPage(location.hash.replace("#","")||"investments"));
 // Whichever of the two modules is on screen is the one the button returns to.
 function activePageEl(){
-  if(document.body.classList.contains("tos")) return $("pageTos");
+  if(!$("pageDocs").hidden) return $("pageDocs");
+  if(!$("pageTos").hidden) return $("pageTos");
   return document.body.classList.contains("planner")?$("pagePlanner"):$("pageInvestments");
 }
 function syncToTop(){
