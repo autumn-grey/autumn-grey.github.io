@@ -8,18 +8,14 @@
 :root{--bg:#111315;--panel:#191c20;--panel2:#20242a;--line:#30363d;--text:#e8eaed;--muted:#9aa3ad;--accent:#e39b45;--good:#59c37a;--bad:#e06c75;--warn:#d9b15b}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 header{padding:22px 28px;border-bottom:1px solid var(--line);background:#15181b} h1{margin:0 0 4px;font-size:24px} header p{margin:0;color:var(--muted)}
-/* Sits beside the title at its own size rather than the heading's. */
-.app-version{font-size:14px;font-weight:700;color:#fff;margin-left:9px;vertical-align:middle}
 .head-row .tagline{flex-basis:100%;order:3}
-@media(max-width:760px){.head-row h1{order:1}.head-row .tagline{order:2}.head-row .head-controls{order:3}
-  /* Not enough width to sit alongside, so it drops under the title. */
-  .app-version{display:block;margin:3px 0 0}}
+@media(max-width:760px){.head-row h1{order:1}.head-row .tagline{order:2}.head-row .head-controls{order:3}}
 main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}.grid-left{display:flex;flex-direction:column;gap:18px;align-self:start;grid-column:1;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px}.grid-left::-webkit-scrollbar{width:8px}.grid-left::-webkit-scrollbar-track{background:transparent}.grid-left::-webkit-scrollbar-thumb{background:#2f353d;border-radius:4px}.grid-left::-webkit-scrollbar-thumb:hover{background:#3d4550}.grid-right{display:flex;flex-direction:column;gap:18px;align-self:start;min-width:0;grid-column:2}.config-tab{display:none;grid-column:1;grid-row:1;align-self:start;writing-mode:vertical-rl;background:var(--panel);color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:14px 8px;cursor:pointer;font:inherit;font-weight:700;letter-spacing:.06em;position:sticky;top:20px}.config-tab:hover{color:var(--text);border-color:var(--accent)}.grid.config-collapsed{grid-template-columns:38px 1fr}.grid.config-collapsed .grid-left{display:none}.grid.config-collapsed .config-tab{display:block}
 /* With the config column hidden, let the table shrink to the available width
    instead of forcing its 1400px minimum and scrolling horizontally. */
 .grid.config-collapsed .table{min-width:0}
 .grid.config-collapsed .table th,.grid.config-collapsed .table td{white-space:normal}
-.grid.config-collapsed .table td:nth-child(2){min-width:150px}.collapse-btn{align-self:flex-start;background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:5px 9px;font-size:11px;cursor:pointer}.collapse-btn:hover{color:var(--text);border-color:var(--accent)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}.panel h2{font-size:15px;margin:0 0 12px}.panel>details{margin:0}.panel>details>summary{font-size:15px;font-weight:700;cursor:pointer;user-select:none;list-style:none;display:flex;align-items:center;gap:7px;margin:0}.panel>details[open]>summary{margin-bottom:12px}.panel>details>summary::-webkit-details-marker{display:none}.panel>details>summary::before{content:"▸";color:var(--muted);font-size:11px;transition:transform .15s}.panel>details[open]>summary::before{content:"▾"}.field{margin:0 0 13px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%;background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:8px}
+.grid.config-collapsed .table td:nth-child(2){min-width:150px}.collapse-btn{align-self:flex-start;background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:5px 9px;font-size:11px;cursor:pointer}.collapse-btn:hover{color:var(--text);border-color:var(--accent)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}.panel h2{font-size:15px;margin:0 0 12px}.panel>details{margin:0}.panel>details>summary{font-size:15px;font-weight:700;cursor:pointer;user-select:none;list-style:none;display:inline-flex;align-items:center;gap:8px;margin:0;width:max-content;max-width:100%}.panel>details[open]>summary{margin-bottom:12px}.panel>details>summary::-webkit-details-marker{display:none}.panel>details>summary::before{content:"▸";color:var(--accent);font-size:17px;line-height:1;transition:transform .15s}.panel>details[open]>summary::before{content:"▾"}.field{margin:0 0 13px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%;background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:8px}
 .field input:disabled,.field select:disabled{opacity:.4;color:var(--muted);background:#0c0e10;border-color:#2a2f36;cursor:not-allowed}
 .field:has(input:disabled) label,.field:has(select:disabled) label,.field:has(input:disabled) .help,.field:has(select:disabled) .help{opacity:.45}.api-blurb{font-size:12px;color:var(--muted);margin:0 0 13px}
 .api-blurb p{margin:0 0 8px;line-height:1.5}
@@ -28,9 +24,9 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .api-blurb .api-privacy{color:#9fd8b4}
 .api-blurb .api-note{color:#8f98a3;font-style:italic}
 .sub-collapse{border-top:1px solid var(--line);margin-top:15px;padding-top:12px}
-.sub-collapse>summary{cursor:pointer;user-select:none;list-style:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--text)}
+.sub-collapse>summary{cursor:pointer;user-select:none;list-style:none;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text);width:max-content;max-width:100%}
 .sub-collapse>summary::-webkit-details-marker{display:none}
-.sub-collapse>summary::before{content:"▸";color:var(--muted);font-size:11px}
+.sub-collapse>summary::before{content:"▸";color:var(--accent);font-size:15px;line-height:1}
 .sub-collapse[open]>summary::before{content:"▾"}
 .sub-collapse .sub-body{margin-top:8px}
 .sub-collapse .sub-body>.prio-all{border-bottom:0;padding:0 0 7px;display:flex;justify-content:flex-end}
@@ -38,9 +34,9 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .user-status .us-line{display:block}
 .user-status .us-ok{color:var(--good)}
 .user-status .us-miss{color:var(--warn)}
-.user-status .us-wrap>summary{cursor:pointer;user-select:none;list-style:none;display:flex;align-items:center;gap:7px}
+.user-status .us-wrap>summary{cursor:pointer;user-select:none;list-style:none;display:inline-flex;align-items:center;gap:8px;width:max-content;max-width:100%}
 .user-status .us-wrap>summary::-webkit-details-marker{display:none}
-.user-status .us-wrap>summary::before{content:"▸";color:var(--muted);font-size:11px}
+.user-status .us-wrap>summary::before{content:"▸";color:var(--accent);font-size:15px;line-height:1}
 .user-status .us-wrap[open]>summary::before{content:"▾"}
 .user-status .us-wrap[open]>summary{margin-bottom:6px}
 .user-status .us-diag{margin-top:8px;border-top:1px solid var(--line);padding-top:7px}
@@ -52,7 +48,7 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 /* Every control answers the same way: the outline picks up the accent and the
    label brightens under the pointer, and the whole thing dips a little while
    it's held down. */
-.btn,.page-tab,.view-btn,.api-key-toggle,.collapse-btn,.config-tab,.grp-toggle,.pref-row,
+.btn,.page-tab,.view-btn,.api-key-toggle,.collapse-btn,.config-tab,.grp-toggle,.pref-row,.pin-stock,
 .plan-nav .pg-num,.plan-nav .pg-arrow,.plan-nav .pg-current,.table th.sortable{
   transition:background-color .15s,border-color .15s,color .15s,transform .07s}
 .btn:hover:not(:disabled){background:#30363d;border-color:var(--accent)}
@@ -66,15 +62,15 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .grp-toggle:hover{color:var(--accent)}
 .pref-row:hover{color:var(--text)}
 .btn:not(:disabled):active,.page-tab:active,.view-btn:active,.api-key-toggle:active,
-.collapse-btn:active,.config-tab:active,.grp-toggle:active,
+.collapse-btn:active,.config-tab:active,.grp-toggle:active,.pin-stock:active,
 .plan-nav .pg-num:active,.plan-nav .pg-current:active,
 .plan-nav .pg-arrow:not([disabled]):active{transform:scale(.97)}
 /* Rows are big, so they dip less than a button would. */
 #tbody tr:active>td,#tbodyPlan tr:active>td,#tbodyUndefined tr:active>td{transform:scale(.998)}.status{margin-top:12px;padding:9px;border-radius:6px;background:#111417;color:var(--muted);font-size:12px}.status.good{color:var(--good)}.status.bad{color:var(--bad)}
 .debug-log{margin-top:9px;padding:9px;border-radius:6px;background:#1a1214;border:1px solid #6b3a3a}
-.debug-log>summary{cursor:pointer;user-select:none;list-style:none;font-size:12px;font-weight:700;color:var(--bad);display:flex;align-items:center;gap:7px}
+.debug-log>summary{cursor:pointer;user-select:none;list-style:none;font-size:12px;font-weight:700;color:var(--bad);display:inline-flex;align-items:center;gap:8px;width:max-content;max-width:100%}
 .debug-log>summary::-webkit-details-marker{display:none}
-.debug-log>summary::before{content:"▸";font-size:11px}
+.debug-log>summary::before{content:"▸";font-size:15px;line-height:1}
 .debug-log[open]>summary::before{content:"▾"}
 .debug-log-body{margin-top:8px;max-height:220px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.5;color:var(--bad)}
 .debug-log-body div{padding:3px 0;border-bottom:1px solid #3a2426;white-space:pre-wrap;word-break:break-word}
@@ -187,6 +183,7 @@ body.basic #pageInvestments #tbody td:nth-child(2){cursor:help}
 }
 #tbodyPlan tr.plan-jump>td{animation:planJump 1.5s ease-in-out}
 .grp-toggle{display:block;margin:0 0 4px;background:none;border:0;padding:0;color:var(--muted);font:inherit;font-size:11px;cursor:pointer}
+.grp-caret{font-size:15px;line-height:1;color:var(--accent);vertical-align:-2px}
 .grp-toggle:hover{color:var(--text)}
 /* Fixed to the corner, and only present once the top of whichever module is
    open has scrolled off. */
@@ -213,7 +210,39 @@ body.basic #pageInvestments #tbody td:nth-child(2){cursor:help}
 .pref-row:last-child{border-bottom:0}
 .pref-row input{margin-right:7px}
 .pref-row .sub{margin:2px 0 0 22px}
+.plan-grid-rule{grid-column:1/-1;border-top:1px solid var(--line);margin:10px 0 2px}
+.pin-stock{display:inline-block;background:none;border:1px solid #3a4048;border-radius:6px;padding:3px 8px;margin:1px 0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.pin-stock:hover{border-color:#59616c}
+.pin-stock.pinned{border-color:var(--good);box-shadow:0 0 0 1px var(--good) inset}
+.pin-stock.pin-dud.pinned{border-color:var(--bad);box-shadow:0 0 0 1px var(--bad) inset}
 .goal-desc{margin:2px 0 0;padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:#12161b;line-height:1.5}
+.site-footer{margin:26px 0 4px;padding-top:14px;border-top:1px solid var(--line);text-align:center;font-size:12px;color:var(--muted)}
+.site-footer p{margin:0 0 6px}
+.site-footer p:last-child{margin-bottom:0}
+/* Links are underlined everywhere, so they read as links without relying on
+   colour alone. */
+a,.site-footer a{color:var(--accent);text-decoration:underline}
+a:hover,.site-footer a:hover{text-decoration:underline;filter:brightness(1.15)}
+/* The ToS is the only thing on its page, so it needs no panel around it. */
+.tos-wrap{max-width:1000px;margin:0 auto;line-height:1.6}
+.tos-title{margin:0 0 4px;text-align:center;font-size:26px}
+.tos-sub{margin:0 0 24px;text-align:center;color:var(--muted);font-size:13px}
+.tos-wrap p{text-align:left;margin:0 0 14px}
+.tos-table{min-width:760px}
+.tos-table td{text-align:left;vertical-align:top;padding:10px 12px;font-size:12px;line-height:1.5}
+.tos-table tr.tos-head td{font-weight:700;background:#20242a;color:var(--text)}
+.tos-ai{margin-top:16px;font-size:12px;color:var(--muted)}
+.tos-ok-wrap{margin:26px 0 8px;text-align:center}
+.tos-ok-wrap .plan-go{min-width:150px}
+/* On the ToS page the chrome is noise: only the app title stays. */
+body.tos .head-controls,
+body.tos .tagline,
+body.tos details.banner,
+body.tos .banner-green{display:none}
+.stale-note{position:relative;margin:10px auto 0;max-width:640px;padding:10px 34px 10px 12px;background:#201d16;border:1px solid #5b4a29;border-radius:7px;color:#d9c18e;font-size:12px;line-height:1.5}
+.stale-x{position:absolute;top:4px;right:6px;background:none;border:0;padding:2px 6px;color:#d9c18e;font-size:17px;line-height:1;cursor:pointer;opacity:.75}
+.stale-x:hover{opacity:1}
+.stale-x:active{transform:scale(.9)}
 #tbody tr.depri td:nth-child(2) strong{opacity:.72}
 #noDataNotice,#noDataNoticePlan{display:none}
 body.no-data #noDataNotice{display:block}
@@ -317,12 +346,23 @@ body.basic #pageInvestments .tag.situational,body.basic #pageInvestments .tag.aw
 #buyNext .bn-name{font-size:16px;font-weight:700;margin:3px 0}
 #buyNext .bn-figs{font-size:12px;color:var(--muted)}
 #buyNext .bn-figs strong{color:var(--good)}
-.tag-key{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--muted);align-items:center;margin-bottom:10px}.table th{position:sticky;top:0;background:#20242a;color:#aeb6bf;font-size:11px;text-transform:uppercase;letter-spacing:.04em;z-index:2}.table th:nth-child(2),.table td:nth-child(2){text-align:left;background:#191c20}.table th:nth-child(2){text-align:center}.table th.pick,.table td.pick{width:46px;padding:9px 4px;text-align:center}.table th.pick input{display:block;margin:4px auto 0}.table td.pick input{cursor:pointer;width:15px;height:15px;accent-color:var(--accent)}.totals-row td{border-bottom:none;font-weight:700;background:#15181c;text-align:center}#tbodyTotals td:nth-child(2),#tbodyTotals th:nth-child(2),#tbodyTotalsPlan td:nth-child(2),#tbodyTotalsPlan th:nth-child(2){background:transparent;text-align:center}.table th:first-child{z-index:3}.education-courses h3{margin:16px 0 8px;font-size:14px}.education-topic{border:1px solid #30353d;border-radius:6px;margin:5px 0;background:#111418}.education-topic summary{cursor:pointer;padding:8px 10px;font-weight:600;user-select:none}.education-course-list{padding:4px 10px 8px;border-top:1px solid #30353d}.education-course{display:block;padding:4px 0;font-size:12px;cursor:pointer}.education-course input{margin-right:7px}.edu-note{font-size:11px;color:var(--good);margin:1px 0 0 22px}.table tbody tr.stock-first td{background:rgba(46,160,67,.20)!important}.table tbody tr.special-purple td{background:rgba(148,88,211,.30)!important}.table th.sortable{cursor:pointer;user-select:none}.table th.sortable:hover{background:#292e35;color:var(--text)}.table th.sortable:focus{outline:2px solid var(--accent);outline-offset:-2px}.sort-indicator{font-size:12px;color:var(--muted);margin-left:4px}.table th.sort-asc .sort-indicator::after{content:"";}.table th.sort-desc .sort-indicator::after{content:"";}.table tr:hover td{background:#252a30}.ticker{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700}.sub{font-size:11px;color:var(--muted)}.good{color:var(--good)}.bad{color:var(--bad)}.muted{color:var(--muted)}.tag{display:inline-block;border:1px solid #414852;border-radius:4px;padding:2px 5px;font-size:10px;color:#b8c0c8;margin-left:5px}.tag.situational{color:var(--warn);border-color:#5b4a29}.tag.awful{color:var(--bad);border-color:#6b3a3a}.tag.money{color:var(--good);border-color:#2f5c3e}.tag.items{color:#4fb6ff;border-color:#2b5b85}.tag.bank{color:#c77dff;border-color:#6a3fa0}.tag.booster{color:#ff6fae;border-color:#8a2f5c}.note{font-size:12px;color:var(--muted);margin:8px 0 0}.banner{padding:10px 12px;background:#201d16;border:1px solid #5b4a29;border-radius:7px;color:#d9c18e;margin-bottom:14px}.banner.banner-green{background:#16241b;border-color:#2f5c3e;color:#9fd8b4}
+.tag-key{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--muted);align-items:center;margin-bottom:10px}.table th{position:sticky;top:0;background:#20242a;color:#aeb6bf;font-size:11px;text-transform:uppercase;letter-spacing:.04em;z-index:2}.table th:nth-child(2),.table td:nth-child(2){text-align:left;background:#191c20}.table th:nth-child(2){text-align:center}.table th.pick,.table td.pick{width:46px;padding:9px 4px;text-align:center}.table th.pick input{display:block;margin:4px auto 0}.table td.pick input{cursor:pointer;width:15px;height:15px;accent-color:var(--accent)}.totals-row td{border-bottom:none;font-weight:700;background:#15181c;text-align:center}#tbodyTotals td:nth-child(2),#tbodyTotals th:nth-child(2),#tbodyTotalsPlan td:nth-child(2),#tbodyTotalsPlan th:nth-child(2){background:transparent;text-align:center}.table th:first-child{z-index:3}.education-courses h3{margin:16px 0 8px;font-size:14px}.education-topic{border:1px solid #30353d;border-radius:6px;margin:5px 0;background:#111418}.education-topic summary{cursor:pointer;padding:8px 10px;font-weight:600;user-select:none}.education-course-list{padding:4px 10px 8px;border-top:1px solid #30353d}.education-course{display:block;padding:4px 0;font-size:12px;cursor:pointer}.education-course input{margin-right:7px}.edu-note{font-size:11px;color:var(--good);margin:1px 0 0 22px}.table tbody tr.stock-first td{background:rgba(46,160,67,.20)!important}.table tbody tr.special-purple td{background:rgba(148,88,211,.30)!important}.table th.sortable{cursor:pointer;user-select:none}.table th.sortable:hover{background:#292e35;color:var(--text)}.table th.sortable:focus{outline:2px solid var(--accent);outline-offset:-2px}.sort-indicator{font-size:12px;color:var(--muted);margin-left:4px}.table th.sort-asc .sort-indicator::after{content:"";}.table th.sort-desc .sort-indicator::after{content:"";}.table tr:hover td{background:#252a30}.ticker{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700}.sub{font-size:11px;color:var(--muted)}.good{color:var(--good)}.bad{color:var(--bad)}.muted{color:var(--muted)}.tag{display:inline-block;border:1px solid #414852;border-radius:4px;padding:2px 5px;font-size:10px;color:#b8c0c8;margin-left:5px}.tag.situational{color:var(--warn);border-color:#5b4a29}.tag.awful{color:var(--bad);border-color:#6b3a3a}.tag.money{color:var(--good);border-color:#2f5c3e}.tag.items{color:#4fb6ff;border-color:#2b5b85}.tag.bank{color:#c77dff;border-color:#6a3fa0}.tag.booster{color:#ff6fae;border-color:#8a2f5c}.note{font-size:12px;color:var(--muted);margin:8px 0 0}.banner{padding:10px 12px;background:#201d16;border:1px solid #5b4a29;border-radius:7px;color:#d9c18e;margin-bottom:14px}
+/* The heading is only useful when the body is hidden; open, the first line
+   already says "Prototype:". */
+details.banner:not([open]){padding:10px 12px}
+details.banner[open]>summary .banner-head{display:none}
+details.banner[open]>summary{margin-bottom:2px}.banner.banner-green{background:#16241b;border-color:#2f5c3e;color:#9fd8b4}
 /* The warning folds away once it has been read. Only the prototype banner is
    a <details>; the others on the page stay plain divs. */
-.banner>summary{cursor:pointer;user-select:none;list-style:none;display:flex;align-items:center;gap:7px;font-weight:700}
+.banner>summary{cursor:pointer;user-select:none;list-style:none;display:inline-flex;align-items:center;gap:8px;font-weight:700;width:max-content;max-width:100%;vertical-align:baseline}
+/* Open, the summary sits inline so the sentence continues after "Prototype:"
+   on the same line, and only the triangle and that word are clickable. */
+details.banner[open]>summary{display:inline}
+.banner-label{display:none}
+details.banner[open] .banner-label{display:inline}
+details.banner[open]>summary::before{margin-right:8px}
 .banner>summary::-webkit-details-marker{display:none}
-.banner>summary::before{content:"▸";font-size:11px;opacity:.8}
+.banner>summary::before{content:"▸";font-size:16px;line-height:1;opacity:.9}
 .banner[open]>summary::before{content:"▾"}
 .banner[open]>summary{margin-bottom:8px}
 @media(max-width:820px){.banner>summary{min-height:40px}}
@@ -371,7 +411,7 @@ body.basic #pageInvestments .tag.situational,body.basic #pageInvestments .tag.aw
 <body>
 <header>
 <div class="head-row">
-  <h1>Autumn's Stonking Awesome Torn App <span class="app-version" id="appVersion"></span></h1>
+  <h1>Autumn's Stonking Awesome Torn App</h1>
   <div class="head-controls">
     <button type="button" id="pageSwitch" class="page-tab">Planner</button>
     <div class="view-toggle" role="group" aria-label="View mode">
@@ -384,12 +424,11 @@ body.basic #pageInvestments .tag.situational,body.basic #pageInvestments .tag.aw
 </header>
 <main>
 <details class="banner" open>
-<summary>Prototype Warning</summary>
-Some things might still be broken, currently only open to members of AutumnGrey's faction, a custom key is required to verify access. It's not saved unless you ask for it, and even then it's saved locally! <br>
+<summary><span class="banner-head">Prototype Warning</span><strong class="banner-label">Prototype:</strong></summary> Some things might still be broken, currently only open to members of AutumnGrey's faction, a custom key is required to verify access. It's not saved unless you ask for it, and even then it's saved locally! <br>
   This app doesn't play well with extensions like Dark Reader, so please disable for this site (it's already permanently in dark mode anyway). <br>
   If you have suggestions, find a bug, or have questions about any of the maths behind this, please message me, <a href="https://www.torn.com/profiles.php?XID=4386333" target="_blank" rel="noopener noreferrer">AutumnGrey</a> directly. <br>
   One more thing, if anyone can figure out a way to work out the ROI for any of the <em>Undefined ROI Stocks</em> I will send you a xanax and a kiss xox &lt;3
-<div class="banner-note">This tool is a guide only. Prices and values are accurate at time of viewing but are subject to fluctuation. Purchasable job merits such as bank investment time and education length reductions are not accounted for. Stock sales profits are not considered for the purpose of this investment planner, as past performance is not a reliable indicator of future outcomes.</div>
+<div class="banner-note">This tool is a guide only. Prices and values are accurate at time of viewing but are subject to fluctuation. Stock sales profits are not considered for the purpose of this investment planner, as past performance is not a reliable indicator of future outcomes.</div>
 </details>
 <div class="page" id="pageInvestments">
 <div class="grid" id="grid">
@@ -401,7 +440,7 @@ Some things might still be broken, currently only open to members of AutumnGrey'
   <summary>API Key</summary>
   <div class="api-blurb">
     <p>Use <a id="linkAccessOnly" href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPIAccessOnly&amp;user=profile&amp;torn=bank,items,stocks,education,properties&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPIAccessOnly</strong></a> to use the app with only public investment data. The app is set with default settings and can be manually configured and updated by the user.</p>
-    <p>Use <a id="linkCustomised" href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPICustomised&amp;user=profile,stocks,education,merits,money,properties,job,perks&amp;faction=basic,upgrades&amp;company=profile&amp;torn=bank,items,stocks,education,properties&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPICustomised</strong></a> to preconfigure settings with your personal statistics including, stocks owned, available funds, job perks, merits, and education courses studied.</p>
+    <p>Use <a id="linkCustomised" href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPICustomised&amp;user=profile,stocks,education,merits,money,properties,job,perks,races&amp;company=profile&amp;torn=bank,items,stocks,education,properties&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPICustomised</strong></a> to preconfigure settings with your personal statistics including, stocks owned, available funds, job perks, merits, and education courses studied.</p>
     <p class="api-note">Click your preferred access level to generate a new custom key, then paste it below</p>
     <p class="api-privacy">All keys and saved data are stored locally on your device, this app sends no data, and saves no sensitive information.</p>
   </div>
@@ -423,6 +462,9 @@ Some things might still be broken, currently only open to members of AutumnGrey'
 <div class="row3">
 <div class="field"><label>City Bank Merits</label><select id="merits"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><div class="help" id="meritsHelp">+0% interest</div></div>
 <div class="field check-field"><label><input type="checkbox" id="tciOwned"> TCI Block</label><div class="help">+10% Bank Interest Bonus.</div></div>
+</div>
+<div class="row2">
+<div class="field"><label>Oil Mogul: JP per day</label><select id="oilMogulJp"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><div class="help" id="oilMogulHelp"></div></div>
 <div class="field check-field"><label><input type="checkbox" id="fatCat"> Oil Rig: Fat Cat</label><div class="help">50% City Bank investment limit</div></div>
 </div>
 <div class="field"><label>City Bank Deposit</label><input id="bankDeposit" class="money-input" type="text" inputmode="numeric" value="$2,000,000,000"><div class="help" id="bankDepositHelp">Max $2,000,000,000</div></div>
@@ -444,19 +486,22 @@ Some things might still be broken, currently only open to members of AutumnGrey'
   <details>
   <summary>Education Stuff</summary>
   <div class="row2">
+  <div class="field"><label>Company Special: JP per day</label><select id="companyJp"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><div class="help" id="companyJpHelp"></div></div>
   <div class="field">
     <label>Education Merits</label>
     <select id="educationMerits"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
     <div class="help" id="eduMeritsHelp">-0% course time</div>
   </div>
+  </div>
+  <div class="row2" style="margin-bottom:11px">
   <div class="field check-field">
     <label><input type="checkbox" id="wsuOwned"> WSU Block Owned</label>
-    <div class="help">-10% course time. Worthless once every course is studied.</div>
+    <div class="help">-10% course time</div>
   </div>
+  <div class="field check-field">
+    <label><input type="checkbox" id="eduJob"> Education Job Perk</label>
+    <div class="help">-10% course time</div>
   </div>
-  <div class="field check-field" style="margin-bottom:11px">
-    <label><input type="checkbox" id="eduJob"> Top of the Education Job</label>
-    <div class="help">-10% course time, stacking with merits and WSU for the full 40%.</div>
   </div>
   <div class="help" id="eduRemainingHelp" style="margin:0 0 12px"></div>
   <div class="help panel-desc">
@@ -635,7 +680,8 @@ Some things might still be broken, currently only open to members of AutumnGrey'
   <div class="field check-field"><label><input type="checkbox" id="piYacht" checked> Private Yacht on PI</label><div class="help" id="piYachtHelp">PI upgrade cost: $1,452,788,000</div></div>
   </div>
   <div class="row2">
-  <div class="field check-field"><label><input type="checkbox" id="eltOwned"> ELT Stock Block Owned</label><div class="help">Takes 10% off Private Island upgrade costs (not the island itself) in both Private Island investments.</div></div>
+  <div class="field check-field"><label><input type="checkbox" id="eltOwned"> ELT Stock Block Owned</label><div class="help">-10% property upgrade cost</div></div>
+  <div class="field check-field"><label><input type="checkbox" id="propertyBroker"> Property Broker: Interior Connections</label><div class="help">-10% property upgrade cost</div></div>
   </div>
   <div class="row2">
   <div class="field"><label>Classified Ads p/Month</label><input id="adsPerMonth" type="number" min="0" step="1" value="1"><div class="help">Used to value MSG's free classified advertising ($250,000 per ad).</div></div>
@@ -754,7 +800,7 @@ Some things might still be broken, currently only open to members of AutumnGrey'
     <summary>Your Position</summary>
     <div class="row2">
       <div class="field"><label>Available Capital</label><input id="capital" class="money-input" type="text" inputmode="numeric" value="$10,000,000"></div>
-      <div class="field"><label>Daily Investment Budget</label><input id="dailyBudget" class="money-input" type="text" inputmode="numeric" value="$1,000,000"><div class="help">This is only your starting daily budget. This budget will grow as your portfolio expands.</div></div>
+      <div class="field"><label>Daily Investment Budget</label><input id="dailyBudget" class="money-input" type="text" inputmode="numeric" value="$1,000,000"><div class="help">This is only your starting daily budget. Investment pay outs will increase it over time.</div></div>
     </div>
     <div class="row3">
       <div class="field"><label>City Bank Payout</label><input id="planBankAmount" class="money-input" type="text" inputmode="numeric" value="$0"></div>
@@ -769,7 +815,7 @@ Some things might still be broken, currently only open to members of AutumnGrey'
     <details open>
     <summary>Planner Configuration</summary>
     <div class="row2">
-      <div class="field"><label>Path</label><select id="planGoal"><option value="everything" selected>One of everything</option><option value="stock">A certain investment</option><option value="selected">Custom Plan</option><option value="energy1000">1000 Energy</option><option value="money">Just give me money</option><option value="increments">Increment amount</option><option value="newbie">Total Newbie</option></select></div>
+      <div class="field"><label>Path</label><select id="planGoal"><option value="everything" selected>One of Everything</option><option value="stock">A Certain Investment</option><option value="selected">Custom Plan</option><option value="energy1000">1000 Energy</option><option value="money">Just Give Me Money</option><option value="increments">Increment Amount</option><option value="newbie">Total Newbie</option></select></div>
       <div class="field"><label>Increments</label><select id="planIncMax"><option value="optimum" selected>Optimum</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
       <div class="field" id="planTargetField" hidden><label>Investment</label><select id="planTarget"></select></div>
       <div class="field" id="planBlockField" hidden><label>Increment</label><select id="planTargetBlock"><option value="1">B1</option><option value="2">B2</option><option value="3">B3</option><option value="4">B4</option><option value="5">B5</option><option value="6">B6</option><option value="7">B7</option><option value="8">B8</option><option value="9">B9</option><option value="10" selected>B10</option></select></div>
@@ -795,6 +841,7 @@ Some things might still be broken, currently only open to members of AutumnGrey'
       <div class="sub-body">
         <label class="pref-row prio-all"><input type="checkbox" id="planPrioAll"> <span>Select all</span></label>
         <div id="planPrioritise" class="plan-grid"></div>
+        <p class="note">Click an undefined ROI stock name to mark it as a highest priority goal. But don't press IST, it's genuinely a bag of shite.</p>
       </div>
     </details>
     </details>
@@ -804,6 +851,10 @@ Some things might still be broken, currently only open to members of AutumnGrey'
 
   <div class="plan-go-wrap">
     <button type="button" id="planGo" class="plan-go">Show Me The Money (Plan)</button>
+  </div>
+  <div id="planStaleNote" class="stale-note" hidden>
+    <button type="button" id="planStaleDismiss" class="stale-x" aria-label="Dismiss this warning for good">&times;</button>
+    <span>Settings have changed since Plan was last generated. Pressing that big green button again is advised.</span>
   </div>
 
   <section class="panel" id="planPanel">
@@ -839,13 +890,71 @@ Some things might still be broken, currently only open to members of AutumnGrey'
   </section>
 
 </div>
+<div class="page" id="pageTos" hidden>
+  <h2 class="tos-title">Terms of Service</h2>
+  <p class="tos-sub">Updated <span id="tosUpdated"></span></p>
+
+  <div class="tos-wrap">
+    <p><strong>Description:</strong> a 3rd party web app utilising market data and limited level user
+    information to calculate investment values and plan investment portfolio pathways which stores key
+    or data only in the user's browser. To reduce API requests required the 3rd party website
+    <a href="https://tornsy.com" target="_blank" rel="noopener noreferrer">tornsy.com</a> is utilised
+    for retrieving live stock market data.</p>
+
+    <p><strong>ToS:</strong> You maintain full control of your data; everything is stored in your
+    browser. No data is sent anywhere.</p>
+
+    <div class="tablewrap"><table class="table tos-table">
+      <tbody>
+        <tr class="tos-head">
+          <td>Data Storage</td>
+          <td>Data Sharing</td>
+          <td>Purpose of Use</td>
+          <td>Key Storage &amp; Sharing</td>
+          <td>Key Access Level</td>
+        </tr>
+        <tr>
+          <td>Will the data be stored for any purpose?</td>
+          <td>Who can access the data besides the end user?</td>
+          <td>What is the stored data being used for?</td>
+          <td>Will the API key be stored securely and who can access it?</td>
+          <td>What key access level or specific selections are required?</td>
+        </tr>
+        <tr>
+          <td>Only locally</td>
+          <td>Nobody</td>
+          <td>Not eligible - only end user has access</td>
+          <td>Stored locally / Not shared</td>
+          <td>Two Custom Options:<br>AutumnAPIAccessOnly - public level only - custom used for naming
+          and security only<br>AutumnAPICustomised - public level + user &gt; education, merits, perks,
+          money, stocks, races and company &gt; profile</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <p class="tos-ai">AI Disclaimer: <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude.ai</a>
+    was utilised in the creation of this web app.</p>
+  </div>
+
+  <div class="tos-ok-wrap"><button type="button" id="tosOk" class="plan-go">OK</button></div>
+</div>
+
 <button type="button" id="toTop" class="to-top" hidden>Jump to top ↑</button>
+<footer class="site-footer">
+  <p class="footer-tos"><a href="#tos" id="tosLink">Terms of Service</a></p>
+  <p><span id="footerVersion"></span> | Last updated <span id="footerUpdated"></span> by
+  <a href="https://www.torn.com/profiles.php?XID=4386333" target="_blank" rel="noopener noreferrer">AutumnGrey</a>
+  | P.S. This is totes free to use but in game donations are always welcome, this took ages &lt;3</p>
+</footer>
 </main>
 <script>
 
 // Bumped on every publish. Written in one place, shown in the banner and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.9.123";
+const APP_VERSION="v1.0.000";
+// ISO date of that publish, shown in the footer exactly as written. ISO reads
+// the same everywhere, so no locale formatting is applied to it.
+const APP_UPDATED="2026-09-03";
 // ======================================================================
 // DATA  ·  Stock table, benefit metadata, tag lists, game constants
 // ======================================================================
@@ -887,7 +996,7 @@ const STOCKS = [
 ["IST","International School TC",100000,"unresolved",0,"Free Education Courses",0]
 ];
 const UNDEFINED_ROI_TICKERS = ["WSU","TCM","WLT","IST","BAG","LOS","TCP","TGP","SYS"];
-// These stocks provide a single benefit block only — no purchasable increments.
+// These stocks provide a single benefit block only, with no purchasable increments.
 const SINGLE_BLOCK_TICKERS = ["ELT","IIL","IST","LOS","MSG","SYS","TCP","TGP","TCI","TCM","WSU","WLT","YAZ"];
 // Benefits whose value only applies if the user actually uses that feature.
 const SITUATIONAL_TICKERS = ["YAZ","EVL","TCP","TGP","SYS","MSG","BAG","TCM","ELT","IIL"];
@@ -1101,7 +1210,7 @@ function bankTermLabel(days){
 }
 // Live figures from Torn's own reference lists. The hardcoded tables below
 // stay as fallbacks, so the app still works before a refresh or on a key
-// without the torn selections — anything the API supplies simply wins.
+// without the torn selections. Anything the API supplies simply wins.
 window.live={benefitReq:null,propertyPrices:null,courseDays:null,courseCosts:null,notes:[]};
 // Shares needed for one benefit block, live where known.
 function blockShares(ticker,fallback){
@@ -1255,6 +1364,7 @@ function resetMoneyTab(){
   clampBankDeposit();
   $("cayFaction").value="0";
   setBool("oilRig",false);
+  $("oilMogulJp").value="0";
   selectItemInStat("nerveItem","Bottle of Beer");
   selectItemInStat("happyItem","Erotic DVD");
   selectItemInStat("energyItem","Xanax");
@@ -1262,6 +1372,7 @@ function resetMoneyTab(){
 }
 function resetEducationTab(){
   $("educationMerits").value="0";
+  $("companyJp").value="0";
   setBool("wsuOwned",false);
   setBool("eduJob",false);
   document.querySelectorAll(".education-course-check").forEach(cb=>cb.checked=false);
@@ -1273,6 +1384,7 @@ function resetMiscTab(){
   $("bannerDays").value="90";
   setBool("piYacht",true);
   setBool("eltOwned",false);
+  setBool("propertyBroker",false);
   calculate();
 }
 function resetPrefsTab(){
@@ -1309,7 +1421,7 @@ function loadLocal(){
       else if(isMoney){ if(isFinite(num)) setMoneyInput(k,num); }
       else $(k).value=v;
     });
-  }catch(e){ logProblem("Saved settings could not be read — defaults used",e) }
+  }catch(e){ logProblem("Saved settings could not be read. Defaults used",e) }
 
   try{
     $("apiKey").value=localStorage.getItem("tornInvApiKey")||"";
@@ -1341,6 +1453,20 @@ function loadLocal(){
   }catch(e){ logProblem("Saved education courses could not be read",e) }
 
   try{
+    const pin=JSON.parse(localStorage.getItem("tornInvPinned")||"null");
+    if(pin){
+      if(Array.isArray(pin.pinned)){window.pinnedStocks.clear();pin.pinned.forEach(t=>window.pinnedStocks.add(t))}
+      window.dudPinned=!!pin.dud;
+      // Saved pins are a decision already made, so the defaults stay out.
+      if(pin.user) window.pinsUserSet=true;
+    }
+  }catch(e){ logProblem("Pinned stocks could not be read",e) }
+
+  try{
+    if(localStorage.getItem("tornInvStaleNote")==="off") window.staleNoteDismissed=true;
+  }catch(e){ logProblem("Warning dismissal could not be read",e) }
+
+  try{
     // Absent means "never saved", which should leave the defaults alone.
     const rawPrio=localStorage.getItem("tornInvPrio");
     if(rawPrio){
@@ -1366,9 +1492,60 @@ function restoreEducationCourseState(state){
 }
 
 // Persists settings, selections, course ticks and the current view.
+// Fields on the Investments page. Changing one rebuilds the investment rows.
+const INVESTMENT_FIELDS=[
+  "merits",
+  "educationMerits",
+  "tciOwned",
+  "fatCat",
+  "wsuOwned",
+  "eduJob",
+  "happyItem",
+  "energyItem",
+  "nerveItem",
+  "piRent",
+  "piIncome",
+  "cayman",
+  "bankDeposit",
+  "cayFaction",
+  "oilRig",
+  "piPerYear",
+  "adsPerMonth",
+  "bannerDays",
+  "piYacht",
+  "eltOwned",
+  "oilMogulJp",
+  "companyJp",
+  "propertyBroker",
+  "incMode",
+  "incMax",
+  "compareTermTable",
+  "returnPeriodTable"
+];
+// Fields on the Planner page. These only mark an existing plan out of date,
+// so that typing in the planner does not re-run the simulation on every key.
+const PLANNER_FIELDS=[
+  "capital",
+  "dailyBudget",
+  "planGoal",
+  "planTarget",
+  "planTci",
+  "planIncMax",
+  "planPiOwn",
+  "planPiRent",
+  "planCayman",
+  "planCityBank",
+  "planTargetBlock",
+  "planBankAmount",
+  "planBankDays",
+  "planBankTermSel",
+  "returnPeriodPlan"
+];
+// Everything persisted to localStorage, which is both lists together.
+const SAVED_FIELDS=[...INVESTMENT_FIELDS,...PLANNER_FIELDS];
 function saveLocal(){
   const s={};
-  ["merits","educationMerits","tciOwned","fatCat","wsuOwned","eduJob","happyItem","energyItem","nerveItem","piRent","piIncome","cayman","bankDeposit","cayFaction","oilRig","piPerYear","adsPerMonth","bannerDays","piYacht","eltOwned","incMode","incMax","capital","dailyBudget","planGoal","planTarget","planTci","planIncMax","planPiOwn","planPiRent","planCayman","planCityBank","planTargetBlock","planBankAmount","planBankDays","planBankTermSel","compareTermTable","returnPeriodTable","returnPeriodPlan"].forEach(k=>{const el=$(k);if(el)s[k]=el.type==="checkbox"?el.checked:el.value});
+  SAVED_FIELDS.forEach(k=>{const el=$(k);if(el)s[k]=el.type==="checkbox"?el.checked:el.value});
   localStorage.setItem("tornInvSettings",JSON.stringify(s));
   localStorage.setItem("tornInvStockPrio",JSON.stringify([...prioritised()]));
   localStorage.setItem("tornInvOwned",JSON.stringify([...window.ownedRows]));
@@ -1386,7 +1563,7 @@ function saveLocal(){
 }
 // Wipes everything this page has stored, on screen and in localStorage.
 function clearLocal(){
-  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal",MARKET_CACHE_KEY]
+  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote",MARKET_CACHE_KEY]
     .forEach(k=>localStorage.removeItem(k));
   window.ownedRows.clear();
   window.skippedRows.clear();
@@ -1432,7 +1609,7 @@ function cacheMarket(){
       educationIndex:window.educationIndex||null,
       pointsMarket:window.pointsMarket||null
     }));
-  }catch(e){ logProblem("Market cache could not be written — storage may be full or private mode is on",e) }
+  }catch(e){ logProblem("Market cache could not be written. Storage may be full, or private mode is on",e) }
 }
 // Age of the cached market data, in hours, or null if there is none.
 function marketCacheAge(){
@@ -1442,7 +1619,7 @@ function marketCacheAge(){
 function restoreMarket(){
   let c=null;
   try{ c=JSON.parse(localStorage.getItem(MARKET_CACHE_KEY)||"null") }
-  catch(e){ logProblem("Market cache could not be read — a refresh will rebuild it",e) }
+  catch(e){ logProblem("Market cache could not be read. A refresh will rebuild it",e) }
   if(!c||c.v!==1) return false;
   if(c.prices&&Object.keys(c.prices).length) prices=c.prices;
   if(c.rates&&Object.keys(c.rates).length) rates=c.rates;
@@ -1542,7 +1719,7 @@ async function fetchPoints(){
   }catch(e){
     window.pointsMarket=[];
     window.pointsMarketError=e.message||"Unknown error fetching points market";
-    logProblem("Points market price unavailable — point-valued benefits can't be priced",e);
+    logProblem("Points market price unavailable. Point-valued benefits can't be priced",e);
   }
 }
 async function fetchStocks(){
@@ -1568,22 +1745,74 @@ async function fetchStocks(){
 const REQUIRED_FACTION="The ZOO - Night Shift";
 // Star ratings at which an Oil Rig unlocks each of the two specials this app
 // cares about.
-const OIL_RIG_SPECIALS={taxHaven:7,fatCat:10};
+const OIL_RIG_SPECIALS={taxHaven:7,fatCat:10,oilMogul:5};
+// Torn's company_type ids. Only the four with specials this app cares about
+// are listed; a company can be renamed by its director, so the name is not
+// safe to match on. Names are kept purely for the status line.
+const COMPANY_TYPE={HAIR_SALON:1,PROPERTY_BROKER:20,OIL_RIG:28,FITNESS_CENTER:29};
+// Specials that pay job points toward a timer. Job points per day equal the
+// company's star rating, so the star count is the dropdown value.
+const JP_SPECIAL_COMPANIES=[
+  {type:COMPANY_TYPE.FITNESS_CENTER, minStars:1, label:"Fitness Centre"},
+  {type:COMPANY_TYPE.HAIR_SALON,     minStars:7, label:"Hair Salon"}
+];
+// Reads the company name and stars once, then sets whichever specials apply.
+// A company with no matching special clears the field rather than leaving a
+// stale value from a previous employer.
+function applyJobSpecials(d,ok,miss){
+  const job=d.job||{};
+  const name=String(job.company_name||d.company?.name||"").trim();
+  const type=+(job.company_type||d.company?.company_type||0)||0;
+  const stars=+(d.company?.rating||d.company?.stars||job.company_rating||0)||0;
+  if(!type){
+    miss("Job point specials","no relevant company reported");
+    return;
+  }
+  if(!stars){
+    miss("Job point specials",`${name} · star rating not reported`);
+    return;
+  }
+  const notes=[];
+  const setSel=(id,val)=>{ const el=$(id); if(el&&+el.value!==val){ el.value=String(val); return true } return false };
+  let changed=false;
+  // Oil Mogul: bank time.
+  const oilJp=(type===COMPANY_TYPE.OIL_RIG&&stars>=OIL_RIG_SPECIALS.oilMogul)?stars:0;
+  changed=setSel("oilMogulJp",oilJp)||changed;
+  if(oilJp) notes.push(`Oil Mogul ${oilJp} JP/day`);
+  // Healthy Mind / Cutting Corners: education time.
+  const eduHit=JP_SPECIAL_COMPANIES.find(c=>c.type===type&&stars>=c.minStars);
+  const eduJp=eduHit?stars:0;
+  changed=setSel("companyJp",eduJp)||changed;
+  if(eduJp) notes.push(`${eduHit.label} ${eduJp} JP/day`);
+  // Interior Connections: property upgrade cost.
+  const broker=type===COMPANY_TYPE.PROPERTY_BROKER&&stars>=10;
+  const bcb=$("propertyBroker");
+  if(bcb&&bcb.checked!==broker){ bcb.checked=broker; changed=true }
+  if(broker) notes.push("Interior Connections");
+  if(changed){ updateJobPointHelp(); markPlanStale() }
+  ok("Job point specials",notes.length?`${name||"company"} ${stars}★ · ${notes.join(", ")}`
+    :`${name||"company"} ${stars}★ · none apply`);
+}
 // Everything the customised key asks for, in one request.
 // Fetched one at a time on purpose. Torn fails a whole request if the key
 // lacks any one selection in it, so batching these would mean a single
 // missing permission wiped out every setting instead of just its own.
-// "job" is deliberately absent: API v1 refuses it outright now ("only
-// available in API v2"), so asking for it only ever produced a failed request
-// and an alarming diagnostic line. Everything it was used for — the Oil Rig
-// specials — comes from the perks list instead.
+// "job" is absent here on purpose: API v1 answers it with "This selection is
+// only available in API v2", so asking for it in this loop only ever produced
+// a failed request. It is fetched from v2 separately below, because the app
+// does need it — it carries the company type, star rating and the user's
+// position, which decide the company stock ticks and the job point specials.
 const USER_SELECTION_LIST=["stocks","education","merits","money","properties","perks"];
 // A request that reports failure instead of throwing, so one missing
 // permission can't take down the whole refresh.
-async function tornTry(url){
+// `label` false suppresses the log entirely, for a failure that is expected
+// and already handled somewhere else. Anything else is used as the message.
+async function tornTry(url,label){
   try{ return await torn(url) }
   catch(e){
-    logProblem("API request failed — that section was skipped ("+url.split("?")[0]+")",e);
+    if(label!==false){
+      logProblem(label||("API request failed. That section was skipped ("+url.split("?")[0]+")"),e);
+    }
     return {__error:e.message||String(e)};
   }
 }
@@ -1608,6 +1837,26 @@ async function fetchUserData(profile){
     data.parts[sel]=j;
     Object.assign(data,j);
   }));
+  // Job details, v2 only. Normalised onto the same shape the rest of the app
+  // reads (company_name / company_type / position), so nothing downstream has
+  // to care which API version it came from.
+  {
+    const j=await tornTry("https://api.torn.com/v2/user/job");
+    if(j.__error) data.errors.job=j.__error;
+    else {
+      const src=j.job||j.data?.job||j;
+      const company=src.company||src;
+      const job={
+        company_id:company.id??company.ID??company.company_id??src.company_id,
+        company_name:company.name??src.company_name,
+        company_type:company.company_type??company.type??src.company_type,
+        company_rating:company.rating??company.stars??src.company_rating,
+        position:src.position??src.job_position??company.position
+      };
+      data.job=job;
+      data.parts.job=job;
+    }
+  }
   // API v2 carries the same money payload under a different shape. Probed only
   // so the Diagnostics panel can say, from a real key, whether Torn exposes any
   // more of the bank there than v1 does. Nothing here feeds the calculations.
@@ -1626,14 +1875,15 @@ async function fetchUserData(profile){
   // the perks list doesn't spell them out.
   const companyId=data.job?.company_id;
   if(companyId){
-    const c=await tornTry(`https://api.torn.com/company/${companyId}?selections=profile`);
+    const c=await tornTry(`https://api.torn.com/company/${companyId}?selections=profile`,
+      "Company profile unavailable. Needs director access. Oil Rig specials fall back to your perks list.");
     if(!c.__error) data.company=c.company||c;
     else data.errors.company=c.__error;
   }
-  // Faction upgrades are a second route to the Cayman bonus.
-  const f=await tornTry("https://api.torn.com/faction/?selections=upgrades");
-  if(!f.__error) data.factionUpgrades=f.upgrades||f;
-  else data.errors.factionUpgrades=f.__error;
+  // The faction Cayman bonus is read from the perks list, which every key
+  // already carries. Faction -> upgrades would be a second route to it, but it
+  // needs "API Access" (AA) permission most members don't have, so asking for
+  // it only ever produced a refusal to swallow. Not requested at all now.
   return data;
 }
 // Every perk line Torn reports, from every source, as one flat list. These
@@ -1685,7 +1935,7 @@ function educationIdFor(name){
 // from someone else, and the ones being rented out.
 // A Private Island counts as fully upgraded once it has every upgrade the
 // app prices, give or take the yacht.
-const PI_FULL_UPGRADES=Object.keys(PI_UPGRADE_COSTS).length-1;
+const PI_FULL_UPGRADES=Object.keys(PI_UPGRADE_COSTS).length;
 function privateIslandsFrom(props){
   const all=Object.values(props||{});
   const list=all.filter(p=>{
@@ -1698,6 +1948,21 @@ function privateIslandsFrom(props){
                        :(Array.isArray(p?.upgrades)?p.upgrades.length:0);
   const perDay=p=>+(p?.rented?.cost_per_day??p?.rented?.cost_per_day_total??p?.rented?.cost??0)||0;
   const full=p=>upgradeCount(p)>=PI_FULL_UPGRADES;
+  // Which upgrades Torn didn't report for this island. Names are matched
+  // loosely because the properties selection has used both "modifications"
+  // and "upgrades", and has not always spelled them identically.
+  const upgradeNames=p=>{
+    const raw=Array.isArray(p?.modifications)?p.modifications
+             :(Array.isArray(p?.upgrades)?p.upgrades:[]);
+    return raw.map(u=>String(typeof u==="string"?u:(u?.name||u?.title||"")).toLowerCase().trim())
+              .filter(Boolean);
+  };
+  const missingUpgrades=p=>{
+    const have=upgradeNames(p);
+    if(!have.length) return null;          // nothing named, so nothing to list
+    return Object.keys(PI_UPGRADE_COSTS)
+      .filter(name=>!have.some(h=>h.includes(name.toLowerCase())||name.toLowerCase().includes(h)));
+  };
   // Both sides show a status of "Rented", so ownership is what separates
   // them: an island you own with a tenant is income, anyone else's is rent
   // you pay. Without a player id to compare against, fall back to status.
@@ -1705,20 +1970,35 @@ function privateIslandsFrom(props){
   const mine=p=>me?+p?.owner_id===me:!/rent(ed|ing) from/i.test(String(p?.status||""));
   const rentedIn=list.filter(p=>p?.rented&&perDay(p)>0&&!mine(p));
   const rentedOut=list.filter(p=>p?.rented&&perDay(p)>0&&mine(p));
+  const dearest=arr=>arr.slice().sort((a,b)=>perDay(b)-perDay(a))[0]||null;
+  // For your own islands, a fully upgraded one is the fair comparison; fall
+  // back to the dearest if none qualify.
   const pick=arr=>{
     const fully=arr.filter(full);
-    const from=fully.length?fully:arr;
-    return from.slice().sort((a,b)=>perDay(b)-perDay(a))[0]||null;
+    return dearest(fully.length?fully:arr);
   };
-  const payFor=pick(rentedIn), chargeFor=pick(rentedOut);
+  // Torn reports modifications only to the owner, so an island you rent in
+  // always comes back with an empty list however upgraded it actually is.
+  // Choosing on price is the only honest option, and the upgrade state is
+  // simply not reported rather than reported as missing.
+  const payFor=dearest(rentedIn), chargeFor=pick(rentedOut);
   return {
     paying:payFor?perDay(payFor):0,
-    payingFull:payFor?full(payFor):false,
     charging:chargeFor?perDay(chargeFor):0,
     chargingFull:chargeFor?full(chargeFor):false,
+    chargingMissing:chargeFor?missingUpgrades(chargeFor):null,
+    chargingCount:chargeFor?upgradeCount(chargeFor):0,
     islands:list.length,
     properties:all.length
   };
+}
+// "not fully upgraded" on its own leaves you guessing which upgrade is
+// absent, and the commonest cause is Torn simply not listing them rather than
+// the island lacking anything. Say which of the two it is.
+function piUpgradeNote(full,missing,count){
+  if(full) return "";
+  if(missing&&missing.length) return ` · missing ${missing.join(", ")}`;
+  return ` · ${count} of ${PI_FULL_UPGRADES} upgrades reported by Torn`;
 }
 // Writes what was pulled into the settings, leaving anything missing alone.
 // Returns a line-by-line account of what happened, which the panel shows.
@@ -1737,7 +2017,7 @@ function applyUserData(d){
   const caymanJobPerk=jobPerks.find(p=>/cayman/i.test(p.text));
   const companyType=+(d.job?.company_type||d.company?.company_type||0);
   const stars=+(d.company?.rating||d.company?.stars||0);
-  const isOilRig=/oil rig/i.test(String(d.job?.company_name||d.company?.name||""))||companyType===30;
+  const isOilRig=companyType===COMPANY_TYPE.OIL_RIG;
   let perkReport=null;
   if(perks.length){
     if(bankLimitPerk!==undefined||caymanJobPerk!==undefined){
@@ -1747,7 +2027,7 @@ function applyUserData(d){
         .filter(Boolean).join(", ")];
     } else {
       setBool("fatCat",false); setBool("oilRig",false);
-      perkReport=[true,jobPerks.length?`${jobPerks.length} found, none affect banking`:"none"];
+      perkReport=[true,jobPerks.length?`${jobPerks.length} found, none affect banking`:"non relevant"];
     }
   } else if(isOilRig&&stars>0){
     setBool("oilRig",stars>=OIL_RIG_SPECIALS.taxHaven);
@@ -1774,7 +2054,7 @@ function applyUserData(d){
     $("planBankDays").value=String(Math.min(365,left));
     setBankPrincipal(cityBank!=null&&cityBank>0?cityBank:0);
     ok("City Bank term",left>0
-      ? `${left} day${left===1?"":"s"} left · assuming a ${planBankTerm()}-day term`
+      ? `${left} day${left===1?"":"s"} left · best guessing a ${planBankTerm()}-day term`
         +(seen>left?` (longest seen ${seen} days)`:"")
       : "nothing locked");
   } else {
@@ -1789,8 +2069,8 @@ function applyUserData(d){
   else miss("Cayman Islands Bank",failed("money")?`needs User → money (${failed("money")})`:"not reported");
 
   // --- merits ---
-  const eduJobPerk=perks.find(p=>/education|course/i.test(p.text)&&/%/.test(p.text)
-                                &&!/merit/i.test(p.source));
+  const eduJobPerk=perks.find(p=>p.source==="job_perks"
+                                &&/education|course/i.test(p.text)&&/%/.test(p.text));
   if(perks.length){
     setBool("eduJob",!!eduJobPerk);
     ok("Education job perk",eduJobPerk?eduJobPerk.text.trim():"none");
@@ -1811,9 +2091,12 @@ function applyUserData(d){
   const eduIds=d.education_completed||d.education?.complete;
   if(Array.isArray(eduIds)&&eduIds.length&&window.educationIndex){
     const hits=markEducationCourses(eduIds,window.educationIndex);
+    // The WSU default depends on how much study is left, which isn't known
+    // until this point on a first run.
+    applyDefaultPins();
     ok("Courses studied",`${hits} of ${eduIds.length} matched to the course list`);
   } else miss("Courses studied",Array.isArray(eduIds)
-      ?(eduIds.length?(window.educationIndexError?`course name list unavailable · ${window.educationIndexError}`:"course name list didn't load — refresh again"):"none completed yet")
+      ?(eduIds.length?(window.educationIndexError?`course name list unavailable · ${window.educationIndexError}`:"course name list didn't load. Refresh again"):"none completed yet")
       :(failed("education")?`needs User → education (${failed("education")})`:"not reported"));
 
   // --- stocks owned ---
@@ -1833,7 +2116,7 @@ function applyUserData(d){
     if(owned.length) ok("Stocks owned",`${owned.length} marked · ${owned.join(", ")}`);
     else miss("Stocks owned","no holdings big enough for a benefit block");
   } else miss("Stocks owned",failed("stocks")?`needs User → stocks (${failed("stocks")})`
-      :(window.stockMetaError?`stock name list unavailable · ${window.stockMetaError}`:"stock list didn't load — refresh again"));
+      :(window.stockMetaError?`stock name list unavailable · ${window.stockMetaError}`:"stock list didn't load. Refresh again"));
 
   // --- job perks (applied above, reported here) ---
   (perkReport[0]?ok:miss)("Job perks",perkReport[1]);
@@ -1841,22 +2124,24 @@ function applyUserData(d){
   // --- faction Cayman bonus (0 when the faction has none) ---
   const factionCaymanPerk=perks.find(p=>p.source==="faction_perks"&&/cayman/i.test(p.text));
   const fromPerk=factionCaymanPerk?perkPercent(factionCaymanPerk.text):null;
-  const fromUpgrade=caymanBonusFrom(d.factionUpgrades);
-  const cay=fromPerk!=null?snapCayman(fromPerk):(fromUpgrade!=null?fromUpgrade:(perks.length||d.factionUpgrades?0:null));
+  // No perk line means no bonus, as long as the perks list itself arrived.
+  const cay=fromPerk!=null?snapCayman(fromPerk):(perks.length?0:null);
   if(cay!=null){
     $("cayFaction").value=String(cay);
     ok("Faction Cayman bonus",cay?`+${cay}%`:"none · set to 0%");
-  } else miss("Faction Cayman bonus","needs User → perks or Faction → upgrades on the key");
+  } else miss("Faction Cayman bonus","needs User → perks on the key");
+  applyCompanyStocks(d,ok,miss);
+  applyJobSpecials(d,ok,miss);
 
   // --- private islands ---
   const pi=privateIslandsFrom(d.properties);
   const piMiss=failed("properties")?`needs User → properties (${failed("properties")})`:null;
   if(pi.paying>0){ setMoneyInput("piRent",pi.paying);
-    ok("PI rent you pay",`${money(pi.paying)} per day${pi.payingFull?"":" · not fully upgraded"}`) }
+    ok("PI rent you pay",`${money(pi.paying)} per day`) }
   else miss("PI rent you pay",piMiss||(pi.islands?"none rented from anyone":"no Private Island on your account"));
   if(pi.charging>0){ setMoneyInput("piIncome",pi.charging);
-    ok("PI rent you charge",`${money(pi.charging)} per day · your best of ${pi.islands} island${pi.islands===1?"":"s"}${pi.chargingFull?"":" · not fully upgraded"}`) }
-  else miss("PI rent you charge",piMiss||(pi.islands?"none of yours are rented out":"no Private Island on your account"));
+    ok("PI rent you charge",`${money(pi.charging)} per day · your best of ${pi.islands} island${pi.islands===1?"":"s"}${piUpgradeNote(pi.chargingFull,pi.chargingMissing,pi.chargingCount)}`) }
+  else miss("PI rent you charge",piMiss||"you own no PI or none of yours are rented out");
 
   updateMeritsHelp();
   syncBasicControls();
@@ -1885,7 +2170,7 @@ function bankTermLeftFrom(d){
 function noteBankTermSeen(days){
   let st={max:0,last:0};
   try{ st=JSON.parse(localStorage.getItem("tornInvBankTerm")||"null")||st }
-  catch(e){ logProblem("Bank term history could not be read — term length restarts from this refresh",e) }
+  catch(e){ logProblem("Bank term history could not be read. Term length restarts from this refresh",e) }
   if(!(days>0)) st={max:0,last:0};
   else if(days>st.last+0.5) st={max:days,last:days};
   else st={max:Math.max(st.max,days),last:days};
@@ -1898,7 +2183,7 @@ function bankTermSeenMax(){
   catch(e){ logProblem("Bank term history could not be read",e); return 0 }
 }
 // The shortest term that fits everything known about this deposit. Torn never
-// reports the term a deposit was taken out on — only the time left — so this
+// reports the term a deposit was taken out on, only the time left, so this
 // is the best that can be inferred, and the dropdown lets it be overridden.
 function planBankTermGuess(){
   const box=Math.max(0,Math.ceil(numVal("planBankDays")));
@@ -1925,7 +2210,7 @@ function buildBankTermOptions(){
   sel.value=String(planBankTermGuess());
 }
 // Snaps the dropdown back to what the days remaining imply. Called whenever
-// that figure changes — from the API or by hand — and not otherwise, so a
+// that figure changes (from the API or by hand) and not otherwise, so a
 // deliberate choice survives until the deposit itself changes.
 function applyBankTermGuess(){
   const sel=$("planBankTermSel");
@@ -1933,7 +2218,7 @@ function applyBankTermGuess(){
 }
 // The principal actually sitting in the bank. The box holds the payout, so
 // changing the assumed term has to rebuild it from this rather than from the
-// figure already shown — otherwise the interest would compound on itself.
+// figure already shown, otherwise the interest would compound on itself.
 let bankPrincipal=0;
 function setBankPrincipal(p){
   bankPrincipal=p>0?p:0;
@@ -1965,24 +2250,60 @@ function updatePlanBankHelp(){
   const term=planBankTerm(), apr=planBankApr();
   const principal=bankPrincipal>0?bankPrincipal:payout/(1+apr*term/365);
   el.textContent=`${money(principal)} invested | ${term} days at ${(apr*100).toFixed(2)}% APR`
-    +` | ${money(payout-principal)} interest`;
+    +` | ${money(payout-principal)} interest`
+    // The term is a best guess from the longest time-left seen, but it sits
+    // among a dozen other hand-adjustable defaults, so it's presented the
+    // same way rather than explaining the inference.
+    +` | Term length is set manually`;
 }
 // The faction upgrade that raises Cayman interest, as a percentage.
-function caymanBonusFrom(upgrades){
-  if(!upgrades) return null;
-  const all=[];
-  const walk=v=>{
-    if(!v||typeof v!=="object") return;
-    if(v.name||v.ability) all.push(v);
-    Object.values(v).forEach(walk);
-  };
-  walk(upgrades);
-  const hit=all.find(u=>/cayman/i.test(`${u.name||""} ${u.ability||""}`));
-  if(!hit) return null;
-  const pct=String(hit.ability||hit.name||"").match(/(\d+(?:\.\d+)?)\s*%/);
-  const val=pct?Math.round(+pct[1]):null;
-  if(val==null) return null;
-  return [0,5,10,15,20,25].reduce((a,b)=>Math.abs(b-val)<Math.abs(a-val)?b:a,0);
+// TCP, TGP and SYS all buff a company you work at, so they are worth nothing
+// to the unemployed. Employment is the switch: ticked when in a company,
+// unticked when not. Only ever applied when the job data actually arrived,
+// so a refused selection leaves the user's own choice alone.
+const COMPANY_TICKERS=["TCP","TGP","SYS"];
+function applyCompanyStocks(d,ok,miss){
+  const job=d.job||{};
+  const name=String(job.company_name||d.company?.name||"").trim();
+  // Ownership, not employment. Torn reports the director's position as
+  // "Director"; every other position is an employee, for whom these stocks
+  // are no use. Position is the only reliable signal — the company profile
+  // endpoint answers for employees as well, so its presence proves nothing.
+  const position=String(job.position||"").trim();
+  const owns=/^director$/i.test(position);
+  if(!d.parts||!d.parts.job){
+    const err=d.errors&&d.errors.job;
+    miss("Company stocks",err?`needs User → job (${err})`:"not reported");
+    return;
+  }
+  let changed=0;
+  COMPANY_TICKERS.forEach(t=>{
+    const cb=document.querySelector(`.plan-prio[data-ticker="${t}"]`);
+    if(cb&&cb.checked!==owns){ cb.checked=owns; changed++ }
+  });
+  if(changed){ syncPlanPrioAll(); markPlanStale() }
+  ok("Company stocks",owns
+    ? `director of ${name||"a company"} · ${COMPANY_TICKERS.join(", ")} ticked`
+    : `${position?position+", not a director":"no company"} · ${COMPANY_TICKERS.join(", ")} unticked`);
+}
+// Racing has no "do you hold a licence" field, so a race history stands in for
+// one: having raced at all proves the licence was bought. Only the single most
+// recent race is requested, which is all the proof needed. A failed or refused
+// call leaves the tick exactly as the user left it.
+const RACING_TICKER="TCM";
+async function applyRacingStock(ok,miss){
+  const j=await tornTry("https://api.torn.com/v2/user/races?limit=1&sort=DESC",false);
+  if(j.__error){
+    miss("Racing stock",`needs User → races (${j.__error})`);
+    return;
+  }
+  const races=Array.isArray(j.races)?j.races:(Array.isArray(j.data)?j.data:[]);
+  const hasRaced=races.length>0;
+  const cb=document.querySelector(`.plan-prio[data-ticker="${RACING_TICKER}"]`);
+  if(cb&&cb.checked!==hasRaced){ cb.checked=hasRaced; syncPlanPrioAll(); markPlanStale() }
+  ok("Racing stock",hasRaced
+    ? `race history found · ${RACING_TICKER} ticked`
+    : `no races on record · ${RACING_TICKER} unticked`);
 }
 // Renders the per-field account of the last user refresh.
 function renderUserStatus(rep,headline,cls,diag){
@@ -1998,7 +2319,7 @@ function renderUserStatus(rep,headline,cls,diag){
     ? `<details class="us-wrap"><summary><strong>${esc(headline)}</strong></summary>${body}</details>`
     : `<strong>${esc(headline)}</strong>`;
 }
-// What each selection actually returned, by name only — never a value. This
+// What each selection actually returned, by name only, never a value. This
 // is here so a field the API names differently can be spotted and fixed.
 function renderDiagnostics(d){
   const rows=[];
@@ -2009,8 +2330,6 @@ function renderDiagnostics(d){
   });
   if(d.errors&&d.errors.company) rows.push(`company: refused · ${d.errors.company}`);
   else if(d.company) rows.push(`company: ${Object.keys(d.company).slice(0,12).join(", ")}`);
-  if(d.errors&&d.errors.factionUpgrades) rows.push(`faction upgrades: refused · ${d.errors.factionUpgrades}`);
-  else if(d.factionUpgrades) rows.push(`faction upgrades: ${Object.keys(d.factionUpgrades).length} entries`);
   const live=window.live||{};
   rows.push(`live reference data: ${[
     live.benefitReq?`${Object.keys(live.benefitReq).length} benefit requirements`:`benefit requirements from the built-in table${window.stockMetaError?" · "+window.stockMetaError:""}`,
@@ -2106,10 +2425,76 @@ function remainingCourseDays(){
   return Object.keys(COURSE_WEEKS).reduce((sum,id)=>sum+($(id)?.checked?0:courseDaysFor(id)),0);
 }
 // Course time is cut by 2% per Education Length merit and 10% for a WSU
-// block, and those stack on the base time rather than compounding — which is
+// block, and those stack on the base time rather than compounding, which is
 // also why WSU saves the same 10% whatever your merits are. (Topping out the
 // education job adds another 10% that this app doesn't model.)
 const EDU_MERIT_REDUCTION=0.02;
+// ======================================================================
+// JOB POINT SPECIALS
+// Two company specials spend job points to shorten a timer that is already
+// running. Both are self-referential: points accrue per day, so how long the
+// timer runs decides how many points you get, which decides how much it is
+// shortened, which decides how long it runs.
+//
+// Solving it is a one-liner rather than a loop. For the bank, with a nominal
+// term of T days, p job points a day and 3 points buying one hour:
+//
+//   D = T - (p * D / 3) / 24      hours bought, converted to days
+//   D * (1 + p/72) = T
+//   D = 72T / (72 + p)
+//
+// So the term finishes in D days but pays the full T days of interest. The
+// effective APR is therefore scaled by T/D = (72 + p)/72, which is the only
+// number the rest of the app needs.
+//
+// Education uses the same shape with 1 point buying half an hour:
+//
+//   D = R - (q * D / 2) / 24  ->  D = 48R / (48 + q)
+//
+// Both hold for fractional points because leftover points roll to the next
+// day rather than being lost, so the average rate is what matters.
+// ======================================================================
+const JP_PER_BANK_HOUR=3;             // 3 job points buy one hour off the bank
+const EDU_HOURS_PER_JP=0.5;           // 1 job point buys 30 minutes off a course
+function oilMogulJp(){ return Math.max(0,Math.min(10,+($("oilMogulJp")?.value||0))) }
+function companyJp(){ return Math.max(0,Math.min(10,+($("companyJp")?.value||0))) }
+// Hours per day each special buys, which is what the help lines quote.
+function oilMogulHoursPerDay(){ return oilMogulJp()/JP_PER_BANK_HOUR }
+function companyHoursPerDay(){ return companyJp()*EDU_HOURS_PER_JP }
+// Days a nominal bank term actually takes once points are being spent.
+function bankTermRealDays(termDays){
+  const p=oilMogulJp();
+  return p>0 ? termDays*72/(72+p) : termDays;
+}
+// The factor an APR is multiplied by because the same interest arrives sooner.
+function bankTimeFactor(){
+  const p=oilMogulJp();
+  return p>0 ? (72+p)/72 : 1;
+}
+// The factor remaining course time is multiplied by for the same reason.
+function educationJpFactor(){
+  const q=companyJp();
+  return q>0 ? 48/(48+q) : 1;
+}
+// "2 hours p/day", or "1 hour 30 minutes p/day" when it lands on a half hour.
+function hoursPerDayLabel(hours){
+  if(!(hours>0)) return "none";
+  const whole=Math.floor(hours+1e-9);
+  const mins=Math.round((hours-whole)*60);
+  const h=whole===1?"1 hour":`${whole} hours`;
+  if(!mins) return `${h} p/day`;
+  const m=`${mins} minutes`;
+  return whole?`${h} ${m} p/day`:`${m} p/day`;
+}
+function updateJobPointHelp(){
+  const oil=$("oilMogulHelp");
+  if(oil) oil.textContent="Oil Rig 5★ special: Oil Mogul reduces bank investment time by one hour"
+    +` for 3 job points. Time Saved: ${hoursPerDayLabel(oilMogulHoursPerDay())}`;
+  const co=$("companyJpHelp");
+  if(co) co.textContent="Fitness Centre 1★ special: Healthy Mind and Hair Salon 7★: Cutting Corners"
+    +" reduce education course time by 30 minutes for 1 job point."
+    +` Time saved: ${hoursPerDayLabel(companyHoursPerDay())}`;
+}
 function educationTimeReduction(){
   const merits=Math.max(0,Math.min(10,+($("educationMerits")?.value||0)));
   return Math.min(0.9,merits*EDU_MERIT_REDUCTION
@@ -2118,7 +2503,7 @@ function educationTimeReduction(){
 }
 // Days until every remaining course is finished, studying them back to back.
 function educationRemainingDays(){
-  return Math.max(0,remainingCourseDays()*(1-educationTimeReduction()));
+  return Math.max(0,remainingCourseDays()*(1-educationTimeReduction())*educationJpFactor());
 }
 // Formats a day count as a calendar-accurate duration measured from today,
 // so month lengths reflect the actual calendar rather than a 30-day estimate.
@@ -2126,7 +2511,7 @@ function educationRemainingDays(){
 function formatDuration(totalDays){
   const days=Math.round(totalDays);
   if(!isFinite(days)||days<=0) return "0 days";
-  // Beyond a century the calendar walk is pointless — and slow.
+  // Beyond a century the calendar walk is pointless, and slow.
   if(days>36500) return "100+ years";
   const addMonths=(date,n)=>{
     const d=new Date(date), day=d.getDate();
@@ -2165,7 +2550,7 @@ function periodWord(days){
 function selectedBoosterName(stat){
   const el=$(`${stat}Item`);
   // Before the first refresh the only option is the "load item data" prompt,
-  // and quoting that back reads as gibberish — so nothing is quoted until an
+  // and quoting that back reads as gibberish, so nothing is quoted until an
   // item has actually been picked.
   const txt=el&&el.value&&el.selectedIndex>=0?el.options[el.selectedIndex].textContent:"";
   return txt.split("·")[0].trim()||"your chosen item";
@@ -2192,7 +2577,7 @@ function tooltipFor(ticker,type,label,qty,days){
 function itemById(id){return items.find(x=>x.id===+id)}
 
 // Builds the "Benefit / Interest" cell content for a stock.
-// Returns [mainLine, secondLine] — second line renders smaller/muted.
+// Returns [mainLine, secondLine]. The second line renders smaller and muted.
 function stockBenefitText(ticker,type,label,qty){
   if(SPECIAL_BENEFITS[ticker]){
     if(ticker==="MSG"){
@@ -2221,7 +2606,7 @@ function stockBenefitText(ticker,type,label,qty){
   return [label||""];
 }
 
-// Total cost of every education course the user has NOT yet ticked —
+// Total cost of every education course the user has NOT yet ticked:
 // the money IST's free-courses benefit would save them from here.
 function remainingCourseCost(){
   return Object.keys(COURSE_COSTS).reduce((sum,id)=>sum+($(id)?.checked?0:courseCostFor(id)),0);
@@ -2232,7 +2617,7 @@ function remainingCourseCost(){
 // value the block provides per day equals this base daily rate.
 function bestVirusPerDay(forceAssumeAll){
   // Advanced always uses the actual course selections. Basic has no course
-  // checkboxes, so it assumes full training — unless the user has ticked
+  // checkboxes, so it assumes full training, unless the user has ticked
   // courses in Advanced, in which case those take precedence. A caller can
   // also force the assumption (the Total Newbie planner pathway, which
   // assumes Computer Science courses complete from month 12).
@@ -2274,17 +2659,24 @@ function bankRows(){
   const dep=bankDepositValue();
   return Object.entries(BANK_TERMS).map(([days,key])=>{
     const base=+(rates[key]||0)/100;
-    const apr=base*(1+meritBonus)*(tci?1.10:1);
+    // Oil Mogul doesn't raise the interest, it shortens the wait for it. The
+    // same payout over fewer days is a higher annualised return, so it lands
+    // as a multiplier on the APR.
+    const timeFactor=bankTimeFactor();
+    const aprNoTime=base*(1+meritBonus)*(tci?1.10:1);
+    const apr=aprNoTime*timeFactor;
     const meritPct=base*meritBonus*100;
     const tciPct=(base*(1+meritBonus)*(tci?0.10:0))*100;
     const parts=[`${(base*100).toFixed(2)}% base APR`];
     if(meritPct>0) parts.push(`${meritPct.toFixed(2)}% from merits`);
     if(tciPct>0) parts.push(`${tciPct.toFixed(2)}% from TCI`);
+    if(timeFactor>1) parts.push(`${((apr-aprNoTime)*100).toFixed(2)}% from Oil Mogul`
+      +` (${(+days)} days in ${bankTermRealDays(+days).toFixed(1)})`);
     return {kind:"bank",ticker:"BANK",name:`City Bank – ${bankTermLabel(days)}`,bank:true,benefit:[`${(apr*100).toFixed(2)}% APR`,`${(apr*(+days/365)*100).toFixed(2)}% over ${days} days`],cost:dep,days:+days,annual:dep*apr,roi:apr,ret7:dep*apr*7/365,ret31:dep*apr*31/365,compareTerm:+days,bankApr:apr,desc:parts.join(" + ")};
   });
 }
 // Every stock row carries the same tag/benefit flags. Building them in one
-// place keeps the row-creation sites below in step — adding a new tag only
+// place keeps the row-creation sites below in step. Adding a new tag only
 // needs changing here.
 function stockFlags(ticker,name,block,type,label,qty,days){
   return {
@@ -2322,7 +2714,8 @@ function stockRows(){
       continue;
     }
     if(type==="bankbonus"){
-      const meritBonus=+($("merits").value||0)*0.05, tciBonus=1; // compare incremental bank profit with TCI absent/present
+      // The TCI block adds 10% to the bank rate, applied as the 0.10 factor below.
+      const meritBonus=+($("merits").value||0)*0.05;
       const baseRates=Object.entries(BANK_TERMS).map(([d,k])=>({days:+d,rate:+rates[k]||0})).filter(x=>x.rate>0);
       if(!baseRates.length){out.push({...stockFlags(ticker,name,1,type,label,qty,days),cost:price*b1,roi:null,desc:"Needs City Bank rates"});continue}
       // TCI value is based on the increase caused by the block, using each term and the currently best APR.
@@ -2342,7 +2735,7 @@ function stockRows(){
       // deposit is made, so capital is committed 7 days per deposit cycle.
       const depositsPerYear=365/best.days;
       const daysHeld=7*depositsPerYear;
-      // Cost stays the real block price — you still have to pay it. Only the
+      // Cost stays the real block price, since you still have to pay it. Only the
       // ROI reflects that the capital is tied up for part of the year.
       const activeCost=blockCost*(daysHeld/365);
       out.push({...shared,name:name+" - Active",cost:blockCost,roi:annual/activeCost,
@@ -2432,7 +2825,7 @@ function stockRows(){
     const annual=benefit*365/days; out.push({...stockFlags(ticker,name,1,type,label,qty,days),cost:price*b1,days,annual,roi:annual/(price*b1),ret7:annual*7/365,ret31:annual*31/365,desc});
     // Stocks with a single benefit block have no purchasable increments.
     if(SINGLE_BLOCK_TICKERS.includes(ticker)) continue;
-    // Defer increment generation until every first block is known — which
+    // Defer increment generation until every first block is known, which
     // increments are worth showing depends on the whole ranking.
     seeds.push({ticker,name,price,b1,benefit,days,desc,type,label,qty});
   }
@@ -2441,7 +2834,7 @@ function stockRows(){
 
 // Which increments to display, per the purchase-sequence model:
 //   The sequence works down the ROI ranking. The last first-block you'd ever
-//   target is the lowest-ROI one that's still profitable — call it the final
+//   target is the lowest-ROI one that's still profitable. Call it the final
 //   target. So we show:
 //     1. every increment ranked at or above the final target's ROI, and
 //     2. the increments that would serve as "parking" while saving for it:
@@ -2450,7 +2843,7 @@ function incrementRows(firstBlocks,seeds){
   if(!seeds.length) return [];
   const path=$("incMode")?.value||"everything";
   const incSel=$("incMax")?.value||"optimum";
-  // Deprioritised stocks show their first block only — no increments.
+  // Deprioritised stocks show their first block only, with no increments.
   const depri=deprioritised();
   const capFor=s=>depri.has(s.ticker)?0:Infinity;
   const blocksFor=(s,maxBlock)=>{
@@ -2542,14 +2935,29 @@ function propertyLawStudied(){ return !!$(PROPERTY_LAW_COURSE)?.checked }
 // What a fully-upgraded Private Island costs, after the two discounts that
 // can apply to it: Property Law takes 10% off the purchase price only, an
 // owned ELT block takes 10% off the upgrades only.
+// Upgrade list price, before any discount. The yacht is optional, so it is
+// the only thing that changes this number.
+function piUpgradeBase(yacht){
+  return yacht?PI_UPGRADE_TOTAL:PI_UPGRADE_TOTAL-PI_UPGRADE_COSTS["Private Yacht"];
+}
+// Total discount currently applied to upgrades, as a fraction. ELT and
+// Interior Connections are 10% each and stack additively.
+function piUpgradeDiscount(){
+  return (boolVal("eltOwned")?0.10:0)+(boolVal("propertyBroker")?0.10:0);
+}
 function privateIslandCost(opts={}){
   const law=opts.propertyLaw!==undefined?opts.propertyLaw:propertyLawStudied();
   const elt=opts.elt!==undefined?opts.elt:boolVal("eltOwned");
+  // Interior Connections is the same 10% off upgrades that ELT gives, from a
+  // 10-star Property Broker instead of a stock block. Torn stacks additively,
+  // so holding both is a flat 20% off rather than 19%.
+  const broker=opts.broker!==undefined?opts.broker:boolVal("propertyBroker");
   const yacht=boolVal("piYacht");
   const base=propertyPrice("Private Island")*(law?0.90:1);
-  const upgrades=(yacht?PI_UPGRADE_TOTAL:PI_UPGRADE_TOTAL-PI_UPGRADE_COSTS["Private Yacht"])*(elt?0.90:1);
+  const upgradeDiscount=1-((elt?0.10:0)+(broker?0.10:0));
+  const upgrades=piUpgradeBase(yacht)*upgradeDiscount;
   const parts=[`${money(base)} island${law?" (Property Law -10%)":""}`,
-               `${money(upgrades)} upgrades${elt?" (ELT -10%)":""}${yacht?"":" (no yacht)"}`];
+               `${money(upgrades)} upgrades${yacht?"":" (no yacht)"}`];
   return {base,upgrades,total:base+upgrades,note:parts.join(" + ")};
 }
 // Two ways to value a Private Island: rent it out, or avoid paying rent.
@@ -2596,9 +3004,14 @@ function updateMeritsHelp(){
   const yh=$("piYachtHelp");
   if(yh){
     const yacht=boolVal("piYacht");
-    const total=yacht?PI_UPGRADE_TOTAL:PI_UPGRADE_TOTAL-PI_UPGRADE_COSTS["Private Yacht"];
-    yh.textContent=`PI upgrade cost: ${money(total)}`;
+    const list=piUpgradeBase(yacht);
+    const cut=piUpgradeDiscount();
+    const saving=list*cut;
+    // Saving only appears once something is actually taking money off it.
+    yh.innerHTML=`PI upgrade cost:<br>${money(list-saving)}`
+      +(saving>0?`<br>Saving:<br>${money(saving)}`:"");
   }
+  updateJobPointHelp();
   const em=$("eduMeritsHelp");
   if(em) em.textContent=`-${((+($("educationMerits")?.value||0))*EDU_MERIT_REDUCTION*100).toFixed(0)}% course time`;
   const er=$("eduRemainingHelp");
@@ -2613,7 +3026,7 @@ function updateMeritsHelp(){
 }
 function updateColumnHeaders(){
   // Headers now carry their own dropdowns, so the selected period is already
-  // visible — nothing to rewrite here (rewriting would destroy the selects).
+  // visible, so there is nothing to rewrite here (rewriting would destroy the selects).
 }
 
 // A row's return for whichever period a column is showing.
@@ -2628,7 +3041,7 @@ const returnValue=r=>periodValue(r.annual,tablePeriod());
 const planReturnValue=r=>periodValue(r.annual,planPeriod());
 
 const DEPRIORITISE_WEIGHT=0.0001;
-// Tickers the user has chosen to rank lower. Displayed figures stay true —
+// Tickers the user has chosen to rank lower. Displayed figures stay true;
 // only ordering and the recommendation use the weighted value.
 function prioritised(){
   const set=new Set();
@@ -2674,7 +3087,7 @@ function calculate(){
   }
   // Anything that rebuilds the rows changes what a plan built from them would
   // say, so an existing plan is flagged as out of date rather than silently
-  // rebuilt — rebuilding is what the button is for.
+  // rebuilt. Rebuilding is what the button is for.
   refreshPlanPrioritiseText();
   updatePlanBankHelp();       // the rate it quotes moves with the bank settings
   markPlanStale();
@@ -2701,7 +3114,7 @@ window.selectedRows=window.selectedRows||new Set();
 window.ownedRows=window.ownedRows||new Set();
 // Investments deliberately passed over. Kept apart from ownership because they
 // answer a different question: not "do I hold this" but "stop suggesting it".
-// The planner ignores this set entirely — skipping mutes a recommendation, it
+// The planner ignores this set entirely. Skipping mutes a recommendation, it
 // does not rewrite your long-term plan.
 window.skippedRows=window.skippedRows||new Set();
 // Plan steps are tracked per occurrence, not per stock: the same investment can
@@ -2721,7 +3134,7 @@ function rowState(key){
 // Increments are bought in order, so a click carries to the blocks that must
 // follow from it. Owning B3 means owning B1 and B2, so marking one owned marks
 // everything below it. Deciding against B2 rules out B3 and beyond, so both
-// skipping and clearing carry upward — clearing leaves them unbought rather
+// skipping and clearing carry upward. Clearing leaves them unbought rather
 // than stranded on skip.
 function blockPeers(key,dir){
   const row=rows.find(r=>rowKey(r)===key);
@@ -2747,7 +3160,7 @@ function cycleRowState(key,tr){
   if(state==="none"){
     // You can only hold one City Bank term at a time, and only one TCI
     // strategy, so marking one owned clears whichever other one was marked.
-    // Skipping carries no such rule — passing over the 7-day term says nothing
+    // Skipping carries no such rule. Passing over the 7-day term says nothing
     // about the 3-month one.
     const group=row?exclusionGroup(row):null;
     if(group) rows.filter(r=>exclusionGroup(r)===group&&rowKey(r)!==key)
@@ -2776,12 +3189,12 @@ function toggleRow(key,checked,group){
     window.selectedRows.add(key);
   }else window.selectedRows.delete(key);
   // The Plan column is what the "Selected investments" goal targets, so a tick
-  // changes that plan — and the situational stocks it needs along with it.
+  // changes that plan, and the situational stocks it needs along with it.
   if($("planGoal")?.value==="selected"){ syncPlanPrioritiseToGoal(); markPlanStale() }
   render();
 }
 
-// Totals for any set of rows: cost, return and blended ROI. Called twice —
+// Totals for any set of rows: cost, return and blended ROI. Called twice,
 // once for what you own, once for what you have ticked to plan for.
 function totalsFor(keys,period){
   const sel=rows.filter(r=>keys.has(rowKey(r)));
@@ -2791,10 +3204,9 @@ function totalsFor(keys,period){
   const roi=cost>0?annual/cost:null;
   return {n:sel.length,cost,ret,roi};
 }
-function renderTotals(){ return totalsFor(window.selectedRows) }
 // Both Portfolio panels are the same two lines; only the period differs.
 // What the plan says you are holding right now: what you started with, plus
-// everything a ticked step bought, minus everything a ticked step sold — a
+// everything a ticked step bought, minus everything a ticked step sold. A
 // step that sells to fund a purchase takes those holdings back off the tally.
 function planHeldKeys(){
   const keys=new Set(window.ownedRows);
@@ -2852,11 +3264,11 @@ function selectAll(which,checked){
 // ======================================================================
 // What to buy right now. The target is the best thing you don't own; while
 // saving for it you can park money in cheaper investments whose combined cost
-// stays under the target's. The recommendation is the cheapest of those — the
-// one you can afford soonest — or the target itself when nothing qualifies.
+// stays under the target's. The recommendation is the cheapest of those (the
+// one you can afford soonest) or the target itself when nothing qualifies.
 function bestBuy(list){
   // Banks are somewhere to hold capital, not something to acquire, so they are
-  // never suggested as a purchase — see bankAdviceText() for how they surface.
+  // never suggested as a purchase. See bankAdviceText() for how they surface.
   const unowned=list.filter(r=>!window.ownedRows.has(rowKey(r))&&!window.skippedRows.has(rowKey(r))
                               &&r.roi!=null&&isFinite(r.roi)&&r.roi>0
                               &&r.kind!=="bank"&&r.kind!=="cayman")
@@ -2887,7 +3299,7 @@ function bankAdviceText(list){
   if(banks.some(r=>window.ownedRows.has(rowKey(r)))&&bankDepositValue()>=bankDepositCap()) return "";
   // Ranked, not raw: a deprioritised stock is pushed down here exactly as it is
   // in the sort and in "Buy this next", so unticking it drops it from this list.
-  // Owned ones stay listed — they are a reminder not to sell them to fund the bank.
+  // Owned ones stay listed as a reminder not to sell them to fund the bank.
   const better=list.filter(r=>r.kind!=="bank"&&r.kind!=="cayman"&&!window.skippedRows.has(rowKey(r))
                              &&r.roi!=null&&isFinite(r.roi)&&rankRoi(r)>bankRoi);
   const names=[...new Set(better.map(r=>r.name))];
@@ -3034,7 +3446,7 @@ function render(){
   renderPlan();
   // Until stock prices load there's nothing to show, so swap the tables for a
   // prompt to enter an API key.
-  // Nothing worth exporting until share prices have loaded — the same
+  // Nothing worth exporting until share prices have loaded, the same
   // condition that swaps the tables for the "enter a key" prompt.
   const noData=!Object.keys(prices).length;
   document.body.classList.toggle("no-data",noData);
@@ -3086,13 +3498,14 @@ function render(){
 // (ticking a step, folding a group, paging) redraws from this cache.
 window.planResult=window.planResult||null;
 window.planStale=false;
-// Builds — or rebuilds — the plan from whatever the settings currently say.
+// Builds (or rebuilds) the plan from whatever the settings currently say.
 function buildPlan(){
   const btn=$("planGo");
   if(btn) btn.disabled=true;
   try{
     window.planResult=simulatePlan();
     window.planStale=false;
+    renderStaleNote();
     window.planPage=1;
     renderPlan();
   } finally {
@@ -3100,9 +3513,25 @@ function buildPlan(){
   }
 }
 // A setting changed, so the plan on screen no longer matches the settings.
-// It stays visible — it just says so.
+// It stays visible, it just says so.
 function markPlanStale(){
   if(window.planResult) window.planStale=true;
+  renderStaleNote();
+}
+// The warning only makes sense once a plan exists to be out of date. Dismissal
+// is permanent and per-browser: someone who knows to press the button again
+// doesn't need telling every time.
+window.staleNoteDismissed=false;
+function renderStaleNote(){
+  const el=$("planStaleNote");
+  if(!el) return;
+  el.hidden=window.staleNoteDismissed||!window.planStale||!window.planResult;
+}
+function dismissStaleNote(){
+  window.staleNoteDismissed=true;
+  renderStaleNote();
+  try{ localStorage.setItem("tornInvStaleNote","off") }
+  catch(e){ logProblem("Warning dismissal could not be saved",e) }
 }
 
 // Stocks the planner can't rank on ROI alone: boosters, situational benefits
@@ -3121,15 +3550,101 @@ function prioritisedTickers(){
   document.querySelectorAll(".plan-prio").forEach(cb=>{if(cb.checked)set.add(cb.dataset.ticker)});
   return set;
 }
+// ----------------------------------------------------------------------
+// PINNED NO-ROI STOCKS
+// A no-ROI stock has no return to rank it by, so the only way to say "I want
+// this one" is to name it. Pinning moves it to the front of the plan; the one
+// exception refuses and goes to the back instead.
+// ----------------------------------------------------------------------
+const DUD_TICKER="IST";
+const DUD_MESSAGE="Why would you -.-";
+// WSU shortens education courses, so it's worth prioritising by default,
+// but only for someone with study left to shorten. One course remaining or
+// none isn't enough to be worth reordering a plan around.
+const DEFAULT_PIN="WSU";
+window.pinnedStocks=window.pinnedStocks||new Set();
+window.dudPinned=window.dudPinned||false;
+// Courses still unticked. Counted rather than measured in days, because the
+// rule is about how much studying is left, not how long it takes.
+function coursesRemaining(){
+  return Object.keys(COURSE_WEEKS).reduce((n,id)=>n+($(id)?.checked?0:1),0);
+}
+// Applied once on first run, and again after an API refresh fills in courses,
+// but never over a choice the user has already made and saved.
+function applyDefaultPins(){
+  if(window.pinsUserSet) return;
+  const cb=document.querySelector(`.plan-prio[data-ticker="${DUD_TICKER}"]`);
+  if(cb&&cb.checked){ cb.checked=false; syncPlanPrioAll() }
+  const want=coursesRemaining()>1;
+  if(want) window.pinnedStocks.add(DEFAULT_PIN);
+  else window.pinnedStocks.delete(DEFAULT_PIN);
+  syncPinnedButtons();
+}
+// Pinned stocks, cheapest first: with no ROI to separate them, price is the
+// only ordering left that means anything.
+function pinnedOrder(){
+  const costs=new Map();
+  rows.filter(r=>r.kind==="stock"&&(r.block||1)===1&&window.pinnedStocks.has(r.ticker))
+      .forEach(r=>costs.set(r.ticker,r.cost));
+  return [...window.pinnedStocks].sort((a,b)=>(costs.get(a)??Infinity)-(costs.get(b)??Infinity));
+}
+function syncPinnedButtons(){
+  document.querySelectorAll(".pin-stock").forEach(b=>{
+    const t=b.dataset.ticker;
+    const on=t===DUD_TICKER?window.dudPinned:window.pinnedStocks.has(t);
+    b.classList.toggle("pinned",on);
+    b.setAttribute("aria-pressed",String(on));
+  });
+}
+function togglePinnedStock(btn){
+  const t=btn.dataset.ticker;
+  const cb=document.querySelector(`.plan-prio[data-ticker="${t}"]`);
+  if(t===DUD_TICKER){
+    // The dud is never pinned. Clicking it either way unticks it, so the
+    // outline going red means "removed from the plan", not "prioritised".
+    window.dudPinned=!window.dudPinned;
+    if(window.dudPinned) floatOverElement(btn,DUD_MESSAGE);
+    if(cb&&cb.checked){ cb.checked=false; syncPlanPrioAll() }
+    syncPinnedButtons();
+    savePinned();
+    markPlanStale();
+    return;
+  }
+  if(window.pinnedStocks.has(t)) window.pinnedStocks.delete(t);
+  else window.pinnedStocks.add(t);
+  // Pinning something the plan was set to skip would contradict itself, so a
+  // pin ticks the box too. Unpinning leaves the tick alone, since wanting it
+  // planned but not first is a perfectly ordinary thing to want.
+  if(window.pinnedStocks.has(t)&&cb&&!cb.checked){ cb.checked=true; syncPlanPrioAll() }
+  syncPinnedButtons();
+  savePinned();
+  markPlanStale();
+}
+// A stock that is no longer planned for can't also be the thing planned first.
+// The dud is exempt: being unticked is its normal state, not a contradiction.
+function dropPinIfUnticked(ticker){
+  if(ticker===DUD_TICKER) return;
+  const cb=document.querySelector(`.plan-prio[data-ticker="${ticker}"]`);
+  if(cb&&!cb.checked&&window.pinnedStocks.delete(ticker)){
+    syncPinnedButtons(); savePinned();
+  }
+}
+function savePinned(){
+  window.pinsUserSet=true;
+  try{
+    localStorage.setItem("tornInvPinned",JSON.stringify({
+      pinned:[...window.pinnedStocks],dud:window.dudPinned,user:true}));
+  }catch(e){ logProblem("Pinned stocks could not be saved",e) }
+}
 // What each goal actually plans for, shown under the two dropdowns.
 const PLAN_GOAL_DESC={
-  everything:"Plans the optimal route to owning a single stock block of every stock",
-  stock:"Plans the optimal route to a chosen investment, at the increment you pick",
-  selected:"Plans the optimal route to exactly what you have ticked in the Plan column of the Investments table, buying whatever else pays best along the way to fund them",
-  energy1000:"Buys whatever pays best until nothing beats Cayman, then takes Mc Smoogle Corp to ten blocks for 1,000 energy a week, plus one block of any situational stock you have ticked",
-  money:"Pure profit. No situational stocks, no filling out the set — it buys only what beats Cayman, in order",
-  increments:"Aims for the chosen number of blocks of every stock that has increments, otherwise the same rules as one of everything",
-  newbie:"A tailored selection of settings and tweaks to simulate the best path for players just starting out, including accounting for unlocking new merits and investment options over time."
+  everything:"The path to owning a single stock block of every stock.",
+  stock:"The path to a chosen investment.",
+  selected:"The path to owning everything you ticked in the Plan column of the Investments Tables.",
+  energy1000:"The route to owning 10 Mc Smoogle Corp increments and 1000 bonus energy every week.",
+  money:"Just gives you lots of money",
+  increments:"Don't know why you'd want 10 of everything, but hey, it's here if you want it.",
+  newbie:"A specially tailored pathway for brand new players to go from zero to multi-billionaire. Simulates bank term unlocks, gradual merit upgrades, study completion, and aims to reach the Monopoly merit in the most profitable way possible."
 };
 function updateGoalDesc(){
   const el=$("planGoalDesc");
@@ -3137,12 +3652,12 @@ function updateGoalDesc(){
 }
 // Which situational stocks the goal in front of you actually needs. These are
 // only ever bought when ticked, so the goal ticks the ones it depends on and
-// clears the rest — switch back to one of everything and they all return.
+// clears the rest. Switch back to one of everything and they all return.
 function situationalForGoal(){
   const goal=$("planGoal")?.value||"everything";
   const all=plannableStocks().map(x=>x[0]);
   // Mc Smoogle Corp is the energy stock, so that path needs it ticked and
-  // nothing else by default — tick more back on and the plan will buy them.
+  // nothing else by default. Tick more back on and the plan will buy them.
   if(goal==="energy1000") return new Set(all.filter(t=>t==="MCS"));
   if(goal==="money") return new Set();          // profit only, nothing situational
   if(goal==="stock"){
@@ -3200,7 +3715,7 @@ function syncPlanPrioAll(){
   all.indeterminate=on>0&&on<boxes.length;
 }
 // Stocks whose benefit isn't a plain payout have no tooltip to fall back on,
-// so the planner list carries its own wording — and says where the setting
+// so the planner list carries its own wording, and says where the setting
 // behind each number lives.
 const PLAN_STOCK_DESC={
   ELT:"10% Property Upgrade Discount. Amount of PI's upgraded per year set in advanced view > Miscellaneous Stuff.",
@@ -3229,11 +3744,28 @@ function refreshPlanPrioritiseText(){
 function buildPlanPrioritise(){
   const el=$("planPrioritise");
   if(!el) return;
-  el.innerHTML=plannableStocks().map(([ticker,name,,type,days,label,qty])=>{
+  const all=plannableStocks();
+  const noRoi=all.filter(x=>UNDEFINED_ROI_TICKERS.includes(x[0]));
+  const withRoi=all.filter(x=>!UNDEFINED_ROI_TICKERS.includes(x[0]));
+  const row=([ticker,name,,type,days,label,qty])=>{
     const tip=planStockDesc(ticker,type,label,qty,days);
     return `<label class="pref-row"><input type="checkbox" class="plan-prio" data-ticker="${ticker}" checked> <span class="ticker">${ticker}</span> <strong>${name}</strong><div class="sub">${esc(tip)}</div></label>`;
-  }).join("");
-  el.querySelectorAll(".plan-prio").forEach(cb=>cb.addEventListener("change",()=>{syncPlanPrioAll();markPlanStale()}));
+  };
+  // No-ROI stocks can't be ranked on return, so instead of a tick they get a
+  // pin: clicking the name promotes that stock to the goal the plan works
+  // toward first. The checkbox still governs whether it's planned for at all.
+  const pinRow=([ticker,name,,type,days,label,qty])=>{
+    const tip=planStockDesc(ticker,type,label,qty,days);
+    const dud=DUD_TICKER===ticker;
+    return `<label class="pref-row"><input type="checkbox" class="plan-prio" data-ticker="${ticker}" checked> <button type="button" class="pin-stock${dud?" pin-dud":""}" data-ticker="${ticker}" aria-pressed="false"><span class="ticker">${ticker}</span> <strong>${name}</strong></button><div class="sub">${esc(tip)}</div></label>`;
+  };
+  el.innerHTML=withRoi.map(row).join("")
+    +(noRoi.length?`<div class="plan-grid-rule"></div>`+noRoi.map(pinRow).join(""):"");
+  el.querySelectorAll(".plan-prio").forEach(cb=>cb.addEventListener("change",()=>{
+    dropPinIfUnticked(cb.dataset.ticker);
+    syncPlanPrioAll();markPlanStale();
+  }));
+  syncPinnedButtons();
   syncPlanPrioAll();
 }
 // Populate the "a certain investment" picker.
@@ -3276,7 +3808,7 @@ function newbieActive(){ return ($("planGoal")?.value||"")==="newbie" }
 function newbieTermUnlockDays(){
   const lengths=Object.keys(BANK_TERMS).map(Number).sort((a,b)=>a-b);
   // A term already running says everything up to its length is unlocked
-  // already, and the next one up can only be started once it finishes — no
+  // already, and the next one up can only be started once it finishes, so no
   // point making someone re-earn the terms they plainly have.
   const held=numVal("planBankAmount")>0?planBankTerm():0;
   let cum=held?Math.max(0,Math.ceil(numVal("planBankDays"))):0;
@@ -3334,7 +3866,7 @@ function fastestFillOptionAt(cash,income,cap,day){
   }
   return best||bestBankOptionAt(day);
 }
-// A newbie has no faction or Oil Rig bonus on Cayman either — base rate only.
+// A newbie has no faction or Oil Rig bonus on Cayman either, so base rate only.
 function newbieCaymanMonthlyRate(){ return 0.005 }
 function newbieCaymanAnnualRoi(){ return Math.pow(1.005,12)-1 }
 // Computer Science courses (and so I Industries Ltd.) are assumed complete
@@ -3407,7 +3939,7 @@ const PLAN_MAX_DAYS=365*100;
 // A first block is bought because the goal wants one of everything, however
 // thin its return. An increment is optional, so it competes with the obvious
 // alternative for that money: leaving it in Cayman, which takes any amount at
-// a fixed rate. City Bank deliberately isn't the comparison — it pays more but
+// a fixed rate. City Bank deliberately isn't the comparison: it pays more but
 // it is capped and locks for a term, so it can't absorb what's left over.
 function passiveFloor(){
   if(!caymanEnabled()) return -Infinity;
@@ -3430,7 +3962,7 @@ function planCandidates(){
     // TCI pays a share of the interest on your City Bank deposit, so the
     // Investments page values it against whatever is in there today. The plan
     // is going to fill that bank, and once it is full the block is worth many
-    // times more — valuing it at today's balance had the planner buying it
+    // times more. Valuing it at today's balance had the planner buying it
     // last, or not rating it at all. Here it is valued against the cap the
     // plan is heading for.
     if(r.ticker==="TCI"&&r.kind==="stock"){
@@ -3445,7 +3977,7 @@ function planCandidates(){
     if(!newbieActive()) return r;
     // Total Newbie: I Industries Ltd. is valued as if every relevant
     // Computer Science course were already complete, since that's assumed
-    // true from month 12 on this pathway — simulatePlan() is what actually
+    // true from month 12 on this pathway. simulatePlan() is what actually
     // holds the purchase back until then (NEWBIE_IIL_UNLOCK_DAY).
     if(r.ticker==="IIL"){
       const best=bestVirusPerDay(true);
@@ -3469,7 +4001,7 @@ function planCandidates(){
   const sel=$("planIncMax")?.value||"optimum";
   const maxBlock=sel==="optimum"?12:Math.max(1,Math.min(10,+sel));
   // Each increment costs twice the last, so an unchecked ladder reaches B12 at
-  // 2,048x the first block — hundreds of billions, which the simulation then
+  // 2,048x the first block, hundreds of billions, which the simulation then
   // spends its whole horizon failing to save for. Anything past what the money
   // could ever reach is not generated at all. Tripled to leave room for
   // interest and for the returns of everything bought along the way; a count
@@ -3569,7 +4101,22 @@ function planOrder(){
     if(j>=priced.length){merged.push(ranked[i++]);continue}
     merged.push(priced[j].cost<ranked[i].cost?priced[j++]:ranked[i++]);
   }
-  return [...merged,...deferred];
+  let order=[...merged,...deferred];
+  // Pinned no-ROI stocks jump the whole queue, cheapest first, because the
+  // user has said outright that these are what the plan is for. The dud goes
+  // to the very back instead, behind even the unticked stocks.
+  const pinRank=new Map(pinnedOrder().map((t,idx)=>[t,idx]));
+  if(pinRank.size||window.dudPinned){
+    const rankOf=r=>{
+      if(window.dudPinned&&r.ticker===DUD_TICKER) return Infinity;
+      return pinRank.has(r.ticker)?pinRank.get(r.ticker):pinRank.size;
+    };
+    // Stable: everything not pinned keeps the order worked out above.
+    order=order.map((r,idx)=>({r,idx}))
+               .sort((a,b)=>(rankOf(a.r)-rankOf(b.r))||(a.idx-b.idx))
+               .map(x=>x.r);
+  }
+  return order;
 }
 // Which stocks the goal actually requires.
 function goalTargets(order){
@@ -3603,7 +4150,7 @@ function goalTargets(order){
   if(goal==="selected"){
     // Only what is ticked in the Plan column. A ticked increment brings the
     // blocks under it along: each one is its own purchase, so B3 means buying
-    // B1 and B2 too. Everything else the plan buys is parking — bought to earn
+    // B1 and B2 too. Everything else the plan buys is parking, bought to earn
     // while saving, then sold on, which acquire() handles as it always has.
     const deepest={};
     const idOf=r=>r.kind==="stock"?`${r.ticker}|${r.name}`:rowKey(r);
@@ -3618,7 +4165,7 @@ function goalTargets(order){
 }
 
 // Walk forward from today, buying what the order calls for. While saving for
-// the next target, park spare cash in something cheaper — but only if it will
+// the next target, park spare cash in something cheaper, but only if it will
 // complete at least one payout cycle before we sell, and that payout beats the
 // 0.1% we lose on the sale.
 // TCI only has to be held while a deposit is made, and it takes this long to
@@ -3641,7 +4188,7 @@ function simulatePlan(){
   // worth prioritising and drops back with the other no-ROI stocks.
   const eduDoneDay=educationRemainingDays();
   // The plan starts from what is already held, as marked on the Investments
-  // page — which includes anything a personal API refresh detected. Ticking a
+  // page, which includes anything a personal API refresh detected. Ticking a
   // plan step still doesn't feed back into this; progress and position stay
   // separate, which is what stopped the plan reshuffling underfoot.
   const owned=new Set();
@@ -3654,7 +4201,7 @@ function simulatePlan(){
   const steps=[];
   // Two different endings: outOfRoom means the simulation itself ran out of
   // steps and everything after is unknown, while a single target being out of
-  // reach only rules out that one — the rest of the list still gets planned.
+  // reach only rules out that one. The rest of the list still gets planned.
   let outOfRoom=false;
   const useCayman=caymanEnabled();
   const isNewbie=newbieActive();
@@ -3686,7 +4233,7 @@ function simulatePlan(){
   // deposit earns the bonus rate. Its worth is counted there rather than as
   // income of its own, which would be the same money twice.
   let tciPassiveHeld=seeded.some(r=>r.ticker==="TCI"&&/ - Passive$/.test(r.name||""));
-  // With TCI managed here, the rate has to start from its pre-bonus value —
+  // With TCI managed here, the rate has to start from its pre-bonus value,
   // otherwise the Investments-page checkbox would apply the 10% a second time.
   const bankRoiFor=row=>{
     const base=(!isNewbie&&boolVal("tciOwned"))?row.roi/1.10:row.roi;
@@ -3703,7 +4250,7 @@ function simulatePlan(){
   const held=[];                       // {row, forOcc}
   seeded.forEach(r=>held.push({row:r,forOcc:null,net:0}));
   // A held TCI block earns through the bank rate above, not on its own, so it
-  // contributes nothing here — otherwise the bonus would be counted twice.
+  // contributes nothing here, otherwise the bonus would be counted twice.
   const returnOf=row=>(row.kind==="stock"&&row.ticker==="TCI")?0:dailyReturn(row);
   const income=()=>{
     const term=bankFull()?bankRowAt(day):null;
@@ -3780,8 +4327,8 @@ function simulatePlan(){
   // Dead capital goes first. Anything already held that earns less than the
   // weakest investment the plan would still choose to buy is worth less than
   // what that money could be doing, so it is sold up front to fund the rest.
-  // Holdings with no measurable return are left alone — their worth isn't in
-  // this model — and islands are never sold.
+  // Holdings with no measurable return are left alone (their worth isn't in
+  // this model) and islands are never sold.
   function sellDeadWeight(){
     // Judged against the first blocks the plan means to buy, not their
     // increments: a deep increment's thin return would drag the bar so low
@@ -3810,7 +4357,7 @@ function simulatePlan(){
 
   // Buy `target`, parking spare capital along the way. Parking purchases are
   // acquired by this same routine, so a stock bought to fund a parking buy is
-  // planned exactly like any other purchase — nesting falls out of that.
+  // planned exactly like any other purchase. Nesting falls out of that.
   let acquireId=0;
   function acquire(target,parentOcc,depth){
     if(steps.length>=PLAN_MAX_ACTIONS){outOfRoom=true;return false}
@@ -3904,7 +4451,7 @@ function simulatePlan(){
       bankHeld=deposit;
       const usingRow=deposit>=bankCap?bankRow:fillRow;
       // The newbie helpers return plain {days,roi} options rather than full
-      // rows off `rows` — build the row shape the renderer expects.
+      // rows off `rows`, so build the row shape the renderer expects.
       const usingRoi=bankRoiFor(usingRow);
       const usingRowFull=usingRow.name?usingRow:{
         kind:"bank",ticker:"BANK",name:`City Bank – ${bankTermLabel(usingRow.days)}`,bank:true,
@@ -3965,7 +4512,7 @@ function simulatePlan(){
       const idx=targets.indexOf(target);
       if(!runCityBank(idx>=0?targets.slice(idx):[target])) return false;
       // runCityBank buys anything that pays out inside the term, and this
-      // target is in that list — without re-checking, it gets bought twice.
+      // target is in that list. Without re-checking, it gets bought twice.
       if(owned.has(rowKey(target))) return true;
     }
     return acquire(target,null,0);
@@ -4016,6 +4563,15 @@ function incrementCell(r){
   if(SINGLE_BLOCK_TICKERS.includes(r.ticker)) return "—";
   return r.block||1;
 }
+// "Torn City Times B2". Which increment is being sold matters as much as which
+// stock: a plan can hold B1 and sell B2, so the name alone is ambiguous.
+// Single-block stocks and non-stocks have nothing to disambiguate.
+function sellLabelPlain(r){
+  const suffix=(r.kind==="stock"&&!SINGLE_BLOCK_TICKERS.includes(r.ticker)&&r.block)
+    ? " B"+r.block : "";
+  return r.name+suffix;
+}
+function sellLabel(r){ return esc(sellLabelPlain(r)) }
 
 // ---- plan paging ----------------------------------------------------
 window.planPage=window.planPage||1;
@@ -4109,7 +4665,7 @@ function renderPlan(){
     if(fb) fb.hidden=true;
     note.textContent=rows.length
       ? ($("planGoal")?.value==="selected"&&!window.selectedRows.size
-          ? "Nothing ticked yet — tick what you are aiming for in the Plan column of the Investments table, then build the plan."
+          ? "Nothing ticked yet. Tick what you are aiming for in the Plan column of the Investments table, then build the plan."
           : "Press Show Me The Money above to build a plan from your current settings")
       : "";
     return;
@@ -4123,7 +4679,7 @@ function renderPlan(){
     s.occ=`${k}#${seen[k]}`;
     s.occIndex=seen[k];
     // Completion is read back from planDone every render, so unticking a step
-    // clears it again — the steps themselves now outlive a single render.
+    // clears it again. The steps themselves now outlive a single render.
     s.done=window.planDone.has(s.occ);
   });
   // Each step knows which acquisition it was bought to fund, so groups nest.
@@ -4147,7 +4703,7 @@ function renderPlan(){
   window.planNextOcc=next?next.occ:null;
   // The goal is what you are saving toward now: the first thing still to buy.
   // The next purchase may be something cheaper bought to earn while you save.
-  // A sale isn't a goal — it's a step toward one, so it's skipped here and
+  // A sale isn't a goal, it's a step toward one, so it's skipped here and
   // picked up by the chain below as a child of whatever it funds.
   const goalStep=pending.find(s=>!s.parking&&!s.sellHolding&&!s.unreachable)||null;
   // Walk down from the goal through the parking that must be bought to reach
@@ -4216,7 +4772,7 @@ function renderPlan(){
     // step, which is often just something parked along the way.
     const isNext=chain.has(s.occ);
     const nxLevel=chain.get(s.occ)||0;
-    const sold=s.sold.length?s.sold.map(r=>esc(r.name)).join(", "):"—";
+    const sold=s.sold.length?s.sold.map(sellLabel).join(", "):"—";
     const when=s.done?"owned":(s.unreachable?"beyond 100 years":(s.day===0?"now":formatDuration(Math.ceil(s.day))));
     // Two different reds: a step bought out of order stays flagged, but a
     // sale that's been carried out is just a completed step like any other.
@@ -4237,7 +4793,7 @@ function renderPlan(){
     }
     return `<tr data-key="${rowKey(s.row)}" data-occ="${s.occ}"${hidden?" hidden":""}${isNext?` style="--nx:${Math.max(0.3,1-nxLevel*0.22).toFixed(2)}"`:""} class="${isNext?"plan-next":""}${s.done&&!outOfOrder?" plan-done":""}${s.parking?" plan-parking":""}${dump?" plan-sell":""}">
 <td>${s.done&&!outOfOrder?'<span class="step-tick">✓</span> ':''}${i+1}</td>
-<td style="padding-left:${10+(s.depth||0)*18}px;--rails:${s.depth||1}">${s.groupSize?`<button type="button" class="grp-toggle" data-grp="${s.occ}">${open?"▾":"▸"} ${s.groupSize} step${s.groupSize===1?"":"s"} first</button>`:""}<span class="ticker">${s.row.ticker}</span> <strong>${esc(s.row.name)}</strong>${s.sellFirst?`<div class="sub">Sell to help fund ${esc(s.parentName||"your next purchase")}</div>`
+<td style="padding-left:${10+(s.depth||0)*18}px;--rails:${s.depth||1}">${s.groupSize?`<button type="button" class="grp-toggle" data-grp="${s.occ}"><span class="grp-caret">${open?"▴":"▸"}</span> ${s.groupSize} step${s.groupSize===1?"":"s"} first</button>`:""}<span class="ticker">${s.row.ticker}</span> <strong>${esc(s.row.name)}</strong>${s.sellFirst?`<div class="sub">Sell to help fund ${esc(s.parentName||"your next purchase")}</div>`
   :s.sellHolding?""
   :dump?`<div class="sub">Sell now and put it toward ${esc(goalRow?goalRow.name:"your goal")}</div>`:(s.parking?`<div class="sub">Bought to earn while saving for ${esc(s.parentName||"the next purchase")}</div>`:"")}</td>
 <td>${incrementCell(s.row)}</td>
@@ -4267,7 +4823,7 @@ function renderPlan(){
     : "";
   const missed=steps.filter(s=>s.unreachable).length;
   const skipped=missed?`${missed} investment${missed===1?" is":"s are"} further off than the 100 years the planner models, and ${missed===1?"was":"were"} stepped over. `:"";
-  note.textContent=(truncated?`Plan stopped at ${steps.length} steps — it needs more than the planner will model. `:range)+skipped+basis;
+  note.textContent=(truncated?`Plan stopped at ${steps.length} steps. It needs more than the planner will model. `:range)+skipped+basis;
   paintTotals("tbodyTotalsPlan","totalReturnHeaderPlan",planPeriod(),true);
 }
 
@@ -4278,7 +4834,7 @@ function renderPlan(){
 // it otherwise, and then every byte of a UTF-8 character becomes its own
 // Latin-1 character: – reads as â€“, ¯ as Â¯, ツ as ãƒ„. A UTF-8 byte-order mark
 // is supposed to prevent that, but whether it works depends on the Excel
-// version, the locale and how the file was opened — so the export sidesteps
+// version, the locale and how the file was opened, so the export sidesteps
 // the question entirely and writes nothing but ASCII, which every code page
 // on earth agrees about.
 const OUT_ASCII={"–":"-","—":"-","·":"-","×":"x","¯":"-","…":"...","’":"'","‘":"'",
@@ -4293,7 +4849,7 @@ function outAscii(v){
 }
 // Tab separated rather than comma: Excel splits a .csv on whatever the
 // machine's regional settings call the list separator, which is a semicolon
-// across most of comma-decimal Europe — the whole file lands in column A
+// across most of comma-decimal Europe. The whole file lands in column A
 // there. A tab is not a list separator in any locale, so it always splits.
 // Quoting is barely needed as a result: only a tab, a newline or a quote
 // inside a value forces it, and the export produces none of those.
@@ -4305,7 +4861,7 @@ function outCell(v){
 function outText(lines){ return lines.map(r=>r.map(outCell).join("\t")).join("\r\n") }
 function downloadTable(name,lines){
   // Pure ASCII by the time it reaches here (see outAscii), so there is nothing
-  // for a byte-order mark to disambiguate — and a BOM only risks turning up as
+  // for a byte-order mark to disambiguate, and a BOM only risks turning up as
   // a stray i>> in readers that don't know about it.
   const blob=new Blob([outText(lines)],{type:"text/tab-separated-values;charset=utf-8"});
   const url=URL.createObjectURL(blob);
@@ -4321,7 +4877,7 @@ function outStamp(){
 }
 // Whole numbers only. A decimal point is read as a thousands separator in a
 // comma-decimal locale, and in the dot-date ones (Germany, Poland, Bulgaria)
-// a value like 26.07 is quietly converted to 26 July — an integer means the
+// a value like 26.07 is quietly converted to 26 July. An integer means the
 // same thing everywhere. Halves round up, as Math.round does.
 const outNum=v=>(v==null||!isFinite(v))?"":Math.round(v);
 const outPct=v=>(v==null||!isFinite(v))?"":Math.round(v*100);
@@ -4357,7 +4913,7 @@ function exportInvestmentsTable(){
   if(basic) mainRows=mainRows.filter(r=>(r.block==null||r.block<=3)&&!/ - Active$/.test(r.name||""));
   const period=returnPeriodLabel();
   const out=[];
-  // One header row, first line of the file, shared by both tables — a
+  // One header row, first line of the file, shared by both tables. A
   // spreadsheet can then sort and filter the whole thing the moment it opens,
   // which a title line and a second set of headers halfway down would break.
   // Which table a row came from is a column instead.
@@ -4406,7 +4962,7 @@ function exportPlanTable(){
       :s.parking?"parking":"to buy";
     out.push([
       i+1, s.row.ticker, s.row.name, outIncrement(s.row), status,
-      s.bankNote||(s.sold&&s.sold.length?s.sold.map(r=>r.name).join(" + "):""),
+      s.bankNote||(s.sold&&s.sold.length?s.sold.map(sellLabelPlain).join(" + "):""),
       outNum(s.row.cost), outNum(planReturnValue(s.row)), outPct(s.row.roi),
       s.unreachable?"":(s.day===0?"now":formatDuration(Math.ceil(s.day))),
       s.unreachable?"":outNum(s.day), s.parentName||""
@@ -4466,7 +5022,7 @@ async function refresh(withUser){
     const gate=await verifyFaction();
     if(!gate.ok){
       setStatus(gate.name
-        ? `This app is for ${REQUIRED_FACTION} only — your key belongs to a member of ${gate.name}.`
+        ? `This app is for ${REQUIRED_FACTION} only. Your key belongs to a member of ${gate.name}.`
         : `This app is for ${REQUIRED_FACTION} only, and your key isn't in a faction.`,"bad");
       $("userStatus").hidden=true;
       calculate();
@@ -4479,6 +5035,9 @@ async function refresh(withUser){
         renderUserStatus([],`Access-only key · settings left as they are (${data.limitedReason})`,"",data);
       }else{
         const rep=applyUserData(data);
+        await applyRacingStock(
+          (label,detail)=>rep.push({ok:true,label,detail}),
+          (label,detail)=>rep.push({ok:false,label,detail}));
         lastUpdated.user=Date.now();
         const good=rep.filter(r=>r.ok).length;
         renderUserStatus(rep,`Preconfigured ${good} of ${rep.length} settings from your account`,"good",data);
@@ -4542,9 +5101,9 @@ function setupTableSorting(){
 }
 
 // Investment-table settings rebuild the rows. The planner's own fields are
-// deliberately absent here — they are wired to markPlanStale further down, so
+// deliberately absent here. They are wired to markPlanStale further down, so
 // that typing in the planner no longer re-runs the simulation on every key.
-["merits","educationMerits","tciOwned","fatCat","wsuOwned","eduJob","happyItem","energyItem","nerveItem","piRent","piIncome","cayman","bankDeposit","cayFaction","oilRig","piPerYear","adsPerMonth","bannerDays","piYacht","eltOwned","incMode","incMax","compareTermTable","returnPeriodTable"].forEach(k=>$(k)?.addEventListener("input",calculate));
+INVESTMENT_FIELDS.forEach(k=>$(k)?.addEventListener("input",calculate));
 // Format as you type. The caret is restored by counting digits rather than
 // characters, so inserting a comma does not shunt it around.
 function liveFormatMoney(el){
@@ -4565,7 +5124,7 @@ MONEY_INPUTS.forEach(id=>{
   const el=$(id);
   if(!el) return;
   // Capital and daily budget only feed the planner, so they never rebuild the
-  // investment rows — they just mark the plan as out of date.
+  // investment rows, they just mark the plan as out of date.
   const planOnly=(id==="capital"||id==="dailyBudget"||id==="planBankAmount");
   const after=()=>{ if(planOnly){ updatePlanBankHelp(); markPlanStale() } else calculate() };
   el.addEventListener("input",()=>{liveFormatMoney(el);if(id==="bankDeposit")clampBankDeposit();after()});
@@ -4640,13 +5199,16 @@ function flashEarlier(tr){
 }
 function flashRowToast(tr,message,cls="row-shake",hold=600){
   if(!tr) return;
-  document.querySelectorAll(".plan-toast").forEach(t=>t.remove());
   tr.classList.add(cls);
   setTimeout(()=>tr.classList.remove(cls),hold);
-  // Anchored to the page rather than the table cell, so a re-render cannot
-  // remove it mid-display.
-  // Sits over the clicked row, centred on it, kept inside the viewport.
-  const box=tr.getBoundingClientRect();
+  floatOverElement(tr,message);
+}
+// Anchored to the page rather than the element, so a re-render cannot remove
+// it mid-display. Sits over the target, centred, kept inside the viewport.
+function floatOverElement(el,message){
+  if(!el) return;
+  document.querySelectorAll(".plan-toast").forEach(t=>t.remove());
+  const box=el.getBoundingClientRect();
   const toast=document.createElement("div");
   toast.className="plan-toast";
   toast.textContent=message;
@@ -4707,7 +5269,7 @@ $("planBankAmount")?.addEventListener("input",()=>{
 });
 $("csvPlan")?.addEventListener("click",exportPlanTable);
 $("csvInvestments")?.addEventListener("click",exportInvestmentsTable);
-// Deselects every ticked step, without touching the plan itself — the
+// Deselects every ticked step, without touching the plan itself. The
 // simulation always starts fresh from the Investments page regardless.
 $("planClear")?.addEventListener("click",()=>{
   window.planDone.clear();
@@ -4761,7 +5323,18 @@ function setConfigCollapsed(collapsed){
   try{localStorage.setItem("tornInvConfigCollapsed",collapsed?"1":"0")}
   catch(e){ logProblem("Configuration panel state could not be saved",e) }
 }
+$("planStaleDismiss")?.addEventListener("click",dismissStaleNote);
 $("collapseConfig")?.addEventListener("click",()=>setConfigCollapsed(true));
+
+// The pin buttons sit inside a <label>, so a plain click would also toggle
+// that label's checkbox. preventDefault stops the label association firing.
+document.addEventListener("click",e=>{
+  const btn=e.target.closest(".pin-stock");
+  if(!btn) return;
+  e.preventDefault();
+  e.stopPropagation();
+  togglePinnedStock(btn);
+});
 $("configTab")?.addEventListener("click",()=>setConfigCollapsed(false));
 
 // Debug log wiring. Copy hands over the whole log as plain text so a bug
@@ -4773,7 +5346,7 @@ $("debugLogCopy")?.addEventListener("click",()=>{
   if(!text) return;
   navigator.clipboard?.writeText(APP_VERSION+"\n"+text)
     .then(()=>setStatus("Debug log copied to the clipboard.","good"))
-    .catch(()=>setStatus("Couldn't copy — select the log text and copy it by hand.","bad"));
+    .catch(()=>setStatus("Couldn't copy. Select the log text and copy it by hand.","bad"));
 });
 window.addEventListener("error",e=>{
   logProblem("Unexpected error"+(e.filename?" (line "+e.lineno+")":""),e.error||e.message);
@@ -4796,12 +5369,25 @@ $("viewAdvanced")?.addEventListener("click",()=>setView(false));
   el.addEventListener("keydown",e=>{if(e.key==="Enter"){formatMoneyInput(el);applyBasicControls(id)}});
 });
 
-const verEl=$("appVersion"); if(verEl) verEl.textContent=APP_VERSION;
+// The version now lives only in the footer, alongside the date.
+// Both read from the constants above, so a publish only ever edits those two.
+{
+  const upEl=$("footerUpdated");
+  if(upEl) upEl.textContent=APP_UPDATED;
+  const fvEl=$("footerVersion");
+  if(fvEl) fvEl.textContent=APP_VERSION;
+  const tosEl=$("tosUpdated");
+  if(tosEl) tosEl.textContent=APP_UPDATED;
+}
 buildPlanPrioritise();buildPlanTargets();buildBankTermOptions();
 // Cached market data first: the item dropdowns and bank rates have to exist
 // before saved settings are re-applied over them.
 const hadCache=restoreMarket();
 loadLocal();
+// The pin buttons are built above, before loadLocal has read the saved pins,
+// so their lit state has to be applied once the pins are actually known.
+syncPinnedButtons();
+applyDefaultPins();
 // A restored payout has to be turned back into a principal before anything
 // reads it. The term dropdown keeps whatever loadLocal put back, which is
 // either a saved choice or the guess made when it was saved.
@@ -4821,14 +5407,20 @@ if(hadCache){
 }
 // Page switching. Basic/Advanced applies to the Investments page only, so the
 // view toggle is hidden while the Planner is open.
+const PAGES=["investments","planner","tos"];
 function setPage(page){
-  const planner=page==="planner";
+  if(!PAGES.includes(page)) page="investments";
+  const planner=page==="planner", tos=page==="tos";
   document.body.classList.toggle("planner",planner);
-  $("pageInvestments").hidden=planner;
+  document.body.classList.toggle("tos",tos);
+  $("pageInvestments").hidden=page!=="investments";
   $("pagePlanner").hidden=!planner;
-  // The button offers the page you are not currently on.
+  $("pageTos").hidden=!tos;
+  // The switch offers the other of the two working pages. From the ToS it
+  // returns to Investments, which is where a first-time reader started.
   $("pageSwitch").textContent=planner?"Investments":"Planner";
-  // The API panel follows the active page so the key is always reachable.
+  // The API panel follows the active page so the key is always reachable. The
+  // ToS page has no slot for it, so it is parked back on the Investments page.
   const api=$("apiPanel");
   if(api){
     if(planner) $("plannerApiSlot").appendChild(api);
@@ -4840,6 +5432,14 @@ function setPage(page){
 }
 $("planPrioAll")?.addEventListener("change",e=>{
   document.querySelectorAll(".plan-prio").forEach(cb=>cb.checked=e.target.checked);
+  // Unticking everything also drops the pins, or the plan would still be
+  // aiming first at something it is no longer planning for.
+  if(!e.target.checked){
+    window.pinnedStocks.clear();
+    window.dudPinned=false;
+    syncPinnedButtons();
+    savePinned();
+  }
   markPlanStale();
 });
 $("planExtraAll")?.addEventListener("change",e=>{
@@ -4848,15 +5448,37 @@ $("planExtraAll")?.addEventListener("change",e=>{
   markPlanStale();
 });
 document.querySelectorAll(".plan-extra").forEach(cb=>cb.addEventListener("change",syncPlanExtraAll));
-// Planner settings never rebuild the plan by themselves any more — they just
+// Planner settings never rebuild the plan by themselves any more, they just
 // mark it out of date, and the button does the work.
 ["planGoal","planTarget","planTargetBlock","planTci","planIncMax","planPiOwn","planPiRent","planCayman","planCityBank"]
   .forEach(id=>$(id)?.addEventListener("change",planSettingChanged));
 $("pageSwitch")?.addEventListener("click",()=>{
   setPage(document.body.classList.contains("planner")?"investments":"planner");
 });
+// The ToS is reached by the footer link and left by the back button, so the
+// hash is the single source of truth for which page is showing.
+$("tosLink")?.addEventListener("click",e=>{
+  e.preventDefault();
+  // Remembered so OK can return here. A direct link to #tos has no previous
+  // page of ours, so that case falls back to Investments.
+  window.tosReturnTo=document.body.classList.contains("planner")?"planner":"investments";
+  history.pushState(null,"","#tos");
+  setPage("tos");
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+// OK goes back the way the reader came. history.back() would work when they
+// arrived by the link, but not on a direct #tos load, so the page is set
+// explicitly and the hash kept in step.
+$("tosOk")?.addEventListener("click",()=>{
+  const back=window.tosReturnTo||"investments";
+  history.pushState(null,"","#"+back);
+  setPage(back);
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+addEventListener("hashchange",()=>setPage(location.hash.replace("#","")||"investments"));
 // Whichever of the two modules is on screen is the one the button returns to.
 function activePageEl(){
+  if(document.body.classList.contains("tos")) return $("pageTos");
   return document.body.classList.contains("planner")?$("pagePlanner"):$("pageInvestments");
 }
 function syncToTop(){
@@ -4873,8 +5495,8 @@ addEventListener("resize",syncToTop);
 
 // Basic is the default view; Advanced only sticks if it was saved.
 try{setView(localStorage.getItem("tornInvView")!=="advanced")}
-catch(e){ logProblem("Saved view mode could not be read — Basic used",e); setView(true) }
-setPage(location.hash==="#planner"?"planner":"investments");
+catch(e){ logProblem("Saved view mode could not be read. Basic used",e); setView(true) }
+setPage(location.hash.replace("#","")||"investments");
 syncToTop();
 </script>
 </body></html>
