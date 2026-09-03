@@ -1,6 +1,6 @@
 # Autumn's Stonking Awesome Torn App
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.5.9 · Updated: 2026-09-03_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.6.0 · Updated: 2026-09-03_
 
 A passive-investment planner for [Torn](https://www.torn.com). The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.
 
@@ -71,14 +71,14 @@ Share prices, item values, bank rates and the reference tables are kept in your 
 
 ## The pages
 
-Switching between pages is done from the header, and the Docs and Terms of Service pages from the footer.
+Switching between pages is done from the header, and the Docs and Terms of Service pages from the footer. The title at the top left is also a button: from Docs or the Terms of Service it takes you back to whichever page you were on, in the view you were in. On a working page it does nothing, because you are already there.
 
 ### Investments
 
 A table of every stock benefit block, priced and ranked by return. Share prices come from tornsy.com; items, bank rates and the points market come from Torn's API.
 
-- **Basic** view is the simplified one: fewer columns, abbreviated money, colour-coded rows, and a break-even column. Best on a phone. It hides the configuration column and replaces it with a five-control Quick Settings bar, then prints the assumptions it is making under the table.
-- **Advanced** view adds the full column set and the configuration panels down the left.
+- **Basic** view is the simplified one, and what the app opens in: fewer columns, abbreviated money, colour-coded rows, and a break-even column. Best on a phone. It hides the configuration column and replaces it with a five-control Quick Settings bar, then prints the assumptions it is making under the table.
+- **Advanced** view adds the full column set and the configuration panels down the left. It works on a phone as well, so nothing is hidden from you on a small screen. Whichever view you last used is remembered.
 - **Click a row once to mark it owned, twice to skip it, and three times to clear it.** Owned rows are outlined; skipped rows get a dashed outline and are left out of recommendations, but still appear in the planner. Marking a higher increment marks everything below it; skipping a lower one skips everything above it; clearing a lower one clears everything above it.
 - The **Plan** column ticks feed the planner's *Custom Plan* path.
 - The **Portfolio** panel totals what you own and what you have ticked to plan.
@@ -103,7 +103,7 @@ The simulation has two hard ceilings: 2,000 steps and 100 simulated years. A tar
 
 ### Docs and Terms of Service
 
-Linked from the footer. Docs holds this page, the Investment Logic explainer, the changelog and the licence. Terms of Service carries the Torn-required data table and the kudos list.
+Linked from the footer. Docs holds this page, the Investment Logic explainer, the changelog, the licence, and one other thing. **Back to Stonking** at the bottom returns you to the app, as does clicking the title. Terms of Service carries the Torn-required data table and the kudos list.
 
 ---
 

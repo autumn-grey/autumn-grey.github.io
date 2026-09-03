@@ -63,7 +63,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="autumns-stonking-awesome-torn-app">Autumn's Stonking Awesome Torn App</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.5.9 · Updated: 2026-09-03</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.6.0 · Updated: 2026-09-03</em></p>
 <p>A passive-investment planner for <a href="https://www.torn.com">Torn</a>. The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.</p>
 <p>Currently restricted to members of <strong>The ZOO - Night Shift</strong>.</p>
 <p>The version number and last-updated date sit in the footer, and the version is stamped into every export, so a bug report can be tied to an exact build.</p>
@@ -130,12 +130,12 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
 <p>Share prices, item values, bank rates and the reference tables are kept in your browser after each refresh and restored when you come back, so a reload is instant and costs no API calls. The status line says how old the saved figures are. Personal data is never cached.</p>
 <hr />
 <h2 id="the-pages">The pages</h2>
-<p>Switching between pages is done from the header, and the Docs and Terms of Service pages from the footer.</p>
+<p>Switching between pages is done from the header, and the Docs and Terms of Service pages from the footer. The title at the top left is also a button: from Docs or the Terms of Service it takes you back to whichever page you were on, in the view you were in. On a working page it does nothing, because you are already there.</p>
 <h3 id="investments">Investments</h3>
 <p>A table of every stock benefit block, priced and ranked by return. Share prices come from tornsy.com; items, bank rates and the points market come from Torn's API.</p>
 <ul>
-<li><strong>Basic</strong> view is the simplified one: fewer columns, abbreviated money, colour-coded rows, and a break-even column. Best on a phone. It hides the configuration column and replaces it with a five-control Quick Settings bar, then prints the assumptions it is making under the table.</li>
-<li><strong>Advanced</strong> view adds the full column set and the configuration panels down the left.</li>
+<li><strong>Basic</strong> view is the simplified one, and what the app opens in: fewer columns, abbreviated money, colour-coded rows, and a break-even column. Best on a phone. It hides the configuration column and replaces it with a five-control Quick Settings bar, then prints the assumptions it is making under the table.</li>
+<li><strong>Advanced</strong> view adds the full column set and the configuration panels down the left. It works on a phone as well, so nothing is hidden from you on a small screen. Whichever view you last used is remembered.</li>
 <li><strong>Click a row once to mark it owned, twice to skip it, and three times to clear it.</strong> Owned rows are outlined; skipped rows get a dashed outline and are left out of recommendations, but still appear in the planner. Marking a higher increment marks everything below it; skipping a lower one skips everything above it; clearing a lower one clears everything above it.</li>
 <li>The <strong>Plan</strong> column ticks feed the planner's <em>Custom Plan</em> path.</li>
 <li>The <strong>Portfolio</strong> panel totals what you own and what you have ticked to plan.</li>
@@ -157,7 +157,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
 </ul>
 <p>The simulation has two hard ceilings: 2,000 steps and 100 simulated years. A target it can't reach inside a century is marked unreachable and stepped over, and the plan carries on. Only running out of steps truncates a plan, and it says so when it does.</p>
 <h3 id="docs-and-terms-of-service">Docs and Terms of Service</h3>
-<p>Linked from the footer. Docs holds this page, the Investment Logic explainer, the changelog and the licence. Terms of Service carries the Torn-required data table and the kudos list.</p>
+<p>Linked from the footer. Docs holds this page, the Investment Logic explainer, the changelog, the licence, and one other thing. <strong>Back to Stonking</strong> at the bottom returns you to the app, as does clicking the title. Terms of Service carries the Torn-required data table and the kudos list.</p>
 <hr />
 <h2 id="the-two-priority-lists">The two priority lists</h2>
 <p>There are two lists of stocks with tickboxes and they do different jobs. They are easy to confuse.</p>

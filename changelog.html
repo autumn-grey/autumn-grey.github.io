@@ -63,12 +63,44 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="changelog">Changelog</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.5.9 · Updated: 2026-09-03</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.6.0 · Updated: 2026-09-03</em></p>
 <p>Newest first. Version numbers follow <a href="https://semver.org">semantic versioning</a>:
 <code>MAJOR.MINOR.PATCH</code>. Still on <code>0.x</code> because the app isn't deployment-ready
 until it has a real access layer.</p>
 <hr />
 <h2 id="released">Released</h2>
+<h3 id="v060-2026-09-03">v0.6.0 — 2026-09-03</h3>
+<p>First build handed out for user testing.</p>
+<ul>
+<li>The title is now a button. From Docs or the Terms of Service it returns you to
+  the page and view you were last on. On a working page it does nothing.</li>
+<li>Docs links are a row of equal tiles that wrap onto further rows as the screen
+  narrows, instead of a stack of full-width cards.</li>
+<li><strong>OK</strong> on the Docs page is now <strong>Back to Stonking</strong>.</li>
+<li>Three more videos in the rotation, twenty-two in all.</li>
+<li><strong>Fixed:</strong> saving settings threw and reported nothing when the browser refused
+  to write to storage, which is what happens in private mode or when storage is
+  full. Every write is now guarded and the status line says so.</li>
+<li><strong>Fixed:</strong> clearing saved settings left the pins set, so the pin buttons still
+  looked pinned and the next save wrote them straight back.</li>
+<li><strong>Fixed:</strong> the Advanced button was marked active in the markup while the app
+  actually opens in Basic. Basic is the default; the markup now agrees.</li>
+<li>Corrected the wording on the clear-settings message, which claimed nothing on
+  screen changed when row marks and pins do.</li>
+</ul>
+<p>Checked and left alone: every path builds without error and with no double-buys,
+no unreachable-day arithmetic errors and no plan-order regressions; the table
+sorts on every column; both exports write; no horizontal scroll and no sub-16px
+inputs at 360, 414 or 768 px on any of the four pages; browser back and forward
+across every page; localStorage keys all written, read and cleared consistently.
+The merge rule stays as it is for testing.</p>
+<h3 id="v0510-2026-09-03">v0.5.10 — 2026-09-03</h3>
+<ul>
+<li>Added <strong>A Beautiful Secret</strong> to the Docs page. Every click opens a different
+  video, picked at random from nineteen.</li>
+<li>Dropped the blurbs from the other Docs cards and the subtitle from the Docs
+  heading.</li>
+</ul>
 <h3 id="v059-2026-09-03">v0.5.9 — 2026-09-03</h3>
 <ul>
 <li>Renamed the Planner Logic page to <strong>Investment Logic</strong>, published as

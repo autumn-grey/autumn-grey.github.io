@@ -8,6 +8,13 @@
 :root{--bg:#111315;--panel:#191c20;--panel2:#20242a;--line:#30363d;--text:#e8eaed;--muted:#9aa3ad;--accent:#e39b45;--good:#59c37a;--bad:#e06c75;--warn:#d9b15b}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 header{padding:22px 28px;border-bottom:1px solid var(--line);background:#15181b} h1{margin:0 0 4px;font-size:24px} header p{margin:0;color:var(--muted)}
+/* The title is a button so it can act as a home link, but it has to look
+   like the heading it replaced: no chrome, inherited type, no cursor change
+   on the pages it would not move you away from. */
+.home-btn{all:unset;display:inline;font:inherit;color:inherit;cursor:default}
+body.tos .home-btn{cursor:pointer}
+body.tos .home-btn:hover{color:var(--accent)}
+.home-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 .head-row .tagline{flex-basis:100%;order:3}
 @media(max-width:760px){.head-row h1{order:1}.head-row .tagline{order:2}.head-row .head-controls{order:3}}
 main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}.grid-left{display:flex;flex-direction:column;gap:18px;align-self:start;grid-column:1;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px}.grid-left::-webkit-scrollbar{width:8px}.grid-left::-webkit-scrollbar-track{background:transparent}.grid-left::-webkit-scrollbar-thumb{background:#2f353d;border-radius:4px}.grid-left::-webkit-scrollbar-thumb:hover{background:#3d4550}.grid-right{display:flex;flex-direction:column;gap:18px;align-self:start;min-width:0;grid-column:2}.config-tab{display:none;grid-column:1;grid-row:1;align-self:start;writing-mode:vertical-rl;background:var(--panel);color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:14px 8px;cursor:pointer;font:inherit;font-weight:700;letter-spacing:.06em;position:sticky;top:20px}.config-tab:hover{color:var(--text);border-color:var(--accent)}.grid.config-collapsed{grid-template-columns:38px 1fr}.grid.config-collapsed .grid-left{display:none}.grid.config-collapsed .config-tab{display:block}
@@ -250,12 +257,18 @@ a:hover,.site-footer a:hover{text-decoration:underline;filter:brightness(1.15)}
   .tos-wrap .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 .tos-ok-wrap{margin:26px 0 8px;text-align:center}
-.docs-list{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
-.docs-card{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:8px;
-  background:var(--panel);text-decoration:none;color:inherit}
+/* One row of equal tiles that wraps onto further rows as the screen narrows.
+   align-items:stretch is what keeps every tile in a row the height of the
+   tallest, so the one with a blurb sets the height for the rest. */
+.docs-list{max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;
+  justify-content:center;align-items:stretch;gap:10px}
+.docs-card{flex:0 0 172px;min-height:88px;display:flex;flex-direction:column;
+  justify-content:center;gap:4px;padding:12px;border:1px solid var(--line);
+  border-radius:8px;background:var(--panel);text-decoration:none;color:inherit;
+  text-align:center}
 .docs-card:hover{border-color:var(--accent)}
-.docs-name{display:block;font-weight:700;font-size:15px;color:var(--accent);text-decoration:underline}
-.docs-blurb{display:block;margin-top:4px;font-size:13px;color:var(--muted);line-height:1.55}
+.docs-name{display:block;font-weight:700;font-size:13.5px;color:var(--accent);text-decoration:underline}
+.docs-blurb{display:block;font-size:11.5px;color:var(--muted);line-height:1.45}
 .kudos{position:relative;max-width:1000px;margin:30px auto 0;padding:22px 0}
 /* Centred behind the text and scaled to the block, so it stays a backdrop
    whatever the names wrap to. */
@@ -442,12 +455,12 @@ details.banner[open]>summary::before{margin-right:8px}
 <body>
 <header>
 <div class="head-row">
-  <h1>Autumn's Stonking Awesome Torn App</h1>
+  <h1><button type="button" id="homeBtn" class="home-btn">Autumn's Stonking Awesome Torn App</button></h1>
   <div class="head-controls">
     <button type="button" id="pageSwitch" class="page-tab">Planner</button>
     <div class="view-toggle" role="group" aria-label="View mode">
-      <button type="button" id="viewBasic" class="view-btn">Basic</button>
-      <button type="button" id="viewAdvanced" class="view-btn active">Advanced</button>
+      <button type="button" id="viewBasic" class="view-btn active">Basic</button>
+      <button type="button" id="viewAdvanced" class="view-btn">Advanced</button>
     </div>
   </div>
   <p class="tagline">A passive investment planner for Torn, with full customisability and heapsa fun features</p>
@@ -923,26 +936,25 @@ details.banner[open]>summary::before{margin-right:8px}
 </div>
 <div class="page" id="pageDocs" hidden>
   <h2 class="tos-title">Docs</h2>
-  <p class="tos-sub">How it works, and why it decides what it decides</p>
   <div class="docs-list">
     <a class="docs-card" href="site-info.html">
       <span class="docs-name">Site Info</span>
-      <span class="docs-blurb">What the app does, getting a key set up, what each page and path is for, and the known limitations.</span>
     </a>
     <a class="docs-card" href="invLogic.html">
       <span class="docs-name">Investment Logic</span>
-      <span class="docs-blurb">The full reasoning: how an investment is valued, how the buy order is chosen, and what the simulation does day by day.</span>
     </a>
     <a class="docs-card" href="changelog.html">
       <span class="docs-name">Changelog</span>
-      <span class="docs-blurb">What changed in each version, and what's planned next.</span>
     </a>
     <a class="docs-card" href="licence.html">
       <span class="docs-name">Licence</span>
-      <span class="docs-blurb">What you may do with this, and what to ask about first.</span>
+    </a>
+    <a class="docs-card" id="secretCard" href="https://www.youtube.com/watch?v=ZbM6WbUw7Bs" target="_blank" rel="noopener noreferrer">
+      <span class="docs-name">A Beautiful Secret</span>
+      <span class="docs-blurb">This is beyond your wildest dreams</span>
     </a>
   </div>
-  <div class="tos-ok-wrap"><button type="button" id="docsOk" class="plan-go">OK</button></div>
+  <div class="tos-ok-wrap"><button type="button" id="docsOk" class="plan-go">Back to Stonking</button></div>
 </div>
 <div class="page" id="pageTos" hidden>
   <h2 class="tos-title">Terms of Service</h2>
@@ -1027,7 +1039,7 @@ details.banner[open]>summary::before{margin-right:8px}
 //
 // Bumped on every publish. Written in one place, shown in the footer and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.5.9";
+const APP_VERSION="v0.6.0";
 // ISO date of that publish, shown in the footer exactly as written. ISO reads
 // the same everywhere, so no locale formatting is applied to it.
 const APP_UPDATED="2026-09-03";
@@ -1617,22 +1629,31 @@ const PLANNER_FIELDS=[
 ];
 // Everything persisted to localStorage, which is both lists together.
 const SAVED_FIELDS=[...INVESTMENT_FIELDS,...PLANNER_FIELDS];
+// Every write is guarded: a browser in private mode, or one whose storage is
+// full, throws on setItem. Left unhandled that threw straight out of the Save
+// button and the page looked like it had saved when nothing had.
 function saveLocal(){
   const s={};
   SAVED_FIELDS.forEach(k=>{const el=$(k);if(el)s[k]=el.type==="checkbox"?el.checked:el.value});
-  localStorage.setItem("tornInvSettings",JSON.stringify(s));
-  localStorage.setItem("tornInvStockPrio",JSON.stringify([...prioritised()]));
-  localStorage.setItem("tornInvOwned",JSON.stringify([...window.ownedRows]));
-  localStorage.setItem("tornInvSkipped",JSON.stringify([...window.skippedRows]));
-  localStorage.setItem("tornInvSelected",JSON.stringify([...window.selectedRows]));
-  localStorage.setItem("tornInvCourses",JSON.stringify(educationCourseState()));
-  localStorage.setItem("tornInvView",document.body.classList.contains("basic")?"basic":"advanced");
-  localStorage.setItem("tornInvPrio",JSON.stringify([...prioritisedTickers()]));
-  localStorage.setItem("tornInvPlanDone",JSON.stringify([...window.planDone]));
-  // The payout box is saved with the other fields, but the principal behind it
-  // is what the term dropdown rebuilds from, so it is kept in its own right.
-  localStorage.setItem("tornInvBankPrincipal",String(bankPrincipal||0));
-  if($("apiKey").value)localStorage.setItem("tornInvApiKey",$("apiKey").value);
+  try{
+    localStorage.setItem("tornInvSettings",JSON.stringify(s));
+    localStorage.setItem("tornInvStockPrio",JSON.stringify([...prioritised()]));
+    localStorage.setItem("tornInvOwned",JSON.stringify([...window.ownedRows]));
+    localStorage.setItem("tornInvSkipped",JSON.stringify([...window.skippedRows]));
+    localStorage.setItem("tornInvSelected",JSON.stringify([...window.selectedRows]));
+    localStorage.setItem("tornInvCourses",JSON.stringify(educationCourseState()));
+    localStorage.setItem("tornInvView",document.body.classList.contains("basic")?"basic":"advanced");
+    localStorage.setItem("tornInvPrio",JSON.stringify([...prioritisedTickers()]));
+    localStorage.setItem("tornInvPlanDone",JSON.stringify([...window.planDone]));
+    // The payout box is saved with the other fields, but the principal behind it
+    // is what the term dropdown rebuilds from, so it is kept in its own right.
+    localStorage.setItem("tornInvBankPrincipal",String(bankPrincipal||0));
+    if($("apiKey").value)localStorage.setItem("tornInvApiKey",$("apiKey").value);
+  }catch(e){
+    logProblem("Settings could not be saved. Storage may be full, or private mode is on",e);
+    setStatus("Nothing was saved: this browser refused to write to storage. Private mode, or storage is full.","bad");
+    return;
+  }
   setStatus("Settings and selections saved locally.","good");
 }
 // Wipes everything this page has stored, on screen and in localStorage.
@@ -1643,10 +1664,16 @@ function clearLocal(){
   window.skippedRows.clear();
   window.selectedRows.clear();
   window.planDone.clear();
+  // Pins are stored in tornInvPinned, so they have to be dropped here too.
+  // Leaving them set meant the pin buttons still looked pinned after a clear,
+  // and the next Save wrote them straight back.
+  window.pinnedStocks.clear();
+  window.dudPinned=false;
+  if(typeof syncPinnedButtons==="function") syncPinnedButtons();
   $("apiKey").value="";
   window.savedBoosters=null;
   render();
-  setStatus("Saved key, settings and selections cleared from this browser. What's on screen stays until you reload.","good");
+  setStatus("Saved key, settings and selections cleared from this browser. Your row marks and pins are cleared on screen too; the settings stay until you reload.","good");
 }
 
 // ======================================================================
@@ -5622,6 +5649,32 @@ $("docsLink")?.addEventListener("click",e=>{
   setPage("docs");
   window.scrollTo({top:0,behavior:"smooth"});
 });
+// A Beautiful Secret picks a fresh video on every click. The href is set before
+// the browser follows the link, so the anchor still works with JS disabled and
+// a middle-click or "open in new tab" gets a real URL rather than a popup.
+const SECRET_VIDEOS=["ZbM6WbUw7Bs","b6rkXGikuNA","bcXiwNjkhxU","8B1rXxwX-2E","PLOPygVcaVE",
+  "lzplodCcz7U","lr_vl62JblQ","PmQhkaw_ypE","fKEXSWC-EqI","d-ae06Z1NcM","2riqL4GOfR8",
+  "YCeQLeQiRP4","erh2ngRZxs0","szxp1f9EnP0","-5x5OXfe9KY","csnZJ1b_ESU","1IAXrxlDK6c",
+  "tKNhPpUR0Pg","GmCrOTMAQ38","dcD_WXYWqHk","VV1XWJN3nJo","RyeYee2lxBY"];
+function pickSecret(el){
+  const id=SECRET_VIDEOS[Math.floor(Math.random()*SECRET_VIDEOS.length)];
+  el.href="https://www.youtube.com/watch?v="+id;
+}
+// pointerdown fires before the click that follows the link, and also before the
+// browser builds the context menu, so both routes get a freshly picked video.
+["pointerdown","click","auxclick","contextmenu"].forEach(ev=>
+  $("secretCard")?.addEventListener(ev,function(){pickSecret(this)}));
+// The title doubles as a home button. From Docs or the ToS it returns to
+// whichever working page you came from, which keeps the Basic/Advanced view
+// you had. On a working page there is nowhere to go, so it does nothing.
+function goHome(){
+  if(!document.body.classList.contains("tos")) return;
+  const back=window.tosReturnTo||"investments";
+  history.pushState(null,"","#"+back);
+  setPage(back);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+$("homeBtn")?.addEventListener("click",goHome);
 $("docsOk")?.addEventListener("click",()=>{
   const back=window.tosReturnTo||"investments";
   history.pushState(null,"","#"+back);

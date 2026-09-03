@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.5.6 · Updated: 2026-09-03_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.6.0 · Updated: 2026-09-03_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,84 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.6.0 — 2026-09-03
+
+First build handed out for user testing.
+
+- The title is now a button. From Docs or the Terms of Service it returns you to
+  the page and view you were last on. On a working page it does nothing.
+- Docs links are a row of equal tiles that wrap onto further rows as the screen
+  narrows, instead of a stack of full-width cards.
+- **OK** on the Docs page is now **Back to Stonking**.
+- Three more videos in the rotation, twenty-two in all.
+- **Fixed:** saving settings threw and reported nothing when the browser refused
+  to write to storage, which is what happens in private mode or when storage is
+  full. Every write is now guarded and the status line says so.
+- **Fixed:** clearing saved settings left the pins set, so the pin buttons still
+  looked pinned and the next save wrote them straight back.
+- **Fixed:** the Advanced button was marked active in the markup while the app
+  actually opens in Basic. Basic is the default; the markup now agrees.
+- Corrected the wording on the clear-settings message, which claimed nothing on
+  screen changed when row marks and pins do.
+
+Checked and left alone: every path builds without error and with no double-buys,
+no unreachable-day arithmetic errors and no plan-order regressions; the table
+sorts on every column; both exports write; no horizontal scroll and no sub-16px
+inputs at 360, 414 or 768 px on any of the four pages; browser back and forward
+across every page; localStorage keys all written, read and cleared consistently.
+The merge rule stays as it is for testing.
+
+### v0.5.10 — 2026-09-03
+
+- Added **A Beautiful Secret** to the Docs page. Every click opens a different
+  video, picked at random from nineteen.
+- Dropped the blurbs from the other Docs cards and the subtitle from the Docs
+  heading.
+
+### v0.5.9 — 2026-09-03
+
+- Renamed the Planner Logic page to **Investment Logic**, published as
+  `invLogic.html`. `planner-logic.html` is now dead and can be deleted.
+- Editing pass over both docs: removed filler wording.
+
+### v0.5.8 — 2026-09-03
+
+Documentation only; the app's behaviour is unchanged.
+
+- Merged the two competing drafts of each doc into one. The logic explainer's
+  source is now `invLogic.md`, rebuilt
+  from the fuller draft: benefit-by-benefit valuation with worked examples, the
+  banks and Private Islands as their own sections, the increment-visibility
+  rule, the job point algebra derived rather than asserted, a symbol and
+  constant reference, and an "In the code" note under most sections.
+- Kept from the previous version: the pinning rules, the acquire and parking
+  pseudocode, the closing moves, the Cayman-not-City-Bank warning, and the full
+  list of what the model ignores.
+- **Corrected:** the 100-year horizon does not truncate a plan. An unreachable
+  target is stepped over and the plan continues; only the 2,000-step limit ends
+  one early. One draft had both ceilings truncating.
+- **Corrected:** the two priority lists are now documented as the separate
+  controls they are. *Prioritise* on the Investments page changes that table's
+  sort order only; *Situational Stocks* on the Planner page is the one the plan
+  obeys. One draft had merged them into a single control.
+- Fixed a cross-reference pointing at the wrong section, and a bank APR formula
+  that omitted the Oil Mogul multiplier its own constants table listed.
+- README rebuilt around the same split: the user-facing guide keeps the whole
+  page, and the code-level material (file layout, the row object, data sources,
+  local storage) moved into the logic explainer's appendix, where the rest of
+  the implementation notes already live.
+- Added a "Reporting a bug" section, a keyboard reference, a tag key, the API
+  key selection table, and an honest note that the faction gate runs in the
+  browser and is not real access control.
+
+### v0.5.7 — 2026-09-03
+
+- The Private Yacht is no longer optional. A Private Island is costed fully
+  upgraded everywhere, the yacht included, so the tickbox in Miscellaneous
+  Stuff is gone along with its saved setting. Its slot now shows the upgrade
+  cost and the saving from ELT and Interior Connections as a plain readout.
+- `piUpgradeBase()` is retired; every caller uses `PI_UPGRADE_TOTAL` directly.
 
 ### v0.5.6 — 2026-09-03
 
