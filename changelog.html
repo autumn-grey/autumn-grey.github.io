@@ -33,6 +33,13 @@ th,td{border:1px solid var(--muted);padding:8px 10px;text-align:left;vertical-al
 th{font-weight:700}
 blockquote{margin:14px 0;padding:2px 0 2px 14px;border-left:3px solid var(--line);
            color:var(--muted)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+        padding:10px 14px;margin:16px 0}
+details[open]{padding-bottom:4px}
+summary{cursor:pointer;color:var(--muted);font-size:13px}
+summary:hover{color:var(--text)}
+details>*:not(summary){font-size:13.5px}
+h2[id],h3[id]{scroll-margin-top:12px}
 hr{border:0;border-top:1px solid var(--line);margin:26px 0}
 .mermaid{background:var(--panel);border:1px solid var(--line);border-radius:8px;
          padding:12px 14px;overflow-x:auto;white-space:pre;
@@ -49,20 +56,63 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <span class="sep">|</span>
     <a href="site-info.html">Site Info</a>
     <span class="sep">|</span>
-    <a href="planner-logic.html">Planner Logic</a>
+    <a href="invLogic.html">Investment Logic</a>
     <span class="sep">|</span>
     <a href="changelog.html">Changelog</a>
     <span class="sep">|</span>
     <a href="licence.html">Licence</a>
   </nav>
-<h1>Changelog</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.5.6 · Updated: 2026-09-03</em></p>
+<h1 id="changelog">Changelog</h1>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.5.9 · Updated: 2026-09-03</em></p>
 <p>Newest first. Version numbers follow <a href="https://semver.org">semantic versioning</a>:
 <code>MAJOR.MINOR.PATCH</code>. Still on <code>0.x</code> because the app isn't deployment-ready
 until it has a real access layer.</p>
 <hr />
-<h2>Released</h2>
-<h3>v0.5.6 — 2026-09-03</h3>
+<h2 id="released">Released</h2>
+<h3 id="v059-2026-09-03">v0.5.9 — 2026-09-03</h3>
+<ul>
+<li>Renamed the Planner Logic page to <strong>Investment Logic</strong>, published as
+  <code>invLogic.html</code>. <code>planner-logic.html</code> is now dead and can be deleted.</li>
+<li>Editing pass over both docs: removed filler wording.</li>
+</ul>
+<h3 id="v058-2026-09-03">v0.5.8 — 2026-09-03</h3>
+<p>Documentation only; the app's behaviour is unchanged.</p>
+<ul>
+<li>Merged the two competing drafts of each doc into one. The logic explainer's
+  source is now <code>invLogic.md</code>, rebuilt
+  from the fuller draft: benefit-by-benefit valuation with worked examples, the
+  banks and Private Islands as their own sections, the increment-visibility
+  rule, the job point algebra derived rather than asserted, a symbol and
+  constant reference, and an "In the code" note under most sections.</li>
+<li>Kept from the previous version: the pinning rules, the acquire and parking
+  pseudocode, the closing moves, the Cayman-not-City-Bank warning, and the full
+  list of what the model ignores.</li>
+<li><strong>Corrected:</strong> the 100-year horizon does not truncate a plan. An unreachable
+  target is stepped over and the plan continues; only the 2,000-step limit ends
+  one early. One draft had both ceilings truncating.</li>
+<li><strong>Corrected:</strong> the two priority lists are now documented as the separate
+  controls they are. <em>Prioritise</em> on the Investments page changes that table's
+  sort order only; <em>Situational Stocks</em> on the Planner page is the one the plan
+  obeys. One draft had merged them into a single control.</li>
+<li>Fixed a cross-reference pointing at the wrong section, and a bank APR formula
+  that omitted the Oil Mogul multiplier its own constants table listed.</li>
+<li>README rebuilt around the same split: the user-facing guide keeps the whole
+  page, and the code-level material (file layout, the row object, data sources,
+  local storage) moved into the logic explainer's appendix, where the rest of
+  the implementation notes already live.</li>
+<li>Added a "Reporting a bug" section, a keyboard reference, a tag key, the API
+  key selection table, and an honest note that the faction gate runs in the
+  browser and is not real access control.</li>
+</ul>
+<h3 id="v057-2026-09-03">v0.5.7 — 2026-09-03</h3>
+<ul>
+<li>The Private Yacht is no longer optional. A Private Island is costed fully
+  upgraded everywhere, the yacht included, so the tickbox in Miscellaneous
+  Stuff is gone along with its saved setting. Its slot now shows the upgrade
+  cost and the saving from ELT and Interior Connections as a plain readout.</li>
+<li><code>piUpgradeBase()</code> is retired; every caller uses <code>PI_UPGRADE_TOTAL</code> directly.</li>
+</ul>
+<h3 id="v056-2026-09-03">v0.5.6 — 2026-09-03</h3>
 <ul>
 <li>Added a changelog, with a roadmap of what's planned next.</li>
 <li>Added Changelog and Licence links to the Docs page.</li>
@@ -71,32 +121,32 @@ until it has a real access layer.</p>
 <li>Pointed the cross-references in Site Info and the licence at the published
   Planner Logic page instead of the markdown source.</li>
 </ul>
-<h3>v0.5.5 — 2026-09-03</h3>
+<h3 id="v055-2026-09-03">v0.5.5 — 2026-09-03</h3>
 <ul>
 <li>Reordered the footer links to Go to Torn, Docs, Terms of Service.</li>
 <li>Added version and updated date to the heading of both doc pages.</li>
 </ul>
-<h3>v0.5.4 — 2026-09-03</h3>
+<h3 id="v054-2026-09-03">v0.5.4 — 2026-09-03</h3>
 <ul>
 <li>Renamed the footer's Torn link to "Go to Torn".</li>
 </ul>
-<h3>v0.5.3 — 2026-09-03</h3>
+<h3 id="v053-2026-09-03">v0.5.3 — 2026-09-03</h3>
 <ul>
 <li>Added a link to Torn in the footer link row.</li>
 </ul>
-<h3>v0.5.2 — 2026-09-03</h3>
+<h3 id="v052-2026-09-03">v0.5.2 — 2026-09-03</h3>
 <ul>
 <li>Added the Docs page, linking out to Site Info and Planner Logic as standalone
   HTML pages built from the markdown sources.</li>
 <li>Added a licence file.</li>
 </ul>
-<h3>v0.5.1 — 2026-09-03</h3>
+<h3 id="v051-2026-09-03">v0.5.1 — 2026-09-03</h3>
 <ul>
 <li>Dropped back from 1.0 to 0.5. The app isn't deployment-ready without a
   working access layer, and the version number was claiming otherwise.</li>
 <li>Switched to unpadded semantic versioning.</li>
 </ul>
-<h3>v0.5.0 — 2026-09-03</h3>
+<h3 id="v050-2026-09-03">v0.5.0 — 2026-09-03</h3>
 <p>Up on GitHub and ready to share for testing.</p>
 <ul>
 <li>Terms of Service page, footer, and Kudos.</li>
@@ -109,25 +159,25 @@ until it has a real access layer.</p>
 <li>Staff exception to the faction gate.</li>
 <li>A debug log panel that stays hidden until something actually fails.</li>
 </ul>
-<h3>v0.4 — Integration</h3>
+<h3 id="v04-integration">v0.4 — Integration</h3>
 <ul>
 <li>Investments and Planner joined into one app with shared settings.</li>
 <li>Footer and Terms of Service.</li>
 </ul>
-<h3>v0.3 — The planner</h3>
+<h3 id="v03-the-planner">v0.3 — The planner</h3>
 <ul>
 <li>Day-by-day purchase simulation, buy order, parking, and the Path options.</li>
 </ul>
-<h3>v0.2 — Basic view</h3>
+<h3 id="v02-basic-view">v0.2 — Basic view</h3>
 <ul>
 <li>Simplified mobile-friendly view alongside the full table.</li>
 </ul>
-<h3>v0.1 — Initial build</h3>
+<h3 id="v01-initial-build">v0.1 — Initial build</h3>
 <ul>
 <li>Advanced investments table, benefit valuation, and ROI ranking.</li>
 </ul>
 <hr />
-<h2>Roadmap</h2>
+<h2 id="roadmap">Roadmap</h2>
 <p>Planned, in no particular order.</p>
 <ul>
 <li><strong>Complete UI visual design overhaul</strong> for max 𝒶𝑒𝓈𝓉𝒽𝑒𝓉𝒾𝒸 and ｆｕｎｃｔｉｏｎａｌ.</li>
