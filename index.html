@@ -708,7 +708,7 @@ details.banner[open]>summary::before{margin-right:8px}
   <summary>Miscellaneous Stuff</summary>
   <div class="row2">
   <div class="field"><label>Private Islands Purchased per Year</label><input id="piPerYear" type="number" min="0" step="1" value="1"><div class="help">Used to value ELT's 10% discount on property upgrades.</div></div>
-  <div class="field check-field"><label><input type="checkbox" id="piYacht" checked> Private Yacht on PI</label><div class="help" id="piYachtHelp">PI upgrade cost: $1,452,788,000</div></div>
+  <div class="field"><label>Private Island Upgrade Cost</label><div class="help" id="piUpgradeHelp">PI upgrade cost:<br>$1,452,788,000</div></div>
   </div>
   <div class="row2">
   <div class="field check-field"><label><input type="checkbox" id="eltOwned"> ELT Stock Block Owned</label><div class="help">-10% property upgrade cost</div></div>
@@ -929,8 +929,8 @@ details.banner[open]>summary::before{margin-right:8px}
       <span class="docs-name">Site Info</span>
       <span class="docs-blurb">What the app does, getting a key set up, what each page and path is for, and the known limitations.</span>
     </a>
-    <a class="docs-card" href="planner-logic.html">
-      <span class="docs-name">Planner Logic</span>
+    <a class="docs-card" href="invLogic.html">
+      <span class="docs-name">Investment Logic</span>
       <span class="docs-blurb">The full reasoning: how an investment is valued, how the buy order is chosen, and what the simulation does day by day.</span>
     </a>
     <a class="docs-card" href="changelog.html">
@@ -1027,7 +1027,7 @@ details.banner[open]>summary::before{margin-right:8px}
 //
 // Bumped on every publish. Written in one place, shown in the footer and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.5.6";
+const APP_VERSION="v0.5.9";
 // ISO date of that publish, shown in the footer exactly as written. ISO reads
 // the same everywhere, so no locale formatting is applied to it.
 const APP_UPDATED="2026-09-03";
@@ -1458,7 +1458,6 @@ function resetMiscTab(){
   $("piPerYear").value="1";
   $("adsPerMonth").value="1";
   $("bannerDays").value="90";
-  setBool("piYacht",true);
   setBool("eltOwned",false);
   setBool("propertyBroker",false);
   calculate();
@@ -1588,7 +1587,6 @@ const INVESTMENT_FIELDS=[
   "piPerYear",
   "adsPerMonth",
   "bannerDays",
-  "piYacht",
   "eltOwned",
   "oilMogulJp",
   "companyJp",
@@ -2024,7 +2022,7 @@ function educationIdFor(name){
 // Finds the Private Islands in a properties payload: the ones being rented
 // from someone else, and the ones being rented out.
 // A Private Island counts as fully upgraded once it has every upgrade the
-// app prices, give or take the yacht.
+// app prices, the yacht included. The yacht is not a special case anywhere.
 const PI_FULL_UPGRADES=Object.keys(PI_UPGRADE_COSTS).length;
 function privateIslandsFrom(props){
   const all=Object.values(props||{});
@@ -2675,8 +2673,7 @@ function stockBenefitText(ticker,type,label,qty){
       return ["Free Classified Advertising",`ad costs -${money(250000*ads)} p/month`];
     }
     if(ticker==="ELT"){
-      const yacht=boolVal("piYacht");
-      const total=yacht?PI_UPGRADE_TOTAL:PI_UPGRADE_TOTAL-PI_UPGRADE_COSTS["Private Yacht"];
+      const total=PI_UPGRADE_TOTAL;
       return ["10% Property Upgrade Discount",`saves ${money(total*0.10)} per PI`];
     }
     if(ticker==="YAZ"){
@@ -2894,10 +2891,9 @@ function stockRows(){
       }
       if(ticker==="ELT"){
         const pis=Math.max(0,+($("piPerYear")?.value||0));
-        const yacht=boolVal("piYacht");
-        const upgradeTotal=yacht?PI_UPGRADE_TOTAL:PI_UPGRADE_TOTAL-PI_UPGRADE_COSTS["Private Yacht"];
+        const upgradeTotal=PI_UPGRADE_TOTAL;
         benefit=upgradeTotal*0.10*pis;
-        desc=`Calculation based on fully upgrading ${pis} PI${pis===1?"":"s"} per year${yacht?"":", excluding the yacht"}. Value set in Misc Stuff`;
+        desc=`Calculation based on fully upgrading ${pis} PI${pis===1?"":"s"} per year. Value set in Misc Stuff`;
       }
     }
     else if(type==="happy"||type==="energy"||type==="nerve"){
@@ -3025,11 +3021,8 @@ function propertyLawStudied(){ return !!$(PROPERTY_LAW_COURSE)?.checked }
 // What a fully-upgraded Private Island costs, after the two discounts that
 // can apply to it: Property Law takes 10% off the purchase price only, an
 // owned ELT block takes 10% off the upgrades only.
-// Upgrade list price, before any discount. The yacht is optional, so it is
-// the only thing that changes this number.
-function piUpgradeBase(yacht){
-  return yacht?PI_UPGRADE_TOTAL:PI_UPGRADE_TOTAL-PI_UPGRADE_COSTS["Private Yacht"];
-}
+// Upgrade list price, before any discount. Every Private Island is costed
+// fully upgraded, Private Yacht included, so this is simply the whole list.
 // Total discount currently applied to upgrades, as a fraction. ELT and
 // Interior Connections are 10% each and stack additively.
 function piUpgradeDiscount(){
@@ -3042,12 +3035,11 @@ function privateIslandCost(opts={}){
   // 10-star Property Broker instead of a stock block. Torn stacks additively,
   // so holding both is a flat 20% off rather than 19%.
   const broker=opts.broker!==undefined?opts.broker:boolVal("propertyBroker");
-  const yacht=boolVal("piYacht");
   const base=propertyPrice("Private Island")*(law?0.90:1);
   const upgradeDiscount=1-((elt?0.10:0)+(broker?0.10:0));
-  const upgrades=piUpgradeBase(yacht)*upgradeDiscount;
+  const upgrades=PI_UPGRADE_TOTAL*upgradeDiscount;
   const parts=[`${money(base)} island${law?" (Property Law -10%)":""}`,
-               `${money(upgrades)} upgrades${yacht?"":" (no yacht)"}`];
+               `${money(upgrades)} upgrades`];
   return {base,upgrades,total:base+upgrades,note:parts.join(" + ")};
 }
 // Two ways to value a Private Island: rent it out, or avoid paying rent.
@@ -3091,10 +3083,9 @@ function updateMeritsHelp(){
   if(el) el.textContent=`+${(+($("merits")?.value||0))*5}% interest`;
   const cf=$("cayFactionHelp");
   if(cf) cf.textContent=`+${(+($("cayFaction")?.value||0))}% interest`;
-  const yh=$("piYachtHelp");
+  const yh=$("piUpgradeHelp");
   if(yh){
-    const yacht=boolVal("piYacht");
-    const list=piUpgradeBase(yacht);
+    const list=PI_UPGRADE_TOTAL;
     const cut=piUpgradeDiscount();
     const saving=list*cut;
     // Saving only appears once something is actually taking money off it.
@@ -3475,8 +3466,8 @@ function renderAssumptions(){
   const el=$("basicAssumptions");
   if(!el) return;
   const pis=+($("piPerYear")?.value||0), ads=+($("adsPerMonth")?.value||0);
-  const bd=+($("bannerDays")?.value||0), yacht=boolVal("piYacht");
-  el.textContent=`Assumes: ${pis} fully upgraded private island${pis===1?"":"s"} per year${yacht?"":" (no yacht)"}, ${ads} classified ad${ads===1?"":"s"} per month, and ${bd} banner ad days per year. Switch to Advanced to change these.`;
+  const bd=+($("bannerDays")?.value||0);
+  el.textContent=`Assumes: ${pis} fully upgraded private island${pis===1?"":"s"} per year, ${ads} classified ad${ads===1?"":"s"} per month, and ${bd} banner ad days per year. Switch to Advanced to change these.`;
 }
 
 // Basic view's quick settings write straight through to the advanced inputs,
