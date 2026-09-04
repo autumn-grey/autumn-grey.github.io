@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.6.0 · Updated: 2026-09-03_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.8.0 · Updated: 2026-09-04_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,66 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.8.0 — 2026-09-04
+
+- **Scripts** and **Education & Job Planner** added to the footer links. Both are
+  placeholders for now.
+- The Prototype banner reads as one paragraph: the arrow and **Prototype:** now
+  start the text rather than sitting above it as a heading. Collapsed, it still
+  reads **Prototype Warning**. Its wording is rewritten, and it links straight to
+  a feedback form or an incident form with the right type already chosen.
+- Terms of Service: a paragraph on how feedback and incident reports are handled,
+  and the data table reworded.
+- The report title is generated, so it is shown as a heading rather than sitting
+  in an editable box.
+- The body limit is 1800 characters, which is what a 2000 character Discord
+  message leaves once the longest possible title and related-to line are taken
+  out. The whole form travels in the message again rather than in an embed.
+
+### v0.7.1 — 2026-09-04
+
+- The report body is capped at 1900 characters. A count appears in the bottom
+  right of the box once you pass 1700, turns red at the cap, and typing past it
+  shakes the box and flashes its outline red.
+- The body now travels in the message's embed rather than its content. A full
+  1900 character body plus the title and the related-to line went over Discord's
+  2000 character message limit and would have been silently truncated.
+- Back to Stonking and OK match the Refresh market data only button; Submit form
+  matches Refresh all API data.
+
+### v0.7.0 — 2026-09-04
+
+- **Feedback & Reporting**, a new page on the end of the footer links.
+  - Two types: Feedback, Suggestions & Questions, or Report a Problem.
+  - The title fills itself in as `INC - version - timestamp UTC - Name [ID]`, or
+    `FSQ` for the other type, and keeps the timestamp current until you edit it.
+  - Reporting a problem asks what it relates to and attaches the logs that suit
+    the answer: the error log always, plus the API report, a planner state file,
+    an investments state file, or all of them for Other. The state files are the
+    same TSV as the download button plus every setting that shaped the numbers.
+  - Submitting posts to a Discord channel. The status line names every file that
+    went and, in red, every one that could not be pulled and why. If any of it
+    failed, a copy button takes the whole form and the status, and a link opens
+    a Torn message to AutumnGrey.
+  - **Your API key is never attached, and every file and the message itself are
+    swept for it before anything is sent.**
+- The Terms of Service data table now says a submitted report leaves the browser,
+  which it did not before because nothing ever left it.
+
+### v0.6.1 — 2026-09-03
+
+- The footer's second and third lines are rewritten, and it now states that
+  Autumn's Tools are not affiliated with Torn Ltd.
+- Investments and Planner are two separate buttons rather than one that toggles,
+  both always visible, with the page you are on filled in. Order is the
+  Basic/Advanced switch, Investments, Planner, so nothing moves when the switch
+  hides on the Planner page.
+- Jump to top is a tab on the right edge reading bottom to top, and it stops
+  above the footer instead of floating over it. Gone from the Terms of Service.
+- A copy button on the API results panel, in its top right corner while the panel
+  is open. Copies the report, the diagnostics, anything in the problem log, and
+  the version.
 
 ### v0.6.0 — 2026-09-03
 
@@ -166,3 +226,10 @@ Planned, in no particular order.
   browser and can be edited out. Until that changes the app is not ready to
   deploy.
 - **v2: the jobs and education guide.**
+
+### Scripts
+
+- A script for following the investment planner within the Torn environment.
+- A script to block users from travelling if they'll miss their OC start time.
+- A script that lets chats open and minimise independently in different windows.
+- A script to add chat reactions visible to anyone who also has the script.

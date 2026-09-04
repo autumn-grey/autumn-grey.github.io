@@ -63,12 +63,72 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="changelog">Changelog</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.6.0 · Updated: 2026-09-03</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.8.0 · Updated: 2026-09-04</em></p>
 <p>Newest first. Version numbers follow <a href="https://semver.org">semantic versioning</a>:
 <code>MAJOR.MINOR.PATCH</code>. Still on <code>0.x</code> because the app isn't deployment-ready
 until it has a real access layer.</p>
 <hr />
 <h2 id="released">Released</h2>
+<h3 id="v080-2026-09-04">v0.8.0 — 2026-09-04</h3>
+<ul>
+<li><strong>Scripts</strong> and <strong>Education &amp; Job Planner</strong> added to the footer links. Both are
+  placeholders for now.</li>
+<li>The Prototype banner reads as one paragraph: the arrow and <strong>Prototype:</strong> now
+  start the text rather than sitting above it as a heading. Collapsed, it still
+  reads <strong>Prototype Warning</strong>. Its wording is rewritten, and it links straight to
+  a feedback form or an incident form with the right type already chosen.</li>
+<li>Terms of Service: a paragraph on how feedback and incident reports are handled,
+  and the data table reworded.</li>
+<li>The report title is generated, so it is shown as a heading rather than sitting
+  in an editable box.</li>
+<li>The body limit is 1800 characters, which is what a 2000 character Discord
+  message leaves once the longest possible title and related-to line are taken
+  out. The whole form travels in the message again rather than in an embed.</li>
+</ul>
+<h3 id="v071-2026-09-04">v0.7.1 — 2026-09-04</h3>
+<ul>
+<li>The report body is capped at 1900 characters. A count appears in the bottom
+  right of the box once you pass 1700, turns red at the cap, and typing past it
+  shakes the box and flashes its outline red.</li>
+<li>The body now travels in the message's embed rather than its content. A full
+  1900 character body plus the title and the related-to line went over Discord's
+  2000 character message limit and would have been silently truncated.</li>
+<li>Back to Stonking and OK match the Refresh market data only button; Submit form
+  matches Refresh all API data.</li>
+</ul>
+<h3 id="v070-2026-09-04">v0.7.0 — 2026-09-04</h3>
+<ul>
+<li><strong>Feedback &amp; Reporting</strong>, a new page on the end of the footer links.</li>
+<li>Two types: Feedback, Suggestions &amp; Questions, or Report a Problem.</li>
+<li>The title fills itself in as <code>INC - version - timestamp UTC - Name [ID]</code>, or
+    <code>FSQ</code> for the other type, and keeps the timestamp current until you edit it.</li>
+<li>Reporting a problem asks what it relates to and attaches the logs that suit
+    the answer: the error log always, plus the API report, a planner state file,
+    an investments state file, or all of them for Other. The state files are the
+    same TSV as the download button plus every setting that shaped the numbers.</li>
+<li>Submitting posts to a Discord channel. The status line names every file that
+    went and, in red, every one that could not be pulled and why. If any of it
+    failed, a copy button takes the whole form and the status, and a link opens
+    a Torn message to AutumnGrey.</li>
+<li><strong>Your API key is never attached, and every file and the message itself are
+    swept for it before anything is sent.</strong></li>
+<li>The Terms of Service data table now says a submitted report leaves the browser,
+  which it did not before because nothing ever left it.</li>
+</ul>
+<h3 id="v061-2026-09-03">v0.6.1 — 2026-09-03</h3>
+<ul>
+<li>The footer's second and third lines are rewritten, and it now states that
+  Autumn's Tools are not affiliated with Torn Ltd.</li>
+<li>Investments and Planner are two separate buttons rather than one that toggles,
+  both always visible, with the page you are on filled in. Order is the
+  Basic/Advanced switch, Investments, Planner, so nothing moves when the switch
+  hides on the Planner page.</li>
+<li>Jump to top is a tab on the right edge reading bottom to top, and it stops
+  above the footer instead of floating over it. Gone from the Terms of Service.</li>
+<li>A copy button on the API results panel, in its top right corner while the panel
+  is open. Copies the report, the diagnostics, anything in the problem log, and
+  the version.</li>
+</ul>
 <h3 id="v060-2026-09-03">v0.6.0 — 2026-09-03</h3>
 <p>First build handed out for user testing.</p>
 <ul>
@@ -219,6 +279,13 @@ The merge rule stays as it is for testing.</p>
   browser and can be edited out. Until that changes the app is not ready to
   deploy.</li>
 <li><strong>v2: the jobs and education guide.</strong></li>
+</ul>
+<h3 id="scripts">Scripts</h3>
+<ul>
+<li>A script for following the investment planner within the Torn environment.</li>
+<li>A script to block users from travelling if they'll miss their OC start time.</li>
+<li>A script that lets chats open and minimise independently in different windows.</li>
+<li>A script to add chat reactions visible to anyone who also has the script.</li>
 </ul>
   <footer>Autumn's Stonking Awesome Torn App &middot;
     <a href="https://www.torn.com/profiles.php?XID=4386333" target="_blank" rel="noopener noreferrer">AutumnGrey</a>

@@ -1,6 +1,6 @@
 # Autumn's Stonking Awesome Torn App
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.6.0 · Updated: 2026-09-03_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.8.0 · Updated: 2026-09-04_
 
 A passive-investment planner for [Torn](https://www.torn.com). The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.
 
@@ -23,7 +23,7 @@ The version number and last-updated date sit in the footer, and the version is s
 - [Exporting](#exporting)
 - [How the planner decides](#how-the-planner-decides)
 - [Your data](#your-data)
-- [Reporting a bug](#reporting-a-bug)
+- [Feedback and reporting](#feedback-and-reporting)
 - [Known limitations](#known-limitations)
 - [Licence](#licence)
 
@@ -37,6 +37,8 @@ The version number and last-updated date sit in the footer, and the version is s
    - **AutumnAPICustomised.** Also reads your own stats and preconfigures the settings for you.
 3. Create the key on Torn, paste it into the box, and press **Refresh all API data**.
 4. Press **Save Key/Settings** if you want it remembered next time.
+
+If a key name ever gains a version, such as `AutumnAPICustomisedv0.1`, the selections it needs have changed and your old key will not do everything the app asks of it. Make a new one under the new name. Only the key that changed is renamed, so the other one keeps working.
 
 Your key is checked against the faction before anything else loads. Nothing works if you're not a member of The ZOO - Night Shift, or a member of Torn staff.
 
@@ -101,9 +103,9 @@ Works out the order to buy things in, and how long each step will take. Nothing 
 
 The simulation has two hard ceilings: 2,000 steps and 100 simulated years. A target it can't reach inside a century is marked unreachable and stepped over, and the plan carries on. Only running out of steps truncates a plan, and it says so when it does.
 
-### Docs and Terms of Service
+### Docs, Terms of Service and the rest
 
-Linked from the footer. Docs holds this page, the Investment Logic explainer, the changelog, the licence, and one other thing. **Back to Stonking** at the bottom returns you to the app, as does clicking the title. Terms of Service carries the Torn-required data table and the kudos list.
+Linked from the footer, along with Feedback & Reporting, Scripts and Education & Job Planner. The last two are placeholders while they are built. Docs holds this page, the Investment Logic explainer, the changelog, the licence, and one other thing. **Back to Stonking** at the bottom returns you to the app, as does clicking the title. Terms of Service carries the Torn-required data table and the kudos list.
 
 ---
 
@@ -192,21 +194,32 @@ See [Investment Logic](invLogic.html) for the full reasoning: how each benefit i
 
 ## Your data
 
-Everything lives in your own browser. The app talks to Torn's API and tornsy.com and nowhere else. There is no backend, no analytics and no telemetry. Nothing is sent anywhere, and nothing is stored unless you press Save. Requests carry `comment=Torn Investments by Autumn`, so you can identify them in your own Torn API log.
+Everything lives in your own browser. The app talks to Torn's API and tornsy.com and nowhere else. There is no backend, no analytics and no telemetry. Nothing is stored unless you press Save. Requests carry `comment=Torn Investments by Autumn`, so you can identify them in your own Torn API log.
+
+The one exception is a report you choose to send through Feedback & Reporting. That goes to a private Discord server only I can see, along with whatever logs the form says it is attaching. Nothing is sent unless you press submit. Your API key is scrubbed from everything before it leaves; your user ID is included so I can follow up with you.
 
 The full terms are on the **Terms of Service** page, linked from the footer.
 
 ---
 
-## Reporting a bug
+## Feedback and reporting
 
-Three things make a report fixable:
+**Feedback & Reporting** is the last link in the footer, and it is the way to reach me about anything.
 
-1. **Export the table or the plan.** The settings footer at the bottom of the file records everything that produced it.
-2. **Copy the problem log**, if the red panel appeared. It sits under the API status, lists every problem with a timestamp, and has a Copy button that hands the whole log over as text.
-3. **Include the version**, which is in the footer and stamped into every export anyway.
+Pick one of two:
 
-Then message [AutumnGrey](https://www.torn.com/profiles.php?XID=4386333) in Torn.
+- **Feedback, Suggestions & Questions.** Just type. Nothing is attached.
+- **Report a Problem.** Say what it relates to, describe what happened, and the app gathers the evidence for you.
+
+The title is generated for you, not typed: the build, the time in UTC and your name, so a report is always tied to an exact version. The body holds 1800 characters, which is what fits alongside the title in one message, with a count in the corner once you get close.
+
+The Prototype banner at the top of the app links straight here, to the feedback form or the incident form as appropriate.
+
+Reporting a problem attaches the error log every time, plus whichever of these fits your answer: the API report, a planner state file, or an investments state file. The state files are the same TSV the download button gives you, with every setting that shaped the numbers on the end, which is what makes a report reproducible.
+
+**Your API key is never attached.** Nothing writes it into any of those files, and every file and the message itself are swept for it before anything is sent.
+
+When you press submit the status line tells you exactly what happened: what was sent, and in red anything that could not be gathered and why. If it failed to send, a copy button takes the whole form and the status so you can send it to [AutumnGrey](https://www.torn.com/profiles.php?XID=4386333) in Torn by hand.
 
 ---
 
