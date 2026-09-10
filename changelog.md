@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.8.0 · Updated: 2026-09-04_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.8.1 · Updated: 2026-09-11_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,19 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.8.1 — 2026-09-11
+
+- City Bank is filled to its cap before anything that earns less than it is
+  bought. A fill used to stop after twelve deposits, leaving the deposit short
+  of the cap and the plan buying blocks returning a fraction of the bank rate
+  with money that belonged in it.
+- A term already running no longer abandons the fill. The plan waits it out,
+  buying only what pays out before it matures, then redeposits the lot.
+- **Testing Feedback** added: a survey reachable from the green button above the
+  footer links and from the Prototype banner, submitted to the same place as
+  Feedback & Reporting as a single text file, with the investments and planner
+  tables attached if you agree to share them. It can be saved and come back to.
 
 ### v0.8.0 — 2026-09-04
 

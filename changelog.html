@@ -63,12 +63,25 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="changelog">Changelog</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.8.0 · Updated: 2026-09-04</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.8.1 · Updated: 2026-09-11</em></p>
 <p>Newest first. Version numbers follow <a href="https://semver.org">semantic versioning</a>:
 <code>MAJOR.MINOR.PATCH</code>. Still on <code>0.x</code> because the app isn't deployment-ready
 until it has a real access layer.</p>
 <hr />
 <h2 id="released">Released</h2>
+<h3 id="v081-2026-09-11">v0.8.1 — 2026-09-11</h3>
+<ul>
+<li>City Bank is filled to its cap before anything that earns less than it is
+  bought. A fill used to stop after twelve deposits, leaving the deposit short
+  of the cap and the plan buying blocks returning a fraction of the bank rate
+  with money that belonged in it.</li>
+<li>A term already running no longer abandons the fill. The plan waits it out,
+  buying only what pays out before it matures, then redeposits the lot.</li>
+<li><strong>Testing Feedback</strong> added: a survey reachable from the green button above the
+  footer links and from the Prototype banner, submitted to the same place as
+  Feedback &amp; Reporting as a single text file, with the investments and planner
+  tables attached if you agree to share them. It can be saved and come back to.</li>
+</ul>
 <h3 id="v080-2026-09-04">v0.8.0 — 2026-09-04</h3>
 <ul>
 <li><strong>Scripts</strong> and <strong>Education &amp; Job Planner</strong> added to the footer links. Both are

@@ -1226,10 +1226,10 @@ details.banner[open]>summary::before{margin-right:8px}
 //
 // Bumped on every publish. Written in one place, shown in the footer and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.8.0";
+const APP_VERSION="v0.8.1";
 // ISO date of that publish, shown in the footer exactly as written. ISO reads
 // the same everywhere, so no locale formatting is applied to it.
-const APP_UPDATED="2026-09-04";
+const APP_UPDATED="2026-09-11";
 // ======================================================================
 // DATA  ·  Stock table, benefit metadata, tag lists, game constants
 // ======================================================================
@@ -4822,16 +4822,49 @@ function simulatePlan(){
   // Fill City Bank once nothing left to buy beats its rate. It has no purchase
   // price, just a capped deposit that locks for a term: put everything in, run
   // the term buying only what pays out before it matures, then redeposit the
-  // lot including interest. Repeat until the cap is reached.
+  // lot including interest. Nothing that earns less than the bank is bought
+  // until the cap is reached.
   function runCityBank(remaining=[]){
-    // Nothing can be deposited while a term is still running.
-    if(pendingBank) return true;
     if(!bankRowAt(day)||bankHeld>=bankCap) return true;
+    // Moves the clock on, buying anything from `remaining` that completes a
+    // payout before the wait is over.
+    const waitOut=(days,interest)=>{
+      if(!(days>0)) days=1;
+      if(day+days>PLAN_MAX_DAYS){outOfRoom=true;return false}
+      day+=days;
+      cash+=days*income();
+      cash+=interest||0;
+      creditMaturedBank();
+      for(const t of remaining){
+        if(owned.has(rowKey(t))||t.kind!=="stock") continue;
+        // A deprioritised situational stock is deliberately left to the end of
+        // the plan. Being cheap enough to afford mid-term is not a reason to
+        // jump it ahead of everything the user actually asked for.
+        if(deferred.has(t.ticker)) continue;
+        if(!(t.days>0)||t.days>days||t.cost>cash) continue;
+        if(steps.length>=PLAN_MAX_ACTIONS){outOfRoom=true;return false}
+        cash-=t.cost;
+        owned.add(rowKey(t));
+        held.push({row:t,forOcc:null,net:0});
+        steps.push({row:t,day,sold:[],unreachable:false,parking:false,depth:0,
+                    parentOcc:null,occId:`term${steps.length}`,
+                    duringTerm:true});
+      }
+      return true;
+    };
+    // Do not lower: a fill runs for as many terms as the cap takes, and
+    // stopping early leaves the plan buying things the bank beats.
     let guard=0;
-    while(bankHeld<bankCap&&guard++<12){
+    while(bankHeld<bankCap&&guard++<PLAN_MAX_ACTIONS){
       if(steps.length>=PLAN_MAX_ACTIONS){outOfRoom=true;return false}
       const bankRow=bankRowAt(day);
       if(!bankRow) break;
+      creditMaturedBank();
+      // Nothing can be added while a term is running, so wait it out.
+      if(pendingBank){
+        if(!waitOut(pendingBank.day-day,0)) return false;
+        continue;
+      }
       // Fill on whichever term gets there soonest, then hold the highest rate.
       const fillRow=isNewbie
         ?(fastestFillOptionAt(cash,income(),bankCap,day)||bankRow)
@@ -4862,7 +4895,12 @@ function simulatePlan(){
       }
       const deposit=Math.min(bankCap,bankHeld+cash);
       const added=deposit-bankHeld;
-      if(added<=0) break;
+      // Nothing to put in yet: let income build rather than abandoning the fill.
+      if(added<=0){
+        if(income()<=0) break;
+        if(!waitOut(1,0)) return false;
+        continue;
+      }
       cash-=added;
       bankHeld=deposit;
       const usingRow=deposit>=bankCap?bankRow:fillRow;
@@ -4890,29 +4928,7 @@ function simulatePlan(){
       }
       if(deposit>=bankCap) break;
       // Run the term: income accrues, and the deposit pays out at maturity.
-      const term=fillRow.days;
-      if(day+term>PLAN_MAX_DAYS){outOfRoom=true;return false}
-      day+=term;
-      cash+=term*income();
-      cash+=deposit*usingRoi*term/365;      // interest, released with the deposit
-      creditMaturedBank();
-      // The money is locked, but income is not: anything that completes a
-      // payout inside the term is still worth buying while we wait.
-      for(const t of remaining){
-        if(owned.has(rowKey(t))||t.kind!=="stock") continue;
-        // A deprioritised situational stock is deliberately left to the end of
-        // the plan. Being cheap enough to afford mid-term is not a reason to
-        // jump it ahead of everything the user actually asked for.
-        if(deferred.has(t.ticker)) continue;
-        if(!(t.days>0)||t.days>term||t.cost>cash) continue;
-        if(steps.length>=PLAN_MAX_ACTIONS){outOfRoom=true;return false}
-        cash-=t.cost;
-        owned.add(rowKey(t));
-        held.push({row:t,forOcc:null,net:0});
-        steps.push({row:t,day,sold:[],unreachable:false,parking:false,depth:0,
-                    parentOcc:null,occId:`term${steps.length}`,
-                    duringTerm:true});
-      }
+      if(!waitOut(fillRow.days,deposit*usingRoi*fillRow.days/365)) return false;
     }
     return true;
   }
