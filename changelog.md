@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.8.1 · Updated: 2026-09-11_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.8.2 · Updated: 2026-09-11_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,11 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.8.2 — 2026-09-11
+
+- A stock pinned as the highest priority is bought ahead of the City Bank fill.
+  Every other undefined-ROI stock still waits until the deposit is capped.
 
 ### v0.8.1 — 2026-09-11
 

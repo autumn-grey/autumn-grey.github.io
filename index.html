@@ -1226,7 +1226,7 @@ details.banner[open]>summary::before{margin-right:8px}
 //
 // Bumped on every publish. Written in one place, shown in the footer and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.8.1";
+const APP_VERSION="v0.8.2";
 // ISO date of that publish, shown in the footer exactly as written. ISO reads
 // the same everywhere, so no locale formatting is applied to it.
 const APP_UPDATED="2026-09-11";
@@ -4935,12 +4935,17 @@ function simulatePlan(){
 
   creditMaturedBank();          // a term that is already up pays out at once
   sellDeadWeight();
+  // A stock pinned as the highest priority is what the plan is for, so it goes
+  // ahead of the bank. The dud is pinned to the back and never counts.
+  const pinnedGoal=row=>row.kind==="stock"&&row.ticker!==DUD_TICKER
+                      &&!!window.pinnedStocks?.has(row.ticker);
   const runTarget=target=>{
     if(steps.length>=PLAN_MAX_ACTIONS){outOfRoom=true;return false}
     if(owned.has(rowKey(target))) return true;
     // Once this target no longer beats the bank, the bank comes first.
     const curBankRow=bankRowAt(day);
-    if(curBankRow&&bankHeld<bankCap&&(target.roi==null||target.roi<=curBankRow.roi)){
+    if(curBankRow&&bankHeld<bankCap&&!pinnedGoal(target)
+       &&(target.roi==null||target.roi<=curBankRow.roi)){
       const idx=targets.indexOf(target);
       if(!runCityBank(idx>=0?targets.slice(idx):[target])) return false;
       // runCityBank buys anything that pays out inside the term, and this
