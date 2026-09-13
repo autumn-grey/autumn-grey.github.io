@@ -63,7 +63,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="autumns-stonking-awesome-torn-app">Autumn's Stonking Awesome Torn App</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.8.2 · Updated: 2026-09-11</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.9.0 · Updated: 2026-09-14</em></p>
 <p>A passive-investment planner for <a href="https://www.torn.com">Torn</a>. The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.</p>
 <p>Currently restricted to members of <strong>The ZOO - Night Shift</strong>.</p>
 <p>The version number and last-updated date sit in the footer, and the version is stamped into every export, so a bug report can be tied to an exact build.</p>
@@ -146,11 +146,13 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
 <h3 id="planner">Planner</h3>
 <p>Works out the order to buy things in, and how long each step will take. Nothing recalculates until you press <strong>Show Me The Money (Plan)</strong>, because the simulation is heavy and live updates made the settings unusable.</p>
 <ul>
-<li><strong>Your Position.</strong> Available capital, daily investment budget, City Bank payout, days remaining on the deposit, and the term length. The daily budget is a starting figure; it grows as the investments you buy start paying out. Term length is set manually, with a best guess pre-selected.</li>
+<li><strong>Your Position.</strong> Available capital, daily investment budget, City Bank invested and its payout, days remaining on the deposit, and the term length. The invested and payout boxes are linked: fill in whichever you know and the other follows, both capped at the deposit limit. The daily budget is a starting figure; it grows as the investments you buy start paying out. Term length is set manually, with a best guess pre-selected.</li>
 <li><strong>Path.</strong> One of Everything, a certain investment, Custom Plan, 1000 Energy, just give me money, increment amount, or <strong>Total Newbie</strong> (see below).</li>
 <li><strong>Other Investments.</strong> Private Islands, City Bank, Cayman and TCI.</li>
 <li><strong>Situational Stocks.</strong> Tick the ones whose benefits you would use. Unticked ones are bought last and never incremented. Stocks with no calculable ROI sit below a divider; click one's name to pin it as the goal the plan works toward first. Pinned stocks are bought cheapest first.</li>
 <li>Steps are numbered, tickable, and paged (20/50/100/500 per page). <strong>Jump to current step</strong> finds the next thing you should buy, switching pages if it's on another one.</li>
+<li><strong>Paid With</strong> breaks each purchase down by where the money came from, listing only the sources that paid toward it: City Bank payouts, Cayman payouts, investment payouts, capital and budget, and sold investments.</li>
+<li>A City Bank step's return is measured on everything the deposit holds after it, not on that step's top-up alone.</li>
 <li>Indented steps with amber lines are bought to earn money while you save for something bigger, one line per level of nesting.</li>
 <li>Red steps want selling: either a holding that's worth less than what the money could be doing, or something you ticked out of order.</li>
 <li>The <strong>Portfolio</strong> panel underneath tracks what you own as the plan progresses.</li>

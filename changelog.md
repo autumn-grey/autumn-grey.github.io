@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.8.2 · Updated: 2026-09-11_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.9.0 · Updated: 2026-09-14_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,31 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.9.0 — 2026-09-14
+
+- **City Bank Payout** is read from Torn as the payout it is. It was being
+  treated as the amount invested and grown by a term's interest a second time,
+  so a $107.9m payout was planned with as $118.4m.
+- **City Bank Invested** added beside it. Type in either box and the other
+  follows, so a deposit can be entered without working out its payout first.
+  Both are held to the deposit cap, $2b or $3b with Fat Cat. The invested figure
+  is derived from the payout at the current rate, so it reads a little low if
+  you have earned bank merits since the deposit was made.
+- **Paid With**, a new planner column, breaks each purchase down by where the
+  money came from: City Bank payouts, Cayman payouts, investment payouts,
+  capital and budget, and sold investments. Only the sources that paid toward
+  that step are listed, with an amount and a share of the bill. The five figures
+  are in the plan's spreadsheet export too.
+- A City Bank step's return is measured on the whole balance the deposit now
+  holds rather than on that step's top-up alone. Adding $26m to a deposit
+  already holding $1b reports the return on $1.026b.
+- Fixed the planner spending money it did not have. A purchase could be planned
+  up to eight months of interest early, taking cash negative, when a month of
+  Cayman interest cleared the target on its own: the days-to-afford projection
+  then subtracted the overshoot and landed before the month boundary where that
+  interest is actually paid. Affordability is now re-checked against real cash
+  before anything is bought.
 
 ### v0.8.2 — 2026-09-11
 

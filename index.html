@@ -53,7 +53,7 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .user-status .us-diag{margin-top:8px;border-top:1px solid var(--line);padding-top:7px}
 .user-status .us-diag summary{cursor:pointer;color:var(--muted)}
 .user-status .us-diag .us-line{color:#8f98a3;word-break:break-word;margin-top:3px}
-.api-key-wrap{display:flex;gap:7px}.api-key-wrap input{flex:1;min-width:0}.api-key-toggle{flex:0 0 auto;padding:8px 10px;border:1px solid #3a4048;background:#252a31;color:var(--text);border-radius:6px;cursor:pointer}.api-key-toggle:hover{background:#30363d}.help{font-size:11px;color:var(--muted);margin-top:5px}.panel-desc{margin:0 0 12px;line-height:1.7}.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-items:start}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;align-items:start}.check{display:flex;align-items:center;gap:8px;margin:8px 0;color:#d7dbe0}.check input{width:auto}.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #49515a;background:#252a31;color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer}.btn.primary{background:var(--accent);border-color:var(--accent);color:#17120c;font-weight:700}
+.api-key-wrap{display:flex;gap:7px}.api-key-wrap input{flex:1;min-width:0}.api-key-toggle{flex:0 0 auto;padding:8px 10px;border:1px solid #3a4048;background:#252a31;color:var(--text);border-radius:6px;cursor:pointer}.api-key-toggle:hover{background:#30363d}.help{font-size:11px;color:var(--muted);margin-top:5px}.panel-desc{margin:0 0 12px;line-height:1.7}.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-items:start}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;align-items:start}.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;align-items:start}@media(max-width:760px){.row4{grid-template-columns:1fr 1fr}}.check{display:flex;align-items:center;gap:8px;margin:8px 0;color:#d7dbe0}.check input{width:auto}.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #49515a;background:#252a31;color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer}.btn.primary{background:var(--accent);border-color:var(--accent);color:#17120c;font-weight:700}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn:disabled:hover{border-color:#49515a}
 /* Every control answers the same way: the outline picks up the accent and the
@@ -92,7 +92,7 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .toolbar .toolbar label{white-space:nowrap}.toolbar label:nth-of-type(1){grid-column:1}.toolbar label:nth-of-type(2){grid-column:4}.toolbar label:nth-of-type(3){grid-column:6}.toolbar .grow{flex:1}.toolbar select,.toolbar input{background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:7px}
 .tablewrap{overflow:auto;border:1px solid var(--line);border-radius:8px}.table{width:100%;border-collapse:separate;border-spacing:0;min-width:1400px}.table.table-compact{min-width:0}.table td.benefit-cell{text-align:left;white-space:normal;min-width:190px}
 #tbodyPlan td:nth-child(3),#tbodyPlan td:nth-child(4){text-align:center}
-#tbodyPlan td.benefit-cell{text-align:center;min-width:150px}.table th,.table td{padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}.table th{text-align:center;vertical-align:bottom}.table th:first-child{text-align:center}.th-select{display:block;margin:4px auto 0;font:inherit;font-size:11px;font-weight:400;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:4px;padding:2px 4px}/* ---- Basic / Advanced view ---- */
+#tbodyPlan td.benefit-cell{text-align:center;min-width:150px}#tbodyPlan td.paid-cell{text-align:left;white-space:normal;min-width:180px}.paid-with{display:flex;flex-direction:column;gap:2px;font-size:11px}.pw-line{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:baseline}.pw-src{color:var(--muted)}.pw-src::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;background:currentColor;vertical-align:middle}.pw-bank{color:#b586e0}.pw-cayman{color:#5fc9d8}.pw-invest{color:#2ee56a}.pw-input{color:#e39b45}.pw-sale{color:#e0655f}.pw-amt{color:var(--text);font-variant-numeric:tabular-nums}.pw-pct{color:var(--muted);font-variant-numeric:tabular-nums;min-width:30px;text-align:right}.table th,.table td{padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}.table th{text-align:center;vertical-align:bottom}.table th:first-child{text-align:center}.th-select{display:block;margin:4px auto 0;font:inherit;font-size:11px;font-weight:400;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:4px;padding:2px 4px}/* ---- Basic / Advanced view ---- */
 .head-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .head-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .page-tab{background:none;border:1px solid var(--line);border-radius:7px;color:var(--muted);font:inherit;font-size:12px;font-weight:700;padding:6px 14px;cursor:pointer}
@@ -955,7 +955,8 @@ details.banner[open]>summary::before{margin-right:8px}
       <div class="field"><label>Available Capital</label><input id="capital" class="money-input" type="text" inputmode="numeric" value="$10,000,000"></div>
       <div class="field"><label>Daily Investment Budget</label><input id="dailyBudget" class="money-input" type="text" inputmode="numeric" value="$1,000,000"><div class="help">This is only your starting daily budget. Investment pay outs will increase it over time.</div></div>
     </div>
-    <div class="row3">
+    <div class="row4">
+      <div class="field"><label>City Bank Invested</label><input id="planBankInvested" class="money-input" type="text" inputmode="numeric" value="$0"><div class="help" id="planBankInvestedHelp">Max $2,000,000,000</div></div>
       <div class="field"><label>City Bank Payout</label><input id="planBankAmount" class="money-input" type="text" inputmode="numeric" value="$0"></div>
       <div class="field"><label>Days Remaining on Deposit</label><input id="planBankDays" type="number" min="0" max="365" step="1" value="0"></div>
       <div class="field"><label>Term Length</label><select id="planBankTermSel"></select></div>
@@ -1023,7 +1024,7 @@ details.banner[open]>summary::before{margin-right:8px}
     </div>
     <div class="plan-nav" id="planNavTop"></div>
     <div class="tablewrap"><table class="table table-compact"><thead><tr>
-      <th>Step</th><th>Investment</th><th>Increment</th><th>Sell to Acquire</th><th>Cost</th><th>Return<br><select id="returnPeriodPlan" class="th-select"><option value="daily">Daily</option><option value="weekly" selected>Weekly</option><option value="monthly">Monthly</option><option value="annual">Annual</option></select></th><th>ROI</th><th>Time Until Purchase</th>
+      <th>Step</th><th>Investment</th><th>Increment</th><th>Sell to Acquire</th><th>Cost</th><th>Paid With</th><th>Return<br><select id="returnPeriodPlan" class="th-select"><option value="daily">Daily</option><option value="weekly" selected>Weekly</option><option value="monthly">Monthly</option><option value="annual">Annual</option></select></th><th>ROI</th><th>Time Until Purchase</th>
     </tr></thead><tbody id="tbodyPlan"></tbody></table></div>
     <div class="plan-nav" id="planNavBottom"></div>
     <p class="help" id="planNote" style="margin:9px 0 0"></p>
@@ -1226,7 +1227,7 @@ details.banner[open]>summary::before{margin-right:8px}
 //
 // Bumped on every publish. Written in one place, shown in the footer and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.8.2";
+const APP_VERSION="v0.9.0";
 // ISO date of that publish, shown in the footer exactly as written. ISO reads
 // the same everywhere, so no locale formatting is applied to it.
 const APP_UPDATED="2026-09-11";
@@ -1516,7 +1517,7 @@ const esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g
 const boolVal=id=>!!$(id)?.checked;
 const setBool=(id,v)=>{const el=$(id);if(el)el.checked=!!v};
 // Money-formatted text inputs: stored as "$1,234,567" but read as a number.
-const MONEY_INPUTS=["piRent","piIncome","cayman","bankDeposit","capital","dailyBudget","planBankAmount"];
+const MONEY_INPUTS=["piRent","piIncome","cayman","bankDeposit","capital","dailyBudget","planBankAmount","planBankInvested"];
 function numVal(id){const el=$(id);if(!el)return 0;const n=parseFloat(String(el.value).replace(/[^0-9.\-]/g,""));return isFinite(n)?n:0}
 function formatMoneyInput(el){
   const n=parseFloat(String(el.value).replace(/[^0-9.\-]/g,""));
@@ -1832,9 +1833,6 @@ function saveLocal(){
     localStorage.setItem("tornInvView",document.body.classList.contains("basic")?"basic":"advanced");
     localStorage.setItem("tornInvPrio",JSON.stringify([...prioritisedTickers()]));
     localStorage.setItem("tornInvPlanDone",JSON.stringify([...window.planDone]));
-    // The payout box is saved with the other fields, but the principal behind it
-    // is what the term dropdown rebuilds from, so it is kept in its own right.
-    localStorage.setItem("tornInvBankPrincipal",String(bankPrincipal||0));
     if($("apiKey").value)localStorage.setItem("tornInvApiKey",$("apiKey").value);
   }catch(e){
     logProblem("Settings could not be saved. Storage may be full, or private mode is on",e);
@@ -2358,14 +2356,14 @@ function applyUserData(d){
     const left=Math.ceil(term.days);
     const seen=Math.ceil(noteBankTermSeen(term.days));
     $("planBankDays").value=String(Math.min(365,left));
-    setBankPrincipal(cityBank!=null&&cityBank>0?cityBank:0);
+    setBankPayout(cityBank!=null&&cityBank>0?cityBank:0);
     ok("City Bank term",left>0
       ? `${left} day${left===1?"":"s"} left · best guessing a ${planBankTerm()}-day term`
         +(seen>left?` (longest seen ${seen} days)`:"")
       : "nothing locked");
   } else {
     $("planBankDays").value="0";
-    setBankPrincipal(0);
+    setBankPayout(0);
     miss("City Bank term",failed("money")?`needs User → money (${failed("money")})`:"no time remaining reported");
   }
 
@@ -2522,29 +2520,49 @@ function applyBankTermGuess(){
   const sel=$("planBankTermSel");
   if(sel) sel.value=String(planBankTermGuess());
 }
-// The principal actually sitting in the bank. The box holds the payout, so
-// changing the assumed term has to rebuild it from this rather than from the
-// figure already shown, otherwise the interest would compound on itself.
-let bankPrincipal=0;
-function setBankPrincipal(p){
-  bankPrincipal=p>0?p:0;
+// Which of the two bank boxes is held fixed while the other is recomputed.
+let bankEntry="payout";
+// Puts what a running term will pay out into the payout box.
+// Do not re-apply interest to this: Torn already reports the matured figure.
+function setBankPayout(p){
+  bankEntry="payout";
   applyBankTermGuess();
-  setMoneyInput("planBankAmount",bankPrincipal>0?planBankPayoutFor(bankPrincipal,planBankTerm()):0);
+  setMoneyInput("planBankAmount",p>0?p:0);
+  syncBankBoxes();
+}
+// Holds the invested box to the deposit cap set on the Investments page.
+function clampBankInvested(){
+  const cap=bankDepositCap();
+  const help=$("planBankInvestedHelp");
+  if(help) help.textContent="Max $"+cap.toLocaleString("en-US");
+  const raw=numVal("planBankInvested");
+  if(raw>cap){ setMoneyInput("planBankInvested",cap); return true }
+  return false;
+}
+// Rewrites whichever of the two bank boxes is not being held, and the help line.
+function syncBankBoxes(){
+  const grow=1+planBankApr()*planBankTerm()/365;
+  if(bankEntry==="invested"){
+    clampBankInvested();
+    const inv=numVal("planBankInvested");
+    setMoneyInput("planBankAmount",inv>0?inv*grow:0);
+  } else {
+    const payout=numVal("planBankAmount");
+    setMoneyInput("planBankInvested",payout>0?payout/grow:0);
+    // A payout over the cap can only mean the deposit behind it was too big.
+    if(clampBankInvested()) setMoneyInput("planBankAmount",bankDepositCap()*grow);
+  }
   updatePlanBankHelp();
 }
-// Rebuild the payout under a new term assumption, keeping the principal.
-function rebuildBankPayout(){
-  if(bankPrincipal>0) setMoneyInput("planBankAmount",planBankPayoutFor(bankPrincipal,planBankTerm()));
-  updatePlanBankHelp();
+// Notes which bank box was typed in, then brings the other into line.
+function bankBoxEdited(id){
+  bankEntry=id==="planBankInvested"?"invested":"payout";
+  syncBankBoxes();
 }
 function planBankApr(){
   const t=planBankTerm();
   const row=bankRows().find(r=>r.days===t);
   return row?row.roi:0;
-}
-// What the whole term pays out, from the principal that is in there now.
-function planBankPayoutFor(principal,termDays){
-  return principal*(1+planBankApr()*termDays/365);
 }
 // Says what the number in the box is made of. Written from the box itself, so
 // it stays honest if the figure is typed in by hand.
@@ -2554,8 +2572,9 @@ function updatePlanBankHelp(){
   const payout=numVal("planBankAmount");
   if(!(payout>0)){ el.textContent=""; return }
   const term=planBankTerm(), apr=planBankApr();
-  const principal=bankPrincipal>0?bankPrincipal:payout/(1+apr*term/365);
-  el.textContent=`${money(principal)} invested | ${term} days at ${(apr*100).toFixed(2)}% APR`
+  const principal=numVal("planBankInvested");
+  el.textContent=`${money(principal)} invested${bankEntry==="payout"?" at a guess":""}`
+    +` | ${term} days at ${(apr*100).toFixed(2)}% APR`
     +` | ${money(payout-principal)} interest`
     // The term is a best guess from the longest time-left seen, but it sits
     // among a dozen other hand-adjustable defaults, so it's presented the
@@ -3398,6 +3417,27 @@ function periodValue(annual,period){
 }
 const returnValue=r=>periodValue(r.annual,tablePeriod());
 const planReturnValue=r=>periodValue(r.annual,planPeriod());
+// Breaks a purchase down by where the money came from, listing only the
+// sources that actually paid toward it.
+function paidWithCell(split){
+  if(!split) return "—";
+  const total=PAID_SOURCES.reduce((a,k)=>a+(split[k]||0),0);
+  if(!(total>0)) return "—";
+  // Under half a percent of the bill is rounding drift, not a contribution.
+  const used=PAID_SOURCES.filter(k=>(split[k]||0)/total>=0.005);
+  if(!used.length) return "—";
+  const shown=used.reduce((a,k)=>a+split[k],0);
+  // Largest remainder, so the percentages down the cell always total 100.
+  const exact=used.map(k=>split[k]/shown*100);
+  const pcts=exact.map(Math.floor);
+  let slack=100-pcts.reduce((a,v)=>a+v,0);
+  exact.map((v,i)=>[v-pcts[i],i]).sort((a,b)=>b[0]-a[0])
+       .forEach(([,i])=>{ if(slack>0){ pcts[i]++; slack-- } });
+  return `<div class="paid-with">${used.map((k,i)=>
+    `<div class="pw-line"><span class="pw-src pw-${k}">${PAID_LABELS[k]}</span>`
+    +`<span class="pw-amt">${moneyShort(split[k])}</span>`
+    +`<span class="pw-pct">${pcts[i]}%</span></div>`).join("")}</div>`;
+}
 
 const DEPRIORITISE_WEIGHT=0.0001;
 // Tickers the user has chosen to rank lower. Displayed figures stay true;
@@ -4330,6 +4370,10 @@ function daysToSave(target,cash,income,m){
   if(income<=0&&m<=0) return Infinity;
   let bal=cash,days=0;
   for(let month=0;month<1200;month++){
+    // A month's interest can clear the target on its own, and the boundary is
+    // when it lands. Without this the day returned is the boundary less the
+    // overshoot, which is before the interest exists.
+    if(bal>=target) return days;
     const end=bal+DAYS_PER_MONTH*income;
     if(end>=target){
       return days+(income>0?(target-bal)/income:DAYS_PER_MONTH);
@@ -4349,6 +4393,16 @@ function caymanBalance(days,start,income,m){
   while(d+DAYS_PER_MONTH<=days){ bal=bal+DAYS_PER_MONTH*income+bal*m; d+=DAYS_PER_MONTH }
   return bal+Math.max(0,days-d)*income;
 }
+// Where a purchase's money came from, in the order the Paid With column
+// lists them.
+const PAID_SOURCES=["bank","cayman","invest","input","sale"];
+const PAID_LABELS={
+  bank:"City Bank payouts",
+  cayman:"Cayman payouts",
+  invest:"Investment payouts",
+  input:"Capital and budget",
+  sale:"Sold investments"
+};
 const PLAN_MAX_ACTIONS=2000;
 const PLAN_MAX_DAYS=365*100;
 
@@ -4612,6 +4666,26 @@ function simulatePlan(){
                             &&window.ownedRows.has(rowKey(r)));
   seeded.forEach(r=>owned.add(rowKey(r)));
   let cash=numVal("capital");
+  // Where the cash in hand came from, so every purchase can say what paid for
+  // it. Kept in step with `cash` by potCredit, potSpend and accrue.
+  const pot={bank:0,cayman:0,invest:0,input:0,sale:0};
+  pot.input=Math.max(0,cash);
+  const potTotal=()=>PAID_SOURCES.reduce((a,k)=>a+pot[k],0);
+  const potCredit=(src,amt)=>{ if(amt>0) pot[src]+=amt };
+  // Spends `amt`, taking from each source in proportion to what it holds,
+  // and reports the split so the step can show it.
+  const potSpend=amt=>{
+    const split={};
+    if(!(amt>0)) return split;
+    const total=potTotal();
+    if(!(total>0)) return {input:amt};
+    const take=Math.min(amt,total);
+    PAID_SOURCES.forEach(k=>{
+      const cut=pot[k]/total*take;
+      if(cut>0){ pot[k]-=cut; split[k]=cut }
+    });
+    return split;
+  };
   const baseIncome=numVal("dailyBudget");
   let day=0;
   const steps=[];
@@ -4673,6 +4747,24 @@ function simulatePlan(){
     return baseIncome+held.reduce((a,h)=>a+returnOf(h.row),0)
            +(term?bankHeld*bankRoiFor(term)/365:0);
   };
+  // Moves `days` of income into cash, crediting each source for its share.
+  // `compound` mirrors whether the call site ran the Cayman compounding.
+  const accrue=(days,compound)=>{
+    if(!(days>0)) return;
+    const inc=income();
+    const before=cash;
+    cash=(compound&&useCayman)?caymanBalance(days,cash,inc,caymanM):cash+days*inc;
+    const gained=cash-before;
+    if(!(gained>0)) return;
+    const term=bankFull()?bankRowAt(day):null;
+    const fromBank=days*(term?bankHeld*bankRoiFor(term)/365:0);
+    const fromInvest=days*held.reduce((a,h)=>a+returnOf(h.row),0);
+    const fromInput=days*baseIncome;
+    potCredit("bank",fromBank);
+    potCredit("invest",fromInvest);
+    potCredit("input",fromInput);
+    potCredit("cayman",gained-fromBank-fromInvest-fromInput);
+  };
   const heldFor=occ=>held.filter(h=>h.forOcc===occ);
   const resaleOf=list=>list.reduce((a,h)=>a+h.row.cost*(1-SELL_FEE),0);
   // Called wherever the clock moves on: once the term is up the money is in
@@ -4681,6 +4773,7 @@ function simulatePlan(){
     if(!pendingBank||day<pendingBank.day) return;
     const p=pendingBank; pendingBank=null;
     cash+=p.payout;
+    potCredit("bank",p.payout);
     steps.push({row:{kind:"bank",ticker:"BANK",name:"City Bank – term matures",bank:true,
                      days:0,cost:p.payout,roi:null,annual:null},
                 day,sold:[],unreachable:false,parking:false,depth:0,parentOcc:null,
@@ -4762,6 +4855,7 @@ function simulatePlan(){
           .forEach(r=>{
       const proceeds=r.cost*(1-SELL_FEE);
       cash+=proceeds;
+      potCredit("sale",proceeds);
       owned.delete(rowKey(r));
       const i=held.findIndex(h=>rowKey(h.row)===rowKey(r));
       if(i>=0) held.splice(i,1);
@@ -4798,24 +4892,40 @@ function simulatePlan(){
       steps.push({row:target,day:null,unreachable:true,sold:[],parking:depth>0,parentOcc,depth});
       return false;
     }
-    day+=wait;
-    cash=useCayman?caymanBalance(wait,cash,income(),caymanM):cash+wait*income();
-    creditMaturedBank();
+    const advance=span=>{ day+=span; accrue(span,true); creditMaturedBank() };
+    advance(wait);
+    // A projection that lands short would buy on money that isn't there, so
+    // the difference is waited out before anything is spent.
+    let top=0;
+    while(top++<4){
+      const need=target.cost-resaleOf(heldFor(occ));
+      if(cash>=need-1) break;
+      const extra=saveTime(need,cash);
+      if(!isFinite(extra)||extra<=0) break;
+      if(day+extra>PLAN_MAX_DAYS){
+        heldFor(occ).forEach(h=>{h.forOcc=null});
+        steps.push({row:target,day:null,unreachable:true,sold:[],parking:depth>0,parentOcc,depth});
+        return false;
+      }
+      advance(extra);
+    }
     // Liquidate what was bought to fund this, then buy it. The payouts it
     // made while held are already in `cash`: a parked stock sits in `held`,
     // so income() has been counting its return every day it was there.
     const sold=heldFor(occ);
     sold.forEach(h=>{
       cash+=h.row.cost*(1-SELL_FEE);
+      potCredit("sale",h.row.cost*(1-SELL_FEE));
       held.splice(held.indexOf(h),1);
       owned.delete(rowKey(h.row));
     });
+    const paidWith=potSpend(target.cost);
     cash-=target.cost;
     owned.add(rowKey(target));
     if(target.ticker==="TCI"&&/ - Passive$/.test(target.name||"")) tciPassiveHeld=true;
     held.push({row:target,forOcc:null,net:0});
     steps.push({row:target,day,sold:sold.map(h=>h.row),unreachable:false,
-                parking:depth>0,occId:occ,parentOcc,depth});
+                parking:depth>0,occId:occ,parentOcc,depth,paidWith});
     return true;
   }
 
@@ -4832,8 +4942,9 @@ function simulatePlan(){
       if(!(days>0)) days=1;
       if(day+days>PLAN_MAX_DAYS){outOfRoom=true;return false}
       day+=days;
-      cash+=days*income();
+      accrue(days,false);
       cash+=interest||0;
+      potCredit("bank",interest||0);
       creditMaturedBank();
       for(const t of remaining){
         if(owned.has(rowKey(t))||t.kind!=="stock") continue;
@@ -4843,12 +4954,13 @@ function simulatePlan(){
         if(deferred.has(t.ticker)) continue;
         if(!(t.days>0)||t.days>days||t.cost>cash) continue;
         if(steps.length>=PLAN_MAX_ACTIONS){outOfRoom=true;return false}
+        const paidWith=potSpend(t.cost);
         cash-=t.cost;
         owned.add(rowKey(t));
         held.push({row:t,forOcc:null,net:0});
         steps.push({row:t,day,sold:[],unreachable:false,parking:false,depth:0,
                     parentOcc:null,occId:`term${steps.length}`,
-                    duringTerm:true});
+                    duringTerm:true,paidWith});
       }
       return true;
     };
@@ -4883,13 +4995,14 @@ function simulatePlan(){
         const waitCost=projected*base*(TCI_ACTIVATION_DAYS/365);
         if(projected>bankHeld&&gain>waitCost+tciRow.cost*SELL_FEE){
           if(day+TCI_ACTIVATION_DAYS>PLAN_MAX_DAYS){outOfRoom=true;return false}
+          const paidWith=potSpend(tciRow.cost);
           cash-=tciRow.cost;
           tciHeld=true;
           steps.push({row:tciRow,day,sold:[],unreachable:false,parking:false,depth:0,
-                      parentOcc:null,occId:`tci${steps.length}`,tciWindow:true,
+                      parentOcc:null,occId:`tci${steps.length}`,tciWindow:true,paidWith,
                       bankNote:`Held ${TCI_ACTIVATION_DAYS} days to lock in the bonus rate`});
           day+=TCI_ACTIVATION_DAYS;
-          cash+=TCI_ACTIVATION_DAYS*income();
+          accrue(TCI_ACTIVATION_DAYS,false);
           creditMaturedBank();
         }
       }
@@ -4901,6 +5014,7 @@ function simulatePlan(){
         if(!waitOut(1,0)) return false;
         continue;
       }
+      const paidWith=potSpend(added);
       cash-=added;
       bankHeld=deposit;
       const usingRow=deposit>=bankCap?bankRow:fillRow;
@@ -4910,8 +5024,10 @@ function simulatePlan(){
       const usingRowFull=usingRow.name?usingRow:{
         kind:"bank",ticker:"BANK",name:`City Bank – ${bankTermLabel(usingRow.days)}`,bank:true,
         days:usingRow.days,roi:usingRoi,annual:bankDepositValue()*usingRoi};
-      steps.push({row:{...usingRowFull,cost:added,roi:usingRoi,annual:added*usingRoi},day,sold:[],unreachable:false,
-                  parking:false,depth:0,parentOcc:null,
+      // Return on everything the deposit now holds, not just this top-up:
+      // the whole balance earns the rate from here on.
+      steps.push({row:{...usingRowFull,cost:added,roi:usingRoi,annual:deposit*usingRoi},day,sold:[],unreachable:false,
+                  parking:false,depth:0,parentOcc:null,paidWith,bankBalance:deposit,
                   occId:`bank${steps.length}`,cityBank:true,
                   bankNote:(deposit>=bankCap
                     ? `At maximum, ${moneyShort(deposit)} held on the ${bankTermLabel(bankRow.days)} term`
@@ -4921,6 +5037,7 @@ function simulatePlan(){
       if(tciHeld&&tciRow){
         const proceeds=tciRow.cost*(1-SELL_FEE);
         cash+=proceeds;
+        potCredit("sale",proceeds);
         tciHeld=false;
         steps.push({row:tciRow,day,sold:[],unreachable:false,parking:false,depth:0,
                     parentOcc:null,occId:`tcisell${steps.length}`,sellHolding:true,
@@ -5236,6 +5353,7 @@ function renderPlan(){
 <td>${incrementCell(s.row)}</td>
 <td class="benefit-cell">${s.bankNote?esc(s.bankNote):sold}</td>
 <td>${moneyShort(s.row.cost)}</td>
+<td class="paid-cell">${paidWithCell(s.paidWith)}</td>
 <td>${moneyShort(planReturnValue(s.row))}</td>
 <td class="${s.row.roi!=null?(s.row.roi>=0?'good':'bad'):''}">${pct(s.row.roi)}</td>
 <td>${when}</td>
@@ -5390,6 +5508,7 @@ function planTableRows(){
   const period=planReturnPeriodLabel();
   const out=[];
   out.push(["Step","Ticker","Investment","Increment","Status","Sell to acquire","Cost*",
+            ...PAID_SOURCES.map(k=>`Paid with: ${PAID_LABELS[k]}*`),
             `Return (${period})*`,"ROI (%)*","Time until purchase","Day*","Nested under"]);
   order.forEach((occ,i)=>{
     const s=index[occ];
@@ -5402,7 +5521,9 @@ function planTableRows(){
     out.push([
       i+1, s.row.ticker, s.row.name, outIncrement(s.row), status,
       s.bankNote||(s.sold&&s.sold.length?s.sold.map(sellLabelPlain).join(" + "):""),
-      outNum(s.row.cost), outNum(planReturnValue(s.row)), outPct(s.row.roi),
+      outNum(s.row.cost),
+      ...PAID_SOURCES.map(k=>outNum(s.paidWith?s.paidWith[k]:null)),
+      outNum(planReturnValue(s.row)), outPct(s.row.roi),
       s.unreachable?"":(s.day===0?"now":formatDuration(Math.ceil(s.day))),
       s.unreachable?"":outNum(s.day), s.parentName||""
     ]);
@@ -5568,13 +5689,14 @@ MONEY_INPUTS.forEach(id=>{
   if(!el) return;
   // Capital and daily budget only feed the planner, so they never rebuild the
   // investment rows, they just mark the plan as out of date.
-  const planOnly=(id==="capital"||id==="dailyBudget"||id==="planBankAmount");
-  const after=()=>{ if(planOnly){ updatePlanBankHelp(); markPlanStale() } else calculate() };
+  const bankBox=(id==="planBankAmount"||id==="planBankInvested");
+  const planOnly=(id==="capital"||id==="dailyBudget"||bankBox);
+  const after=()=>{ if(planOnly){ if(bankBox) bankBoxEdited(id); markPlanStale() } else calculate() };
   el.addEventListener("input",()=>{liveFormatMoney(el);if(id==="bankDeposit")clampBankDeposit();after()});
   el.addEventListener("blur",()=>{formatMoneyInput(el);if(id==="bankDeposit")clampBankDeposit();after()});
   el.addEventListener("keydown",e=>{if(e.key==="Enter"){formatMoneyInput(el);if(id==="bankDeposit")clampBankDeposit();after()}});
 });
-$("fatCat")?.addEventListener("change",()=>{clampBankDeposit();calculate()});
+$("fatCat")?.addEventListener("change",()=>{clampBankDeposit();syncBankBoxes();calculate()});
 clampBankDeposit();
 
 $("clearPicks")?.addEventListener("click",()=>{
@@ -5702,15 +5824,8 @@ $("planPageSize")?.addEventListener("change",()=>{window.planPage=1;renderPlan()
 // Changing the planner's period repaints the plan and its Portfolio panel; the
 // plan itself is untouched, so nothing is re-simulated.
 $("returnPeriodPlan")?.addEventListener("change",render);
-$("planBankDays")?.addEventListener("input",()=>{applyBankTermGuess();rebuildBankPayout();markPlanStale()});
-$("planBankTermSel")?.addEventListener("change",()=>{rebuildBankPayout();markPlanStale()});
-// A hand-typed payout redefines the principal, read under whatever term is
-// currently assumed.
-$("planBankAmount")?.addEventListener("input",()=>{
-  const payout=numVal("planBankAmount");
-  bankPrincipal=payout>0?payout/(1+planBankApr()*planBankTerm()/365):0;
-  updatePlanBankHelp();
-});
+$("planBankDays")?.addEventListener("input",()=>{applyBankTermGuess();syncBankBoxes();markPlanStale()});
+$("planBankTermSel")?.addEventListener("change",()=>{syncBankBoxes();markPlanStale()});
 $("csvPlan")?.addEventListener("click",exportPlanTable);
 $("csvInvestments")?.addEventListener("click",exportInvestmentsTable);
 // Deselects every ticked step, without touching the plan itself. The
@@ -5846,16 +5961,7 @@ loadLocal();
 // so their lit state has to be applied once the pins are actually known.
 syncPinnedButtons();
 applyDefaultPins();
-// A restored payout has to be turned back into a principal before anything
-// reads it. The term dropdown keeps whatever loadLocal put back, which is
-// either a saved choice or the guess made when it was saved.
-{
-  const saved=+(localStorage.getItem("tornInvBankPrincipal")||0);
-  const payout=numVal("planBankAmount");
-  bankPrincipal=saved>0?saved
-    :(payout>0?payout/(1+planBankApr()*planBankTerm()/365):0);
-  updatePlanBankHelp();
-}
+syncBankBoxes();
 syncPlanExtraAll();updateGoalDesc();setupTableSorting();calculate();
 if(hadCache){
   const age=marketCacheAge();

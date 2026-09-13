@@ -1,6 +1,6 @@
 # Autumn's Stonking Awesome Torn App
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.8.2 · Updated: 2026-09-11_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.9.0 · Updated: 2026-09-14_
 
 A passive-investment planner for [Torn](https://www.torn.com). The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.
 
@@ -91,11 +91,13 @@ A table of every stock benefit block, priced and ranked by return. Share prices 
 
 Works out the order to buy things in, and how long each step will take. Nothing recalculates until you press **Show Me The Money (Plan)**, because the simulation is heavy and live updates made the settings unusable.
 
-- **Your Position.** Available capital, daily investment budget, City Bank payout, days remaining on the deposit, and the term length. The daily budget is a starting figure; it grows as the investments you buy start paying out. Term length is set manually, with a best guess pre-selected.
+- **Your Position.** Available capital, daily investment budget, City Bank invested and its payout, days remaining on the deposit, and the term length. The invested and payout boxes are linked: fill in whichever you know and the other follows, both capped at the deposit limit. The daily budget is a starting figure; it grows as the investments you buy start paying out. Term length is set manually, with a best guess pre-selected.
 - **Path.** One of Everything, a certain investment, Custom Plan, 1000 Energy, just give me money, increment amount, or **Total Newbie** (see below).
 - **Other Investments.** Private Islands, City Bank, Cayman and TCI.
 - **Situational Stocks.** Tick the ones whose benefits you would use. Unticked ones are bought last and never incremented. Stocks with no calculable ROI sit below a divider; click one's name to pin it as the goal the plan works toward first. Pinned stocks are bought cheapest first.
 - Steps are numbered, tickable, and paged (20/50/100/500 per page). **Jump to current step** finds the next thing you should buy, switching pages if it's on another one.
+- **Paid With** breaks each purchase down by where the money came from, listing only the sources that paid toward it: City Bank payouts, Cayman payouts, investment payouts, capital and budget, and sold investments.
+- A City Bank step's return is measured on everything the deposit holds after it, not on that step's top-up alone.
 - Indented steps with amber lines are bought to earn money while you save for something bigger, one line per level of nesting.
 - Red steps want selling: either a holding that's worth less than what the money could be doing, or something you ticked out of order.
 - The **Portfolio** panel underneath tracks what you own as the plan progresses.
