@@ -15,6 +15,18 @@ Four HTML pages are built from markdown by `build-docs.py`. Editing the HTML is 
 
 `index.html` is the app itself. It is **not** generated — edit it directly.
 
+## scripts.json
+
+The Scripts page's panel list. `index.html` fetches it at page open; the Scripts
+page's edit mode writes it back through the GitHub contents API using a
+fine-grained token the owner pastes into the page (kept in their browser's
+localStorage, never in the repo).
+
+So this file gets committed from two places: by hand here, and by the live site.
+Pull before editing it locally, or the site's next save hits a 409 and the change
+has to be redone. Edits made in the page while no token is set are held in
+localStorage as an unpublished draft, and the page says so.
+
 ## Build
 
 ```

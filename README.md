@@ -107,7 +107,7 @@ The simulation has two hard ceilings: 2,000 steps and 100 simulated years. A tar
 
 ### Docs, Terms of Service and the rest
 
-Linked from the footer, along with Feedback & Reporting, Scripts and Education & Job Planner. The last two are placeholders while they are built. Docs holds this page, the Investment Logic explainer, the changelog, the licence, and one other thing. **Back to Stonking** at the bottom returns you to the app, as does clicking the title. Terms of Service carries the Torn-required data table and the kudos list.
+Linked from the footer, along with Feedback & Reporting, Scripts and Education & Job Planner. **Scripts** is a list of userscripts and tools worth having, each panel a link and a short description; Education & Job Planner is still a placeholder while it is built. Docs holds this page, the Investment Logic explainer, the changelog, the licence, and one other thing. **Back to Stonking** at the bottom returns you to the app, as does clicking the title. Terms of Service carries the Torn-required data table and the kudos list.
 
 ---
 

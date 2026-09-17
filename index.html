@@ -371,6 +371,73 @@ a:hover,.site-footer a:hover{text-decoration:underline;filter:brightness(1.15)}
 .soon-text{fill:#9458d3;font-family:Georgia,"Times New Roman",serif;font-size:38px;
   font-style:italic;font-weight:700;text-decoration:underline}
 
+/* SCRIPTS PAGE
+   Two views of the same list. Everyone gets the read-only panels; the owner
+   also gets the edit chrome, which is shown by body.scripts-owner and only
+   becomes active under .scripts-editing. Nothing here is security: the gate
+   is window.userId, which lives in the browser like the faction check does.
+   It keeps the page tidy for everyone else, it does not lock it. The token
+   is what actually stops anyone but me writing to the repo. */
+.scripts-wrap{max-width:900px;margin:0 auto;position:relative}
+.scripts-head{display:flex;align-items:flex-start;justify-content:space-between;
+  gap:12px;margin:0 0 14px}
+.scripts-intro{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+.scripts-head-tools{display:flex;gap:8px;flex:0 0 auto}
+/* Square icon buttons, used for + at the top of the page and for - and the
+   pencil on each panel, so they all read as the same control. */
+.icon-btn{width:28px;height:28px;flex:0 0 auto;display:inline-flex;
+  align-items:center;justify-content:center;padding:0;line-height:1;
+  font-size:15px;border:1px solid #49515a;background:#252a31;color:var(--text);
+  border-radius:6px;cursor:pointer}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+.icon-btn.danger:hover{border-color:var(--bad);color:var(--bad)}
+body:not(.scripts-owner) .scripts-owner-only{display:none}
+body:not(.scripts-editing) .scripts-edit-only{display:none}
+.scripts-list{display:flex;flex-direction:column;gap:10px}
+.script-card{position:relative;padding:14px 14px 13px;border:1px solid var(--line);
+  border-radius:8px;background:var(--panel)}
+.script-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.script-title{font-weight:700;font-size:15px;color:var(--accent);text-decoration:underline}
+.script-title:hover{filter:brightness(1.15)}
+.script-desc{margin:6px 0 0;color:var(--text);font-size:13px;line-height:1.6;
+  white-space:pre-wrap}
+.script-card-tools{display:flex;gap:6px;flex:0 0 auto}
+/* The handle only exists while editing, so the cursor only changes then. */
+.script-card.draggable{cursor:grab}
+.script-card.dragging{opacity:.4}
+.script-card.drop-before{box-shadow:0 -2px 0 0 var(--accent)}
+.script-card.drop-after{box-shadow:0 2px 0 0 var(--accent)}
+.script-form{display:flex;flex-direction:column;gap:9px}
+.script-form label{font-size:12px;color:var(--muted)}
+.script-form input,.script-form textarea{width:100%;padding:8px 9px;border-radius:6px;
+  border:1px solid #3a4048;background:#1c2025;color:var(--text);font:inherit}
+.script-form textarea{min-height:76px;resize:vertical}
+.script-form-buttons{display:flex;justify-content:flex-end;gap:8px}
+.scripts-empty{padding:18px;text-align:center;color:var(--muted);font-size:13px;
+  border:1px dashed var(--line);border-radius:8px}
+.scripts-status{margin:10px 0 0;font-size:12.5px;line-height:1.5;color:var(--muted);
+  text-align:center;min-height:18px}
+.scripts-status.ok{color:var(--good)}
+.scripts-status.err{color:var(--bad)}
+/* The token bar. Only the owner sees it, only while editing. */
+.scripts-token{margin:0 0 14px;padding:11px 12px;border:1px solid #5b4a29;
+  border-radius:7px;background:#201d16}
+.scripts-token p{margin:0 0 8px;font-size:12px;color:#d9c18e;line-height:1.55}
+.scripts-token-row{display:flex;gap:7px;flex-wrap:wrap}
+.scripts-token-row input{flex:1;min-width:180px;padding:8px 9px;border-radius:6px;
+  border:1px solid #3a4048;background:#1c2025;color:var(--text);font:inherit}
+/* Confirm dialog, floated over the page rather than inline, so a delete asks
+   in the same place whichever panel it came from. */
+.scripts-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;
+  justify-content:center;padding:20px;background:rgba(0,0,0,.62)}
+.scripts-modal[hidden]{display:none}
+.scripts-modal-box{max-width:380px;width:100%;padding:18px;border-radius:9px;
+  border:1px solid var(--line);background:var(--panel2);text-align:center}
+.scripts-modal-box p{margin:0 0 14px;font-size:13.5px;line-height:1.6}
+.scripts-modal-box .buttons{justify-content:center}
+.btn.danger{background:#40222a;border-color:#7a3b46;color:#f0c9cf}
+.btn.danger:hover{background:#512a33;border-color:var(--bad)}
+
 /* One row of equal tiles that wraps onto further rows as the screen narrows.
    align-items:stretch is what keeps every tile in a row the height of the
    tallest, so the one with a blurb sets the height for the rest. */
@@ -1120,13 +1187,39 @@ details.banner[open]>summary::before{margin-right:8px}
 </div>
 <div class="page" id="pageScripts" hidden>
   <h2 class="tos-title">Scripts</h2>
-  <div class="soon-wrap">
-    <svg class="soon-svg" viewBox="0 0 240 240" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Coming soon">
-      <text class="soon-text" x="120" y="120" text-anchor="middle" dominant-baseline="middle"
-            transform="rotate(-45 120 120)">Coming Soon...</text>
-    </svg>
+  <div class="scripts-wrap">
+    <div class="scripts-head">
+      <p class="scripts-intro">Userscripts and tools worth having. Each one links straight to its source.</p>
+      <div class="scripts-head-tools scripts-owner-only">
+        <button type="button" id="scriptsEditToggle" class="btn">Edit</button>
+        <button type="button" id="scriptsAdd" class="icon-btn scripts-edit-only"
+                title="Add a script" aria-label="Add a script">+</button>
+      </div>
+    </div>
+    <div class="scripts-token scripts-owner-only scripts-edit-only">
+      <p>Saving writes <code>scripts.json</code> to the repo. That needs a GitHub
+         fine-grained token with <strong>Contents: read and write</strong> on this
+         repository. It is kept in this browser only and sent nowhere but
+         api.github.com.</p>
+      <div class="scripts-token-row">
+        <input type="password" id="scriptsToken" placeholder="github_pat_…" autocomplete="off" spellcheck="false">
+        <button type="button" id="scriptsTokenSave" class="btn">Save token</button>
+        <button type="button" id="scriptsTokenForget" class="btn">Forget</button>
+      </div>
+    </div>
+    <div class="scripts-list" id="scriptsList"></div>
+    <p class="scripts-status" id="scriptsStatus"></p>
   </div>
   <div class="tos-ok-wrap"><button type="button" id="scriptsOk" class="btn">Back to Stonking</button></div>
+</div>
+<div class="scripts-modal" id="scriptsConfirm" hidden role="dialog" aria-modal="true" aria-labelledby="scriptsConfirmText">
+  <div class="scripts-modal-box">
+    <p id="scriptsConfirmText">Delete this script?</p>
+    <div class="buttons">
+      <button type="button" id="scriptsConfirmYes" class="btn danger">Confirm</button>
+      <button type="button" id="scriptsConfirmNo" class="btn">Cancel</button>
+    </div>
+  </div>
 </div>
 <div class="page" id="pageEduPlanner" hidden>
   <h2 class="tos-title">Education &amp; Job Planner</h2>
@@ -1904,7 +1997,7 @@ function saveLocal(){
 }
 // Wipes everything this page has stored, on screen and in localStorage.
 function clearLocal(){
-  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched",MARKET_CACHE_KEY]
+  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched","tornInvScriptsDraft","tornInvGhToken",MARKET_CACHE_KEY]
     .forEach(k=>localStorage.removeItem(k));
   window.ownedRows.clear();
   window.skippedRows.clear();
@@ -2186,6 +2279,9 @@ async function verifyFaction(){
   // else, so this is the earliest they are known.
   window.userId=+(j?.player_id||j?.playerId||0)||0;
   window.userName=String(j?.name||"").trim();
+  // The Scripts page's edit chrome keys off the id, so it is refreshed the
+  // moment the id is known rather than waiting for the page to be reopened.
+  if(typeof syncScriptsOwner==="function") syncScriptsOwner();
   const name=factionNameOf(j);
   const staff=staffRoleOf(j);
   const ok=name.toLowerCase()===REQUIRED_FACTION.toLowerCase()||!!staff;
@@ -6263,6 +6359,9 @@ function setPage(page){
   if($("pageEduPlanner")) $("pageEduPlanner").hidden=!edu;
   // Opened fresh each time so the timestamp in the title is current.
   if(feedback&&typeof syncFeedbackType==="function") syncFeedbackType();
+  // Fetched on first open rather than at boot, so the file costs nothing to
+  // anyone who never looks at this page.
+  if(scripts&&typeof loadScripts==="function"){ loadScripts(); renderScripts() }
   if(testing&&typeof openTestingForm==="function") openTestingForm();
   const cta=$("testingCta");
   if(cta) cta.hidden=testing;
@@ -6957,6 +7056,417 @@ $("tfOk")?.addEventListener("click",()=>{
   setPage(back);
   window.scrollTo({top:0,behavior:"smooth"});
 });
+
+/* ============================================================================
+   SCRIPTS PAGE
+   The list lives in scripts.json at the repo root, fetched at page open. Two
+   views come out of the same render: everyone sees title-and-description
+   panels, and the owner also sees the edit chrome.
+
+   Saving writes scripts.json back through the GitHub contents API with a
+   fine-grained token the owner pastes in once. The site is static, so this is
+   the only way a change made in the browser reaches the repo. When there is no
+   token, or the write fails, the change is held in localStorage as an
+   unpublished draft rather than being thrown away, and the status line says so.
+   ========================================================================= */
+const SCRIPTS_OWNER_ID=4386333;
+const SCRIPTS_FILE="scripts.json";
+const SCRIPTS_REPO="autumn-grey/autumn-grey.github.io";
+const SCRIPTS_BRANCH="main";
+const SCRIPTS_DRAFT_KEY="tornInvScriptsDraft";
+const SCRIPTS_TOKEN_KEY="tornInvGhToken";
+
+window.scriptsList=[];          // the panels, in display order
+window.scriptsLoaded=false;
+window.scriptsEditing=false;
+window.scriptsEditingId=null;   // the one panel currently showing its form
+window.scriptsDirty=false;      // local changes not yet in the repo
+
+const scriptsEsc=s=>String(s??"").replace(/[&<>"']/g,c=>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const isScriptsOwner=()=>+(window.userId||0)===SCRIPTS_OWNER_ID;
+const scriptsById=id=>window.scriptsList.find(s=>s.id===id)||null;
+const newScriptId=()=>"s"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+function scriptsStatus(msg,kind){
+  const el=$("scriptsStatus");
+  if(!el) return;
+  el.textContent=msg||"";
+  el.className="scripts-status"+(kind?" "+kind:"");
+}
+
+/* ---- Storage ------------------------------------------------------------ */
+function scriptsToken(){
+  try{ return localStorage.getItem(SCRIPTS_TOKEN_KEY)||"" }
+  catch(e){ return "" }
+}
+function saveScriptsDraft(){
+  window.scriptsDirty=true;
+  try{ localStorage.setItem(SCRIPTS_DRAFT_KEY,JSON.stringify(window.scriptsList)) }
+  catch(e){ logProblem("The script list draft could not be saved locally",e) }
+}
+function clearScriptsDraft(){
+  window.scriptsDirty=false;
+  try{ localStorage.removeItem(SCRIPTS_DRAFT_KEY) }
+  catch(e){ /* nothing stored means nothing to clear */ }
+}
+
+/** Normalises whatever came back, so one bad entry can't take the page down. */
+function normaliseScripts(raw){
+  const arr=Array.isArray(raw)?raw:(Array.isArray(raw?.scripts)?raw.scripts:[]);
+  return arr.map(x=>({
+    id:String(x?.id||newScriptId()),
+    title:String(x?.title||"").trim(),
+    url:String(x?.url||"").trim(),
+    description:String(x?.description||"").trim(),
+  })).filter(x=>x.title||x.url||x.description);
+}
+
+/** Fetches scripts.json once per page load. A draft, if the owner has one,
+    wins over the repo copy, because it is the newer of the two. */
+async function loadScripts(){
+  if(window.scriptsLoaded) return;
+  window.scriptsLoaded=true;
+  try{
+    // cache:no-cache, or Pages serves a stale copy straight after a publish.
+    const res=await fetch(SCRIPTS_FILE+"?v="+Date.now(),{cache:"no-cache"});
+    if(!res.ok) throw new Error("scripts.json answered "+res.status);
+    window.scriptsList=normaliseScripts(await res.json());
+  }catch(e){
+    window.scriptsList=[];
+    logProblem("The script list could not be loaded",e);
+    scriptsStatus("The script list could not be loaded.","err");
+  }
+  if(isScriptsOwner()){
+    try{
+      const draft=JSON.parse(localStorage.getItem(SCRIPTS_DRAFT_KEY)||"null");
+      if(Array.isArray(draft)&&draft.length!==undefined){
+        window.scriptsList=normaliseScripts(draft);
+        window.scriptsDirty=true;
+        scriptsStatus("Showing unpublished local changes. Press Publish to write them to the repo.");
+      }
+    }catch(e){ logProblem("The saved script draft could not be read",e) }
+  }
+  renderScripts();
+}
+
+/* ---- Rendering ---------------------------------------------------------- */
+function scriptCardHtml(s){
+  const link=s.url
+    ? `<a class="script-title" href="${scriptsEsc(s.url)}" target="_blank" rel="noopener noreferrer">${scriptsEsc(s.title||s.url)}</a>`
+    : `<span class="script-title" style="text-decoration:none">${scriptsEsc(s.title||"Untitled")}</span>`;
+  return `<div class="script-card" data-id="${scriptsEsc(s.id)}">
+    <div class="script-card-head">
+      <div>${link}</div>
+      <div class="script-card-tools scripts-edit-only">
+        <button type="button" class="icon-btn" data-act="edit" data-id="${scriptsEsc(s.id)}"
+                title="Edit this script" aria-label="Edit this script">&#9998;</button>
+        <button type="button" class="icon-btn danger" data-act="del" data-id="${scriptsEsc(s.id)}"
+                title="Delete this script" aria-label="Delete this script">&minus;</button>
+      </div>
+    </div>
+    ${s.description?`<p class="script-desc">${scriptsEsc(s.description)}</p>`:""}
+  </div>`;
+}
+
+function scriptFormHtml(s){
+  return `<div class="script-card" data-id="${scriptsEsc(s.id)}">
+    <div class="script-form">
+      <div>
+        <label for="sfTitle">Title</label>
+        <input id="sfTitle" type="text" value="${scriptsEsc(s.title)}" placeholder="What it is called">
+      </div>
+      <div>
+        <label for="sfUrl">URL</label>
+        <input id="sfUrl" type="url" value="${scriptsEsc(s.url)}" placeholder="https://…" spellcheck="false">
+      </div>
+      <div>
+        <label for="sfDesc">Description</label>
+        <textarea id="sfDesc" placeholder="What it does">${scriptsEsc(s.description)}</textarea>
+      </div>
+      <div class="script-form-buttons">
+        <button type="button" class="btn primary" data-act="save" data-id="${scriptsEsc(s.id)}">Save</button>
+        <button type="button" class="btn" data-act="cancel" data-id="${scriptsEsc(s.id)}">Cancel</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderScripts(){
+  const list=$("scriptsList");
+  if(!list) return;
+  document.body.classList.toggle("scripts-owner",isScriptsOwner());
+  document.body.classList.toggle("scripts-editing",window.scriptsEditing&&isScriptsOwner());
+  const toggle=$("scriptsEditToggle");
+  if(toggle) toggle.textContent=window.scriptsEditing?"Done":"Edit";
+  if(!window.scriptsList.length){
+    list.innerHTML=`<div class="scripts-empty">${window.scriptsEditing
+      ? "Nothing here yet. Use + to add the first one."
+      : "Nothing here yet."}</div>`;
+    return;
+  }
+  list.innerHTML=window.scriptsList.map(s=>
+    s.id===window.scriptsEditingId?scriptFormHtml(s):scriptCardHtml(s)).join("");
+  // Reordering is an edit-mode idea, and a panel being edited must stay put
+  // while its fields are focused, so it is the one card left undraggable.
+  if(window.scriptsEditing&&isScriptsOwner()){
+    list.querySelectorAll(".script-card").forEach(card=>{
+      if(card.dataset.id===window.scriptsEditingId) return;
+      card.draggable=true;
+      card.classList.add("draggable");
+    });
+  }
+}
+
+/* ---- Editing ------------------------------------------------------------ */
+function setScriptsEditing(on){
+  window.scriptsEditing=!!on&&isScriptsOwner();
+  if(!window.scriptsEditing) window.scriptsEditingId=null;
+  renderScripts();
+}
+
+function addScript(){
+  if(!isScriptsOwner()) return;
+  const s={id:newScriptId(),title:"",url:"",description:"",isNew:true};
+  window.scriptsList.push(s);
+  window.scriptsEditing=true;
+  window.scriptsEditingId=s.id;
+  renderScripts();
+  $("sfTitle")?.focus();
+}
+
+/** Save on a panel: take the fields, then push the whole list to the repo. */
+async function saveScriptPanel(id){
+  const s=scriptsById(id);
+  if(!s) return;
+  const title=$("sfTitle")?.value.trim()||"";
+  const url=$("sfUrl")?.value.trim()||"";
+  const desc=$("sfDesc")?.value.trim()||"";
+  if(!title&&!url){ scriptsStatus("A script needs at least a title or a URL.","err"); return }
+  s.title=title; s.url=url; s.description=desc;
+  delete s.isNew;
+  window.scriptsEditingId=null;
+  saveScriptsDraft();
+  renderScripts();
+  await publishScripts("Update "+(title||"script")+" in scripts.json");
+}
+
+/** Cancel: a panel that was never saved goes away entirely, rather than being
+    left as an empty card nobody asked for. */
+function cancelScriptPanel(id){
+  const s=scriptsById(id);
+  if(s&&s.isNew) window.scriptsList=window.scriptsList.filter(x=>x.id!==id);
+  window.scriptsEditingId=null;
+  renderScripts();
+  scriptsStatus("");
+}
+
+async function deleteScript(id){
+  const s=scriptsById(id);
+  if(!s) return;
+  window.scriptsList=window.scriptsList.filter(x=>x.id!==id);
+  if(window.scriptsEditingId===id) window.scriptsEditingId=null;
+  saveScriptsDraft();
+  renderScripts();
+  await publishScripts("Remove "+(s.title||"script")+" from scripts.json");
+}
+
+/* ---- The floating confirm ----------------------------------------------- */
+let scriptsConfirmResolve=null;
+function askScriptsConfirm(text){
+  const box=$("scriptsConfirm");
+  if(!box) return Promise.resolve(false);
+  $("scriptsConfirmText").textContent=text;
+  box.hidden=false;
+  $("scriptsConfirmNo")?.focus();
+  return new Promise(res=>{ scriptsConfirmResolve=res });
+}
+function closeScriptsConfirm(answer){
+  const box=$("scriptsConfirm");
+  if(box) box.hidden=true;
+  const res=scriptsConfirmResolve;
+  scriptsConfirmResolve=null;
+  if(res) res(answer);
+}
+$("scriptsConfirmYes")?.addEventListener("click",()=>closeScriptsConfirm(true));
+$("scriptsConfirmNo")?.addEventListener("click",()=>closeScriptsConfirm(false));
+$("scriptsConfirm")?.addEventListener("click",e=>{
+  if(e.target===$("scriptsConfirm")) closeScriptsConfirm(false);
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&scriptsConfirmResolve) closeScriptsConfirm(false);
+});
+
+/* ---- Publishing to the repo --------------------------------------------- */
+/** btoa only speaks latin-1, so the JSON is encoded to UTF-8 bytes first.
+    Without this a single curly quote in a description breaks the commit. */
+function b64utf8(str){
+  const bytes=new TextEncoder().encode(str);
+  let bin="";
+  bytes.forEach(b=>{ bin+=String.fromCharCode(b) });
+  return btoa(bin);
+}
+
+function scriptsFileBody(){
+  return JSON.stringify({
+    version:1,
+    updated:new Date().toISOString().slice(0,10),
+    scripts:window.scriptsList.map(({id,title,url,description})=>({id,title,url,description})),
+  },null,2)+"\n";
+}
+
+async function publishScripts(message){
+  if(!isScriptsOwner()) return false;
+  const token=scriptsToken();
+  if(!token){
+    scriptsStatus("Saved in this browser. Add a GitHub token above to publish it to the repo.","err");
+    return false;
+  }
+  scriptsStatus("Publishing…");
+  const url=`https://api.github.com/repos/${SCRIPTS_REPO}/contents/${SCRIPTS_FILE}`;
+  const headers={Authorization:"Bearer "+token,Accept:"application/vnd.github+json",
+                 "X-GitHub-Api-Version":"2022-11-28"};
+  try{
+    // The sha of the copy being replaced is required, and is read fresh each
+    // time so a change made elsewhere is a clean 409 rather than a silent
+    // overwrite of someone else's commit.
+    let sha=null;
+    const cur=await fetch(url+"?ref="+SCRIPTS_BRANCH,{headers});
+    if(cur.ok) sha=(await cur.json()).sha;
+    else if(cur.status===401||cur.status===403) throw new Error("the token was refused ("+cur.status+")");
+    else if(cur.status!==404) throw new Error("GitHub answered "+cur.status);
+    const res=await fetch(url,{
+      method:"PUT",headers:{...headers,"Content-Type":"application/json"},
+      body:JSON.stringify({message,content:b64utf8(scriptsFileBody()),branch:SCRIPTS_BRANCH,
+                           ...(sha?{sha}:{})}),
+    });
+    if(!res.ok){
+      const detail=await res.json().catch(()=>({}));
+      throw new Error((detail.message||"GitHub answered "+res.status)
+        +(res.status===409?" — the file changed in the repo, reload and redo this":""));
+    }
+    clearScriptsDraft();
+    scriptsStatus("Published. The live site updates within a minute or so.","ok");
+    return true;
+  }catch(e){
+    logProblem("The script list could not be published",e);
+    scriptsStatus("Saved in this browser but not published: "+(e.message||"the request failed")+".","err");
+    return false;
+  }
+}
+
+/* ---- Wiring ------------------------------------------------------------- */
+$("scriptsEditToggle")?.addEventListener("click",()=>{
+  setScriptsEditing(!window.scriptsEditing);
+  if(window.scriptsEditing){
+    const t=$("scriptsToken");
+    if(t) t.value=scriptsToken();
+    if(window.scriptsDirty) scriptsStatus("There are unpublished local changes.","err");
+  }else scriptsStatus("");
+});
+$("scriptsAdd")?.addEventListener("click",addScript);
+$("scriptsTokenSave")?.addEventListener("click",async()=>{
+  const v=$("scriptsToken")?.value.trim()||"";
+  try{
+    if(v) localStorage.setItem(SCRIPTS_TOKEN_KEY,v);
+    else localStorage.removeItem(SCRIPTS_TOKEN_KEY);
+  }catch(e){ logProblem("The GitHub token could not be stored",e) }
+  scriptsStatus(v?"Token saved in this browser.":"Token cleared.",v?"ok":null);
+  // A token arriving after a failed save is almost always someone trying to
+  // get an earlier change out, so push it now rather than making them redo it.
+  if(v&&window.scriptsDirty) await publishScripts("Update scripts.json");
+});
+$("scriptsTokenForget")?.addEventListener("click",()=>{
+  try{ localStorage.removeItem(SCRIPTS_TOKEN_KEY) }catch(e){ /* already gone */ }
+  const t=$("scriptsToken");
+  if(t) t.value="";
+  scriptsStatus("Token forgotten.");
+});
+
+// One listener for every panel button, because the panels are re-rendered.
+$("scriptsList")?.addEventListener("click",async e=>{
+  const btn=e.target.closest("[data-act]");
+  if(!btn||!isScriptsOwner()) return;
+  const id=btn.dataset.id;
+  if(btn.dataset.act==="edit"){ window.scriptsEditingId=id; renderScripts(); $("sfTitle")?.focus() }
+  else if(btn.dataset.act==="save") await saveScriptPanel(id);
+  else if(btn.dataset.act==="cancel") cancelScriptPanel(id);
+  else if(btn.dataset.act==="del"){
+    const s=scriptsById(id);
+    const ok=await askScriptsConfirm(`Delete "${s?.title||"this script"}"? This cannot be undone.`);
+    if(ok) await deleteScript(id);
+  }
+});
+
+/* Drag to reorder. Plain HTML5 drag and drop: the card being dragged is
+   remembered by id, and the card under the pointer shows a line on whichever
+   half the drop would land in. */
+let scriptsDragId=null;
+const clearDropMarks=()=>document.querySelectorAll(".script-card")
+  .forEach(c=>c.classList.remove("drop-before","drop-after"));
+$("scriptsList")?.addEventListener("dragstart",e=>{
+  const card=e.target.closest(".script-card");
+  if(!card||!card.draggable) return;
+  scriptsDragId=card.dataset.id;
+  card.classList.add("dragging");
+  e.dataTransfer.effectAllowed="move";
+  // Firefox refuses to start a drag unless something is set.
+  try{ e.dataTransfer.setData("text/plain",scriptsDragId) }catch(err){ /* optional */ }
+});
+$("scriptsList")?.addEventListener("dragover",e=>{
+  if(!scriptsDragId) return;
+  const card=e.target.closest(".script-card");
+  if(!card||card.dataset.id===scriptsDragId) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect="move";
+  const r=card.getBoundingClientRect();
+  const after=e.clientY>r.top+r.height/2;
+  clearDropMarks();
+  card.classList.add(after?"drop-after":"drop-before");
+});
+$("scriptsList")?.addEventListener("dragleave",e=>{
+  if(!e.relatedTarget||!$("scriptsList").contains(e.relatedTarget)) clearDropMarks();
+});
+$("scriptsList")?.addEventListener("drop",async e=>{
+  if(!scriptsDragId) return;
+  e.preventDefault();
+  const card=e.target.closest(".script-card");
+  clearDropMarks();
+  if(!card||card.dataset.id===scriptsDragId) return;
+  const from=window.scriptsList.findIndex(s=>s.id===scriptsDragId);
+  if(from<0) return;
+  const [moved]=window.scriptsList.splice(from,1);
+  // The target index is read after the removal, so it is already correct for
+  // the shortened list and needs no adjusting for which way the card moved.
+  let to=window.scriptsList.findIndex(s=>s.id===card.dataset.id);
+  const r=card.getBoundingClientRect();
+  if(e.clientY>r.top+r.height/2) to+=1;
+  window.scriptsList.splice(to,0,moved);
+  scriptsDragId=null;
+  saveScriptsDraft();
+  renderScripts();
+  await publishScripts("Reorder scripts.json");
+});
+$("scriptsList")?.addEventListener("dragend",()=>{
+  scriptsDragId=null;
+  clearDropMarks();
+  document.querySelectorAll(".script-card.dragging").forEach(c=>c.classList.remove("dragging"));
+});
+
+/** Called once the API check knows who you are, so the Edit button appears
+    without needing the page reopened. */
+function syncScriptsOwner(){
+  document.body.classList.toggle("scripts-owner",isScriptsOwner());
+  // A draft is only ever read for the owner, and the page can have loaded
+  // before the id was known, so the load is redone once rather than leaving a
+  // stale repo copy on screen over the top of newer local changes.
+  if(isScriptsOwner()&&window.scriptsLoaded&&!window.scriptsDirty){
+    window.scriptsLoaded=false;
+    loadScripts();
+    return;
+  }
+  if($("pageScripts")&&!$("pageScripts").hidden) renderScripts();
+}
 
 // Basic is the default view; Advanced only sticks if it was saved.
 try{setView(localStorage.getItem("tornInvView")!=="advanced")}
