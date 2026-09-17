@@ -4,10 +4,10 @@
   "scripts": [
     {
       "id": "smu664pw5ceh3",
-      "title": "OC Travel Guard",
+      "title": "",
       "url": "https://greasyfork.org/en/scripts/594464-oc-travel-guard",
       "description": "Blocks travel to any destination you could not fly back from before your current Organised Crime begins.\n\nAlso provides specific warnings when an Organised Crime is safe but cutting it fine.",
-      "status": "wip",
+      "status": "live",
       "meta": {
         "name": "OC Travel Guard",
         "version": "1.0.4",
