@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.9.0 · Updated: 2026-09-14_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.11.0 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,31 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.11.0 — 2026-09-18
+
+- **Basic Banking**, a third page beside Investments and Planner. It answers
+  one question the Investments table cannot: over a whole year, does a short
+  term's compounding beat a long term's higher rate? Nothing on it feeds the
+  planner.
+- It keeps its own copy of the bank settings — merits, TCI, Oil Mogul, Fat Cat,
+  deposit — plus a daily investment budget. Each field starts out mirroring the
+  Investments page and follows it through an API refresh; editing one stops the
+  mirroring for that field alone. **Apply to investment settings** is the only
+  route back the other way, and mirroring resumes once the two sides agree.
+- **One Year of Banking** ranks every term by new deposits per year, total
+  profit, ROI and absolute total. Best and worst by profit are marked green and
+  red.
+- **Breakdown** shows one line per deposit for the chosen term, 52 for a week
+  down to 4 for three months, with initial capital, amount added, interest rate,
+  profit, total returned and daily return. A second table under it totals the
+  first initial capital, everything added, the profit from interest and the
+  final amount returned.
+- Every term adds one term-length of the daily budget, so each row puts in
+  about the same money across the year and the comparison measures the banking
+  rather than how much each term happened to deploy. Money over the deposit cap
+  earns nothing but stays in the amount returned and rolls forward as capital,
+  so the profit flattens at the cap without anything going missing.
 
 ### v0.9.0 — 2026-09-14
 

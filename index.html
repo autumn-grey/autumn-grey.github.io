@@ -103,7 +103,19 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .page-tab.active{background:var(--accent);border-color:var(--accent);color:#0b0d10}
 .page-tab.active:hover{background:#f0b768;color:#0b0d10}
 .page[hidden]{display:none}
-body.planner .view-toggle{display:none}
+body.planner .view-toggle,body.banking .view-toggle{display:none}
+/* ---- Basic Banking ---- */
+#noDataNoticeBank{display:none}body.no-data #noDataNoticeBank{display:block}
+body.no-data #bankSummaryPanel,body.no-data #bankDetailPanel{display:none}
+#pageBanking .table th,#pageBanking .table td{text-align:right}
+#pageBanking .bank-label-first th:first-child,#pageBanking .bank-label-first td:first-child{text-align:left;background:#191c20}
+#pageBanking .bank-totals{margin-top:12px}
+#pageBanking #tbodyBankTotals td{font-weight:700;background:#15181c;border-bottom:none}
+#pageBanking #tbodyBankSummary tr.bank-best td{background:rgba(46,160,67,.20)}
+#pageBanking #tbodyBankSummary tr.bank-worst td{background:rgba(248,113,113,.22)}
+#pageBanking .bank-pick{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 12px;font-size:12px;color:var(--muted)}
+#pageBanking .bank-pick select{background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:7px 8px;font:inherit}
+
 .view-toggle{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
 .view-btn{background:none;border:0;color:var(--muted);font:inherit;font-size:12px;font-weight:700;padding:6px 14px;cursor:pointer}
 .view-btn:hover{color:var(--text)}
@@ -570,6 +582,7 @@ details.banner[open]>summary::before{margin-right:8px}
     </div>
     <button type="button" id="goInvestments" class="page-tab" aria-pressed="true">Investments</button>
     <button type="button" id="goPlanner" class="page-tab" aria-pressed="false">Planner</button>
+    <button type="button" id="goBanking" class="page-tab" aria-pressed="false">Basic Banking</button>
   </div>
   <p class="tagline">A passive investment planner for Torn, with full customisability and heapsa fun features</p>
 </div>
@@ -1044,6 +1057,45 @@ details.banner[open]>summary::before{margin-right:8px}
   </section>
 
 </div>
+<div class="page" id="pageBanking" hidden>
+  <div id="bankingApiSlot"></div>
+  <section class="panel">
+    <details open>
+    <summary>Bank Settings</summary>
+    <div class="row3">
+      <div class="field"><label>City Bank Merits</label><select id="bkMerits"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+      <div class="field"><label>Oil Mogul: JP per day</label><select id="bkOilJp"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+      <div class="field"><label>City Bank Deposit</label><input id="bkDeposit" class="money-input" type="text" inputmode="numeric" value="$2,000,000,000"></div>
+    </div>
+    <div class="row2">
+      <div class="field check-field"><label><input type="checkbox" id="bkTci"> TCI Block</label></div>
+      <div class="field check-field"><label><input type="checkbox" id="bkFatCat"> Oil Rig: Fat Cat</label></div>
+    </div>
+    <div class="field"><label>Daily Investment Budget</label><input id="bkBudget" class="money-input" type="text" inputmode="numeric" value="$1,000,000"><div class="help">This is how much you estimate you can put aside per day, to save for the next bank term, <em>not</em> how much you plan to deposit in the bank each time.</div></div>
+    <div class="buttons"><button type="button" class="btn primary" id="bkApply">Apply to investment settings</button></div>
+    </details>
+  </section>
+
+  <div class="banner" id="noDataNoticeBank">Please enter a valid custom API key and click <strong>Refresh Data</strong> to calculate and display bank returns.</div>
+
+  <section class="panel" id="bankSummaryPanel">
+    <h2>One Year of Banking</h2>
+    <div class="tablewrap"><table class="table table-compact bank-label-first"><thead><tr>
+      <th>Term Length</th><th>New Deposits per Year</th><th>Total Profit Returned</th><th>ROI</th><th>Absolute Total</th>
+    </tr></thead><tbody id="tbodyBankSummary"></tbody></table></div>
+  </section>
+
+  <section class="panel" id="bankDetailPanel">
+    <h2>Breakdown</h2>
+    <div class="bank-pick"><label for="bkDetailTerm">Term Length</label><select id="bkDetailTerm"></select></div>
+    <div class="tablewrap"><table class="table table-compact bank-label-first"><thead><tr>
+      <th>Deposit</th><th>Initial Capital</th><th>Amount Added</th><th>Interest Rate</th><th>Profit Returned</th><th>Total Amount Returned</th><th>Daily Return</th>
+    </tr></thead><tbody id="tbodyBankDetail"></tbody></table></div>
+    <div class="tablewrap bank-totals"><table class="table table-compact"><thead><tr>
+      <th>First Initial Capital</th><th>Total Amount Added</th><th>Total Profit Returned</th><th>Total Amount Returned</th>
+    </tr></thead><tbody id="tbodyBankTotals"></tbody></table></div>
+  </section>
+</div>
 <div class="page" id="pageDocs" hidden>
   <h2 class="tos-title">Docs</h2>
   <div class="docs-list">
@@ -1227,10 +1279,10 @@ details.banner[open]>summary::before{margin-right:8px}
 //
 // Bumped on every publish. Written in one place, shown in the footer and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.9.0";
+const APP_VERSION="v0.11.0";
 // ISO date of that publish, shown in the footer exactly as written. ISO reads
 // the same everywhere, so no locale formatting is applied to it.
-const APP_UPDATED="2026-09-11";
+const APP_UPDATED="2026-09-18";
 // ======================================================================
 // DATA  ·  Stock table, benefit metadata, tag lists, game constants
 // ======================================================================
@@ -1517,7 +1569,7 @@ const esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g
 const boolVal=id=>!!$(id)?.checked;
 const setBool=(id,v)=>{const el=$(id);if(el)el.checked=!!v};
 // Money-formatted text inputs: stored as "$1,234,567" but read as a number.
-const MONEY_INPUTS=["piRent","piIncome","cayman","bankDeposit","capital","dailyBudget","planBankAmount","planBankInvested"];
+const MONEY_INPUTS=["piRent","piIncome","cayman","bankDeposit","capital","dailyBudget","planBankAmount","planBankInvested","bkDeposit","bkBudget"];
 function numVal(id){const el=$(id);if(!el)return 0;const n=parseFloat(String(el.value).replace(/[^0-9.\-]/g,""));return isFinite(n)?n:0}
 function formatMoneyInput(el){
   const n=parseFloat(String(el.value).replace(/[^0-9.\-]/g,""));
@@ -1815,8 +1867,17 @@ const PLANNER_FIELDS=[
   "planBankTermSel",
   "returnPeriodPlan"
 ];
-// Everything persisted to localStorage, which is both lists together.
-const SAVED_FIELDS=[...INVESTMENT_FIELDS,...PLANNER_FIELDS];
+// Fields on the Basic Banking page. Each one shadows an Investments field of
+// its own, listed here, and starts out mirroring it. Editing one stops the
+// mirroring for that field only, so the page can be played with freely
+// without disturbing the investment settings until Apply is pressed.
+const BANKING_MIRROR={bkMerits:"merits",bkTci:"tciOwned",bkOilJp:"oilMogulJp",
+                      bkFatCat:"fatCat",bkDeposit:"bankDeposit",bkBudget:"dailyBudget"};
+const BANKING_FIELDS=[...Object.keys(BANKING_MIRROR),"bkDetailTerm"];
+// Which of them the reader has taken over. Restored by loadBankingTouched().
+window.bankingTouched=new Set();
+// Everything persisted to localStorage, which is the three lists together.
+const SAVED_FIELDS=[...INVESTMENT_FIELDS,...PLANNER_FIELDS,...BANKING_FIELDS];
 // Every write is guarded: a browser in private mode, or one whose storage is
 // full, throws on setItem. Left unhandled that threw straight out of the Save
 // button and the page looked like it had saved when nothing had.
@@ -1843,7 +1904,7 @@ function saveLocal(){
 }
 // Wipes everything this page has stored, on screen and in localStorage.
 function clearLocal(){
-  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote",MARKET_CACHE_KEY]
+  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched",MARKET_CACHE_KEY]
     .forEach(k=>localStorage.removeItem(k));
   window.ownedRows.clear();
   window.skippedRows.clear();
@@ -3491,6 +3552,10 @@ function calculate(){
   updatePlanBankHelp();       // the rate it quotes moves with the bank settings
   markPlanStale();
   render();
+  // Basic Banking shadows these settings, so it follows any that it is still
+  // mirroring and redraws off the rates this rebuild just used.
+  syncBankingFromAdvanced();
+  renderBanking();
 }
 // ======================================================================
 // SELECTION  ·  Owned rows and checkbox selection state
@@ -5690,11 +5755,18 @@ MONEY_INPUTS.forEach(id=>{
   // Capital and daily budget only feed the planner, so they never rebuild the
   // investment rows, they just mark the plan as out of date.
   const bankBox=(id==="planBankAmount"||id==="planBankInvested");
+  // Basic Banking keeps its own copies, so these never touch the investments.
+  const bankingBox=(id==="bkDeposit"||id==="bkBudget");
   const planOnly=(id==="capital"||id==="dailyBudget"||bankBox);
-  const after=()=>{ if(planOnly){ if(bankBox) bankBoxEdited(id); markPlanStale() } else calculate() };
-  el.addEventListener("input",()=>{liveFormatMoney(el);if(id==="bankDeposit")clampBankDeposit();after()});
-  el.addEventListener("blur",()=>{formatMoneyInput(el);if(id==="bankDeposit")clampBankDeposit();after()});
-  el.addEventListener("keydown",e=>{if(e.key==="Enter"){formatMoneyInput(el);if(id==="bankDeposit")clampBankDeposit();after()}});
+  const after=()=>{
+    if(bankingBox){ bankingTouch(id); renderBanking() }
+    else if(planOnly){ if(bankBox) bankBoxEdited(id); markPlanStale() }
+    else calculate();
+  };
+  const clamp=()=>{ if(id==="bankDeposit")clampBankDeposit(); if(id==="bkDeposit")clampBkDeposit() };
+  el.addEventListener("input",()=>{liveFormatMoney(el);clamp();after()});
+  el.addEventListener("blur",()=>{formatMoneyInput(el);clamp();after()});
+  el.addEventListener("keydown",e=>{if(e.key==="Enter"){formatMoneyInput(el);clamp();after()}});
 });
 $("fatCat")?.addEventListener("change",()=>{clampBankDeposit();syncBankBoxes();calculate()});
 clampBankDeposit();
@@ -5952,11 +6024,209 @@ $("viewAdvanced")?.addEventListener("click",()=>setView(false));
   const tosEl=$("tosUpdated");
   if(tosEl) tosEl.textContent=APP_UPDATED;
 }
-buildPlanPrioritise();buildPlanTargets();buildBankTermOptions();
+
+// ======================================================================
+// BASIC BANKING  ·  What a year of each City Bank term is actually worth
+// ----------------------------------------------------------------------
+// The Investments page prices one deposit over one term. The question this
+// page answers is a different one: over a whole year, does a short term's
+// compounding beat a long term's higher rate? It is a read-only view with
+// its own copy of the bank settings, and nothing here feeds the planner.
+// ======================================================================
+const BANKING_YEAR=365;
+// ---- The reader's copy of the bank settings ---------------------------
+function loadBankingTouched(){
+  try{
+    const a=JSON.parse(localStorage.getItem("tornInvBankingTouched")||"[]");
+    if(Array.isArray(a)) a.forEach(k=>window.bankingTouched.add(k));
+  }catch(e){ logProblem("Basic Banking overrides could not be read. Investment settings used",e) }
+}
+function saveBankingTouched(){
+  try{ localStorage.setItem("tornInvBankingTouched",JSON.stringify([...window.bankingTouched])) }
+  catch(e){ logProblem("Basic Banking overrides could not be saved",e) }
+}
+// Marks a field as the reader's, so it stops following the investment page.
+function bankingTouch(id){
+  if(window.bankingTouched.has(id)) return;
+  window.bankingTouched.add(id);
+  saveBankingTouched();
+}
+// Copies the investment settings into every field not yet taken over. Runs on
+// every rebuild, so an API refresh flows through to the untouched fields.
+function syncBankingFromAdvanced(){
+  if(!$("bkDeposit")) return;
+  Object.entries(BANKING_MIRROR).forEach(([id,src])=>{
+    if(window.bankingTouched.has(id)) return;
+    const from=$(src), el=$(id);
+    if(!from||!el) return;
+    if(el.type==="checkbox") el.checked=!!from.checked;
+    else el.value=from.value;
+  });
+  clampBkDeposit();
+}
+// The one route back the other way, and only on a button press.
+function applyBankingToAdvanced(){
+  Object.entries(BANKING_MIRROR).forEach(([id,dst])=>{
+    const to=$(dst), el=$(id);
+    if(!to||!el) return;
+    if(to.type==="checkbox") to.checked=!!el.checked;
+    else to.value=el.value;
+  });
+  clampBankDeposit();
+  // The two sides now agree, so the mirroring can resume from here.
+  window.bankingTouched.clear();
+  saveBankingTouched();
+  syncBasicControls();
+  syncBankBoxes();
+  calculate();
+  const btn=$("bkApply");
+  if(btn){
+    btn.textContent="Applied";
+    clearTimeout(window.bkApplyTimer);
+    window.bkApplyTimer=setTimeout(()=>{btn.textContent="Apply to investment settings"},1600);
+  }
+}
+// ---- Rates, read off this page's own settings -------------------------
+function bkCap(){ return boolVal("bkFatCat")?3e9:2e9 }
+function clampBkDeposit(){
+  if(!$("bkDeposit")) return;
+  setMoneyInput("bkDeposit",Math.min(Math.max(0,numVal("bkDeposit")),bkCap()));
+}
+function bkOilJp(){ return Math.max(0,Math.min(10,+($("bkOilJp")?.value||0))) }
+// Oil Mogul shortens the wait rather than raising the rate, so here it shows
+// up as more terms fitting in the year rather than a bigger number per term.
+function bkTermRealDays(days){
+  const p=bkOilJp();
+  return p>0 ? days*72/(72+p) : days;
+}
+// APR before Oil Mogul: the posted rate, plus merits, plus the TCI block.
+function bkTermApr(days){
+  const base=+(rates[BANK_TERMS[days]]||0)/100;
+  const merits=Math.max(0,Math.min(10,+($("bkMerits")?.value||0)))*0.05;
+  return base*(1+merits)*(boolVal("bkTci")?1.10:1);
+}
+// ---- The year ---------------------------------------------------------
+// One term at a time, for as many whole terms as fit in a year. Each term
+// pays its interest at the end, and that payout plus everything put aside
+// while it was locked away goes straight back in, which is where the
+// compounding comes from.
+//
+// Every term adds one term-length of the daily budget, so each row of the
+// comparison puts in about the same money across the year and the difference
+// between the rows is the banking, not the saving.
+//
+// Anything over the deposit cap cannot earn, but it is still money, so it
+// stays in the amount returned and goes back round as capital next term
+// rather than being added again. Interest is paid on the capped part only,
+// which is why the profit flattens out once the cap is reached.
+function bankingPlan(days){
+  const apr=bkTermApr(days);
+  const span=bkTermRealDays(days);          // real days one term takes
+  const rate=apr*days/BANKING_YEAR;         // interest paid at the end of one
+  const deposits=span>0?Math.floor(BANKING_YEAR/span):0;
+  const cap=bkCap(), budget=Math.max(0,numVal("bkBudget"));
+  const lines=[];
+  let initial=Math.min(Math.max(0,numVal("bkDeposit")),cap), carry=0;
+  for(let k=0;k<deposits;k++){
+    const added=budget*span;
+    const pool=initial+added;
+    const principal=Math.min(cap,pool);
+    carry=pool-principal;
+    const profit=principal*rate;
+    const total=principal+profit+carry;   // everything held once the term ends
+    lines.push({initial,added,rate,profit,total,daily:span>0?profit/span:0});
+    initial=total;
+  }
+  const firstInitial=lines.length?lines[0].initial:0;
+  const added=lines.reduce((a,l)=>a+l.added,0);
+  const profit=lines.reduce((a,l)=>a+l.profit,0);
+  const capitalIn=firstInitial+added;
+  return {days,apr,span,rate,lines,
+          totals:{deposits,firstInitial,added,profit,
+                  absolute:capitalIn+profit,
+                  roi:capitalIn>0?profit/capitalIn:null}};
+}
+function bankingTerms(){ return Object.keys(BANK_TERMS).map(Number).sort((a,b)=>a-b) }
+function buildBankingTermOptions(){
+  const sel=$("bkDetailTerm");
+  if(!sel) return;
+  sel.innerHTML="";
+  bankingTerms().forEach(d=>{
+    const o=document.createElement("option");
+    o.value=String(d); o.textContent=bankTermLabel(d);
+    sel.appendChild(o);
+  });
+  sel.value="30";
+}
+// ---- Drawing ----------------------------------------------------------
+function renderBankingSummary(){
+  const body=$("tbodyBankSummary");
+  if(!body) return;
+  const all=bankingTerms().map(d=>({days:d,t:bankingPlan(d).totals}));
+  // Best and worst by profit, which is what "return" means in this table.
+  // Every term puts in much the same money across the year, so ROI and the
+  // absolute total order themselves the same way in practice.
+  const profits=all.map(x=>x.t.profit).filter(v=>isFinite(v));
+  const best=Math.max(...profits), worst=Math.min(...profits);
+  // Nothing to rank when every term pays the same, so neither colour is used.
+  const spread=isFinite(best)&&isFinite(worst)&&best>worst;
+  body.innerHTML=all.map(({days,t})=>{
+    const mark=!spread?""
+      :t.profit===best?' class="bank-best"'
+      :t.profit===worst?' class="bank-worst"':"";
+    return `<tr${mark}>
+<td>${bankTermLabel(days)}</td>
+<td>${t.deposits}</td>
+<td>${money(t.profit)}</td>
+<td class="${t.roi!=null&&t.roi>=0?"good":""}">${pct(t.roi)}</td>
+<td>${money(t.absolute)}</td>
+</tr>`;
+  }).join("");
+}
+function renderBankingDetail(){
+  const body=$("tbodyBankDetail"), totals=$("tbodyBankTotals"), sel=$("bkDetailTerm");
+  if(!body||!totals||!sel) return;
+  const p=bankingPlan(+sel.value||30);
+  body.innerHTML=p.lines.map((l,i)=>`<tr>
+<td>${i+1}</td>
+<td>${money(l.initial)}</td>
+<td>${money(l.added)}</td>
+<td>${(l.rate*100).toFixed(2)}%</td>
+<td>${money(l.profit)}</td>
+<td>${money(l.total)}</td>
+<td>${money(l.daily)}</td>
+</tr>`).join("");
+  // Its own table rather than a footer row, so the four figures get real
+  // headings instead of borrowing the breakdown's columns.
+  totals.innerHTML=`<tr>
+<td>${money(p.totals.firstInitial)}</td>
+<td>${money(p.totals.added)}</td>
+<td>${money(p.totals.profit)}</td>
+<td>${money(p.totals.absolute)}</td>
+</tr>`;
+}
+function renderBanking(){ renderBankingSummary(); renderBankingDetail(); }
+// ---- Wiring -----------------------------------------------------------
+// The money boxes are handled with the rest of MONEY_INPUTS further up, so
+// that they format as you type; these are the selects and checkboxes.
+["bkMerits","bkOilJp","bkTci","bkFatCat"].forEach(id=>
+  $(id)?.addEventListener("change",()=>{
+    bankingTouch(id);
+    if(id==="bkFatCat") clampBkDeposit();
+    renderBanking();
+  }));
+// The breakdown picker is a view control, not a setting, so it never counts
+// as taking a field over.
+$("bkDetailTerm")?.addEventListener("change",renderBankingDetail);
+$("bkApply")?.addEventListener("click",applyBankingToAdvanced);
+
+buildPlanPrioritise();buildPlanTargets();buildBankTermOptions();buildBankingTermOptions();
 // Cached market data first: the item dropdowns and bank rates have to exist
 // before saved settings are re-applied over them.
 const hadCache=restoreMarket();
 loadLocal();
+loadBankingTouched();
+syncBankingFromAdvanced();
 // The pin buttons are built above, before loadLocal has read the saved pins,
 // so their lit state has to be applied once the pins are actually known.
 syncPinnedButtons();
@@ -5971,16 +6241,20 @@ if(hadCache){
 }
 // Page switching. Basic/Advanced applies to the Investments page only, so the
 // view toggle is hidden while the Planner is open.
-const PAGES=["investments","planner","tos","docs","feedback","testing","scripts","eduplanner"];
+const PAGES=["investments","planner","banking","tos","docs","feedback","testing","scripts","eduplanner"];
 function setPage(page){
   if(!PAGES.includes(page)) page="investments";
   const planner=page==="planner", tos=page==="tos", docs=page==="docs", feedback=page==="feedback";
   const scripts=page==="scripts", edu=page==="eduplanner", testing=page==="testing";
+  const banking=page==="banking";
   document.body.classList.toggle("planner",planner);
+  // Basic/Advanced is an Investments idea, so the toggle is hidden here too.
+  document.body.classList.toggle("banking",banking);
   // Every page reached from the footer shares the ToS page's stripped-back chrome.
   document.body.classList.toggle("tos",tos||docs||feedback||testing||scripts||edu);
   $("pageInvestments").hidden=page!=="investments";
   $("pagePlanner").hidden=!planner;
+  if($("pageBanking")) $("pageBanking").hidden=!banking;
   $("pageTos").hidden=!tos;
   $("pageDocs").hidden=!docs;
   if($("pageFeedback")) $("pageFeedback").hidden=!feedback;
@@ -5994,14 +6268,16 @@ function setPage(page){
   if(cta) cta.hidden=testing;
   // The switch offers the other of the two working pages. From the ToS it
   // returns to Investments, which is where a first-time reader started.
-  const inv=$("goInvestments"), pln=$("goPlanner");
+  const inv=$("goInvestments"), pln=$("goPlanner"), bnk=$("goBanking");
   if(inv){ inv.classList.toggle("active",page==="investments"); inv.setAttribute("aria-pressed",String(page==="investments")) }
   if(pln){ pln.classList.toggle("active",planner); pln.setAttribute("aria-pressed",String(planner)) }
+  if(bnk){ bnk.classList.toggle("active",banking); bnk.setAttribute("aria-pressed",String(banking)) }
   // The API panel follows the active page so the key is always reachable. The
   // ToS page has no slot for it, so it is parked back on the Investments page.
   const api=$("apiPanel");
   if(api){
     if(planner) $("plannerApiSlot").appendChild(api);
+    else if(banking) $("bankingApiSlot").appendChild(api);
     else if(document.body.classList.contains("basic")) $("noDataNotice")?.before(api);
     else $("collapseConfig")?.after(api);
   }
@@ -6034,6 +6310,7 @@ document.querySelectorAll(".plan-extra").forEach(cb=>cb.addEventListener("change
 // always shown filled in rather than being inferred from the other one's label.
 $("goInvestments")?.addEventListener("click",()=>setPage("investments"));
 $("goPlanner")?.addEventListener("click",()=>setPage("planner"));
+$("goBanking")?.addEventListener("click",()=>setPage("banking"));
 // The ToS is reached by the footer link and left by the back button, so the
 // hash is the single source of truth for which page is showing.
 $("docsLink")?.addEventListener("click",e=>{
@@ -6102,6 +6379,7 @@ function activePageEl(){
   if($("pageTesting")&&!$("pageTesting").hidden) return $("pageTesting");
   if($("pageScripts")&&!$("pageScripts").hidden) return $("pageScripts");
   if($("pageEduPlanner")&&!$("pageEduPlanner").hidden) return $("pageEduPlanner");
+  if($("pageBanking")&&!$("pageBanking").hidden) return $("pageBanking");
   return document.body.classList.contains("planner")?$("pagePlanner"):$("pageInvestments");
 }
 function syncToTop(){
