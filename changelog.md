@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.11.0 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.0 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,26 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.12.0 — 2026-09-18
+
+- **Scripts**, the footer page that was a placeholder, is now a list of
+  userscripts and tools. Each panel is a hyperlinked title and a description,
+  and the list is read from `scripts.json` at the root of the site.
+- The page has two views. Everyone sees the panels; my own account also sees an
+  **Edit** button. Like the faction gate, that check runs in the browser and is
+  tidiness rather than security — it is the GitHub token below that actually
+  decides who can write anything.
+- Edit mode adds **+** at the top of the page for a new panel, a pencil and a
+  minus on each existing one, and drag to reorder. Editing a panel opens Title,
+  URL and Description with Save and Cancel underneath. Deleting asks first, in a
+  floating confirm rather than inline, so it reads the same wherever it came
+  from.
+- Saving writes `scripts.json` straight back to the repository through GitHub,
+  using a token I paste into the page once and that stays in my browser. The
+  live site catches up about a minute later. There is no backend involved and
+  nothing is stored anywhere but the repository. A change made while the token
+  is missing is held locally rather than lost, and the page says as much.
 
 ### v0.11.0 — 2026-09-18
 

@@ -63,12 +63,32 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="changelog">Changelog</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.11.0 · Updated: 2026-09-18</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.12.0 · Updated: 2026-09-18</em></p>
 <p>Newest first. Version numbers follow <a href="https://semver.org">semantic versioning</a>:
 <code>MAJOR.MINOR.PATCH</code>. Still on <code>0.x</code> because the app isn't deployment-ready
 until it has a real access layer.</p>
 <hr />
 <h2 id="released">Released</h2>
+<h3 id="v0120-2026-09-18">v0.12.0 — 2026-09-18</h3>
+<ul>
+<li><strong>Scripts</strong>, the footer page that was a placeholder, is now a list of
+  userscripts and tools. Each panel is a hyperlinked title and a description,
+  and the list is read from <code>scripts.json</code> at the root of the site.</li>
+<li>The page has two views. Everyone sees the panels; my own account also sees an
+  <strong>Edit</strong> button. Like the faction gate, that check runs in the browser and is
+  tidiness rather than security — it is the GitHub token below that actually
+  decides who can write anything.</li>
+<li>Edit mode adds <strong>+</strong> at the top of the page for a new panel, a pencil and a
+  minus on each existing one, and drag to reorder. Editing a panel opens Title,
+  URL and Description with Save and Cancel underneath. Deleting asks first, in a
+  floating confirm rather than inline, so it reads the same wherever it came
+  from.</li>
+<li>Saving writes <code>scripts.json</code> straight back to the repository through GitHub,
+  using a token I paste into the page once and that stays in my browser. The
+  live site catches up about a minute later. There is no backend involved and
+  nothing is stored anywhere but the repository. A change made while the token
+  is missing is held locally rather than lost, and the page says as much.</li>
+</ul>
 <h3 id="v0110-2026-09-18">v0.11.0 — 2026-09-18</h3>
 <ul>
 <li><strong>Basic Banking</strong>, a third page beside Investments and Planner. It answers

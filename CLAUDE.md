@@ -39,8 +39,34 @@ Run it after editing any of the four `.md` files, before committing, so sources 
 
 Page styling and the shared nav/footer live in `build-docs.py` (`STYLE` and `TEMPLATE`), not in the generated HTML.
 
+## Versioning and the changelog
+
+**Every push gets a version bump and a changelog entry. No exceptions** — if it
+is worth publishing it is worth a line saying what changed. A push publishes, so
+the changelog is what ties a live build to what is in it, and a bug report
+carries the version.
+
+- A new section or feature is a **minor** bump: `0.12.0`.
+- Everything after it — fixes, tweaks, follow-ups — is a **patch** bump:
+  `0.12.1`, `0.12.2`, and so on.
+
+The version string lives in four places, and they must agree:
+
+| File | What to change |
+|---|---|
+| `index.html` | `APP_VERSION` and `APP_UPDATED` (near the top of the script) |
+| `changelog.md` | the `_Reference for …_` line, plus a new `### vX.Y.Z — YYYY-MM-DD` entry at the top of **Released** |
+| `README.md` | the `_Reference for …_` line |
+| `invLogic.md` | the `_Reference for …_` line |
+
+Then run the build, so the generated pages carry the new version too.
+
+Changelog entries are written for the person using the app, not the person who
+wrote it: what changed and what it means for them, not which functions moved.
+Newest first.
+
 ## Deploying
 
 `main` is the published branch. Pushing to it updates the live site within about a minute. `.nojekyll` is present, so files are served as-is with no Jekyll processing.
 
-Confirm before pushing — every push publishes.
+Confirm before pushing — every push publishes, and every push needs its version bump and changelog entry first.
