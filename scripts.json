@@ -1,5 +1,12 @@
 {
   "version": 1,
-  "updated": "2026-09-18",
-  "scripts": []
+  "updated": "2026-09-17",
+  "scripts": [
+    {
+      "id": "smu664pw5ceh3",
+      "title": "OC Travel Guard",
+      "url": "https://greasyfork.org/en/scripts/594464-oc-travel-guard",
+      "description": "Blocks travel to any destination you could not fly back from before your current Organised Crime begins.\n\nAlso provides specific warnings when an Organised Crime is safe but cutting it fine."
+    }
+  ]
 }
