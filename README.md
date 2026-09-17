@@ -1,6 +1,6 @@
 # Autumn's Stonking Awesome Torn App
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.0 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.2 · Updated: 2026-09-18_
 
 A passive-investment planner for [Torn](https://www.torn.com). The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.
 
@@ -196,7 +196,7 @@ See [Investment Logic](invLogic.html) for the full reasoning: how each benefit i
 
 ## Your data
 
-Everything lives in your own browser. The app talks to Torn's API and tornsy.com and nowhere else. There is no backend, no analytics and no telemetry. Nothing is stored unless you press Save. Requests carry `comment=Torn Investments by Autumn`, so you can identify them in your own Torn API log.
+Everything lives in your own browser. The app talks to Torn's API and tornsy.com, and on the Scripts page to greasyfork.org for the version and dates of each listed script. Nothing about you goes with that last one. Nowhere else, except github.com when I edit the Scripts page myself. There is no backend, no analytics and no telemetry. Nothing is stored unless you press Save. Requests carry `comment=Torn Investments by Autumn`, so you can identify them in your own Torn API log.
 
 The one exception is a report you choose to send through Feedback & Reporting. That goes to a private Discord server only I can see, along with whatever logs the form says it is attaching. Nothing is sent unless you press submit. Your API key is scrubbed from everything before it leaves; your user ID is included so I can follow up with you.
 

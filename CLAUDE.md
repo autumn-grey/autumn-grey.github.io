@@ -22,6 +22,12 @@ page's edit mode writes it back through the GitHub contents API using a
 fine-grained token the owner pastes into the page (kept in their browser's
 localStorage, never in the repo).
 
+An entry whose URL is a Greasy Fork one carries a `meta` block — name, version,
+created, updated — read from `https://greasyfork.org/scripts/{id}.json`, which
+is CORS-open. It is written at save time and re-read on every page open, so the
+stored copy is a fallback for when Greasy Fork is unreachable, not the source of
+truth. An empty `title` means the panel names itself from that block.
+
 So this file gets committed from two places: by hand here, and by the live site.
 Pull before editing it locally, or the site's next save hits a 409 and the change
 has to be redone. Edits made in the page while no token is set are held in

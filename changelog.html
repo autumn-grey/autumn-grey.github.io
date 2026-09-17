@@ -63,12 +63,36 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="changelog">Changelog</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.12.0 · Updated: 2026-09-18</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.12.2 · Updated: 2026-09-18</em></p>
 <p>Newest first. Version numbers follow <a href="https://semver.org">semantic versioning</a>:
 <code>MAJOR.MINOR.PATCH</code>. Still on <code>0.x</code> because the app isn't deployment-ready
 until it has a real access layer.</p>
 <hr />
 <h2 id="released">Released</h2>
+<h3 id="v0122-2026-09-18">v0.12.2 — 2026-09-18</h3>
+<ul>
+<li>A script's title can be left empty. When the link is a Greasy Fork one the
+  panel names itself from the listing, as <code>OC Travel Guard - v 1.0.4</code>. Typing a
+  title still overrides it.</li>
+<li><strong>Created</strong> and <strong>Updated</strong> dates appear under the description, also read from
+  Greasy Fork.</li>
+<li>Those are re-read every time the page opens, so a version bump on Greasy Fork
+  shows up here without the panel being opened and saved again. The last known
+  answer is kept in the file, so the page still reads properly if Greasy Fork
+  cannot be reached.</li>
+<li>The Terms of Service and the <em>Your data</em> section now name greasyfork.org,
+  which the page talks to, and github.com, which only my own editing touches.
+  Neither carries anything about you. They previously said Torn and tornsy.com
+  and nowhere else, which stopped being true with this page.</li>
+</ul>
+<h3 id="v0121-2026-09-18">v0.12.1 — 2026-09-18</h3>
+<ul>
+<li>Each script is now marked <strong>WIP</strong> or <strong>Live</strong> from its edit panel, and the
+  title takes the colour: green for live, orange for still being worked on.
+  Anything written before this existed reads as WIP, so nothing claims to be
+  finished on my behalf.</li>
+<li>A line under the Scripts heading says what the two colours mean.</li>
+</ul>
 <h3 id="v0120-2026-09-18">v0.12.0 — 2026-09-18</h3>
 <ul>
 <li><strong>Scripts</strong>, the footer page that was a placeholder, is now a list of

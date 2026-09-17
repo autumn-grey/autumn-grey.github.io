@@ -379,9 +379,9 @@ a:hover,.site-footer a:hover{text-decoration:underline;filter:brightness(1.15)}
    It keeps the page tidy for everyone else, it does not lock it. The token
    is what actually stops anyone but me writing to the repo. */
 .scripts-wrap{max-width:900px;margin:0 auto;position:relative}
-.scripts-head{display:flex;align-items:flex-start;justify-content:space-between;
-  gap:12px;margin:0 0 14px}
-.scripts-intro{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+.scripts-intro{max-width:640px;margin:0 auto 18px;text-align:center;
+  color:var(--muted);font-size:13px;line-height:1.6}
+.scripts-head{display:flex;justify-content:flex-end;gap:12px;margin:0 0 14px}
 .scripts-head-tools{display:flex;gap:8px;flex:0 0 auto}
 /* Square icon buttons, used for + at the top of the page and for - and the
    pencil on each panel, so they all read as the same control. */
@@ -397,10 +397,20 @@ body:not(.scripts-editing) .scripts-edit-only{display:none}
 .script-card{position:relative;padding:14px 14px 13px;border:1px solid var(--line);
   border-radius:8px;background:var(--panel)}
 .script-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.script-title{font-weight:700;font-size:15px;color:var(--accent);text-decoration:underline}
+/* The two states the intro line promises: green is finished, orange is not. */
+.script-title{font-weight:700;font-size:15px;text-decoration:underline;color:var(--accent)}
+.script-title.live{color:var(--good)}
+.script-title.wip{color:var(--accent)}
 .script-title:hover{filter:brightness(1.15)}
+/* Two radios sharing a row, so the choice reads as one control. */
+.script-status{display:flex;gap:16px;align-items:center}
+.script-status label{display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--text);cursor:pointer}
+.script-status input{width:auto;margin:0}
 .script-desc{margin:6px 0 0;color:var(--text);font-size:13px;line-height:1.6;
   white-space:pre-wrap}
+.script-dates{margin:7px 0 0;color:var(--muted);font-size:11.5px}
+.script-dates span+span{margin-left:12px}
 .script-card-tools{display:flex;gap:6px;flex:0 0 auto}
 /* The handle only exists while editing, so the cursor only changes then. */
 .script-card.draggable{cursor:grab}
@@ -1187,9 +1197,10 @@ details.banner[open]>summary::before{margin-right:8px}
 </div>
 <div class="page" id="pageScripts" hidden>
   <h2 class="tos-title">Scripts</h2>
+  <p class="scripts-intro">A repository of all my fine 'hand-crafted' Torn scripts.
+     Green ones are g2g. Orange ones are works in progress.</p>
   <div class="scripts-wrap">
     <div class="scripts-head">
-      <p class="scripts-intro">Userscripts and tools worth having. Each one links straight to its source.</p>
       <div class="scripts-head-tools scripts-owner-only">
         <button type="button" id="scriptsEditToggle" class="btn">Edit</button>
         <button type="button" id="scriptsAdd" class="icon-btn scripts-edit-only"
@@ -1292,6 +1303,13 @@ details.banner[open]>summary::before{margin-right:8px}
     <a href="https://tornsy.com" target="_blank" rel="noopener noreferrer">tornsy.com</a> is utilised
     for retrieving live stock market data.</p>
 
+    <p>The Scripts page reads public listing data from
+    <a href="https://greasyfork.org" target="_blank" rel="noopener noreferrer">greasyfork.org</a>
+    so each script shows its current version and dates. Nothing about you is sent with those
+    requests. Editing that page, which only the developer can do, writes to
+    <a href="https://github.com" target="_blank" rel="noopener noreferrer">github.com</a> using
+    the developer's own access token.</p>
+
     <p>Feedback and incident reporting forms are handled through a private
     <a href="https://discord.com/" target="_blank" rel="noopener noreferrer">discord.com</a> server
     accessible only by the developer. API keys are scrubbed from all reports, however user ID is
@@ -1372,7 +1390,7 @@ details.banner[open]>summary::before{margin-right:8px}
 //
 // Bumped on every publish. Written in one place, shown in the footer and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.12.0";
+const APP_VERSION="v0.12.2";
 // ISO date of that publish, shown in the footer exactly as written. ISO reads
 // the same everywhere, so no locale formatting is applied to it.
 const APP_UPDATED="2026-09-18";
@@ -7119,7 +7137,69 @@ function normaliseScripts(raw){
     title:String(x?.title||"").trim(),
     url:String(x?.url||"").trim(),
     description:String(x?.description||"").trim(),
+    // Anything not explicitly finished is treated as still in progress, so an
+    // entry written before this existed shows orange rather than claiming to
+    // be done.
+    status:String(x?.status||"").toLowerCase()==="live"?"live":"wip",
+    // Last known Greasy Fork answer. Baked in so the page draws straight away
+    // and still reads sensibly if Greasy Fork is unreachable.
+    meta:x?.meta&&typeof x.meta==="object"?{
+      name:String(x.meta.name||""),version:String(x.meta.version||""),
+      created:String(x.meta.created||""),updated:String(x.meta.updated||""),
+    }:null,
   })).filter(x=>x.title||x.url||x.description);
+}
+
+/** Greasy Fork script id out of any of its URL shapes, including the localised
+    ones (/en/scripts/…). Anything else is not a Greasy Fork link. */
+function greasyForkId(url){
+  const m=/greasyfork\.org\/(?:[a-z]{2}(?:-[A-Za-z]+)?\/)?scripts\/(\d+)/i.exec(String(url||""));
+  return m?m[1]:null;
+}
+
+/** The bits of the Greasy Fork record this page shows. Dates are kept as
+    YYYY-MM-DD because that is how they are displayed and it sorts properly. */
+async function fetchGreasyForkMeta(url){
+  const id=greasyForkId(url);
+  if(!id) return null;
+  const res=await fetch(`https://greasyfork.org/scripts/${id}.json`,{cache:"no-cache"});
+  if(!res.ok) throw new Error("Greasy Fork answered "+res.status);
+  const j=await res.json();
+  return {
+    name:String(j?.name||"").trim(),
+    version:String(j?.version||"").trim(),
+    created:String(j?.created_at||"").slice(0,10),
+    updated:String(j?.code_updated_at||"").slice(0,10),
+  };
+}
+
+/** What the panel heading reads. A title typed by hand always wins; an empty
+    one falls back to the Greasy Fork name and version, and to the bare URL
+    when there is nothing else to go on. */
+function scriptDisplayTitle(s){
+  if(s.title) return s.title;
+  if(s.meta?.name) return s.meta.name+(s.meta.version?" - v "+s.meta.version:"");
+  return s.url||"Untitled";
+}
+
+/** Re-reads Greasy Fork for every entry that has one, after the page has
+    already drawn. Version and dates then follow a script's own releases
+    without the panel being opened and saved again. Display only: the repo copy
+    is refreshed the next time a panel is saved, so a failed fetch here changes
+    nothing and is not worth reporting. */
+async function refreshScriptsMeta(){
+  const targets=window.scriptsList.filter(s=>greasyForkId(s.url));
+  if(!targets.length) return;
+  const results=await Promise.all(targets.map(async s=>{
+    try{ return [s,await fetchGreasyForkMeta(s.url)] }
+    catch(e){ return [s,null] }
+  }));
+  let changed=false;
+  results.forEach(([s,meta])=>{
+    if(!meta) return;
+    if(JSON.stringify(s.meta)!==JSON.stringify(meta)){ s.meta=meta; changed=true }
+  });
+  if(changed) renderScripts();
 }
 
 /** Fetches scripts.json once per page load. A draft, if the owner has one,
@@ -7148,13 +7228,20 @@ async function loadScripts(){
     }catch(e){ logProblem("The saved script draft could not be read",e) }
   }
   renderScripts();
+  refreshScriptsMeta();
 }
 
 /* ---- Rendering ---------------------------------------------------------- */
 function scriptCardHtml(s){
+  const cls="script-title "+(s.status==="live"?"live":"wip");
+  const shown=scriptDisplayTitle(s);
   const link=s.url
-    ? `<a class="script-title" href="${scriptsEsc(s.url)}" target="_blank" rel="noopener noreferrer">${scriptsEsc(s.title||s.url)}</a>`
-    : `<span class="script-title" style="text-decoration:none">${scriptsEsc(s.title||"Untitled")}</span>`;
+    ? `<a class="${cls}" href="${scriptsEsc(s.url)}" target="_blank" rel="noopener noreferrer">${scriptsEsc(shown)}</a>`
+    : `<span class="${cls}" style="text-decoration:none">${scriptsEsc(shown)}</span>`;
+  const dates=(s.meta?.created||s.meta?.updated)
+    ? `<p class="script-dates">${s.meta.created?`<span>Created: ${scriptsEsc(s.meta.created)}</span>`:""}${
+        s.meta.updated?`<span>Updated: ${scriptsEsc(s.meta.updated)}</span>`:""}</p>`
+    : "";
   return `<div class="script-card" data-id="${scriptsEsc(s.id)}">
     <div class="script-card-head">
       <div>${link}</div>
@@ -7166,6 +7253,7 @@ function scriptCardHtml(s){
       </div>
     </div>
     ${s.description?`<p class="script-desc">${scriptsEsc(s.description)}</p>`:""}
+    ${dates}
   </div>`;
 }
 
@@ -7174,7 +7262,8 @@ function scriptFormHtml(s){
     <div class="script-form">
       <div>
         <label for="sfTitle">Title</label>
-        <input id="sfTitle" type="text" value="${scriptsEsc(s.title)}" placeholder="What it is called">
+        <input id="sfTitle" type="text" value="${scriptsEsc(s.title)}"
+               placeholder="Leave empty to use the Greasy Fork name and version">
       </div>
       <div>
         <label for="sfUrl">URL</label>
@@ -7183,6 +7272,10 @@ function scriptFormHtml(s){
       <div>
         <label for="sfDesc">Description</label>
         <textarea id="sfDesc" placeholder="What it does">${scriptsEsc(s.description)}</textarea>
+      </div>
+      <div class="script-status">
+        <label><input type="radio" name="sfStatus" value="wip"${s.status!=="live"?" checked":""}> WIP</label>
+        <label><input type="radio" name="sfStatus" value="live"${s.status==="live"?" checked":""}> Live</label>
       </div>
       <div class="script-form-buttons">
         <button type="button" class="btn primary" data-act="save" data-id="${scriptsEsc(s.id)}">Save</button>
@@ -7200,9 +7293,7 @@ function renderScripts(){
   const toggle=$("scriptsEditToggle");
   if(toggle) toggle.textContent=window.scriptsEditing?"Done":"Edit";
   if(!window.scriptsList.length){
-    list.innerHTML=`<div class="scripts-empty">${window.scriptsEditing
-      ? "Nothing here yet. Use + to add the first one."
-      : "Nothing here yet."}</div>`;
+    list.innerHTML=`<div class="scripts-empty">Nothing here yet.</div>`;
     return;
   }
   list.innerHTML=window.scriptsList.map(s=>
@@ -7227,7 +7318,7 @@ function setScriptsEditing(on){
 
 function addScript(){
   if(!isScriptsOwner()) return;
-  const s={id:newScriptId(),title:"",url:"",description:"",isNew:true};
+  const s={id:newScriptId(),title:"",url:"",description:"",status:"wip",meta:null,isNew:true};
   window.scriptsList.push(s);
   window.scriptsEditing=true;
   window.scriptsEditingId=s.id;
@@ -7244,7 +7335,19 @@ async function saveScriptPanel(id){
   const desc=$("sfDesc")?.value.trim()||"";
   if(!title&&!url){ scriptsStatus("A script needs at least a title or a URL.","err"); return }
   s.title=title; s.url=url; s.description=desc;
+  s.status=document.querySelector('input[name="sfStatus"]:checked')?.value==="live"?"live":"wip";
   delete s.isNew;
+  // Read once here so the repo copy carries a name, version and dates of its
+  // own. A link that is not a Greasy Fork one simply has none, and a title
+  // typed by hand still stands whatever comes back.
+  if(greasyForkId(url)){
+    scriptsStatus("Reading Greasy Fork…");
+    try{ s.meta=await fetchGreasyForkMeta(url) }
+    catch(e){
+      logProblem("Greasy Fork could not be read for "+(title||url),e);
+      scriptsStatus("Greasy Fork could not be read, so the name and dates are unchanged.","err");
+    }
+  }else s.meta=null;
   window.scriptsEditingId=null;
   saveScriptsDraft();
   renderScripts();
@@ -7311,7 +7414,8 @@ function scriptsFileBody(){
   return JSON.stringify({
     version:1,
     updated:new Date().toISOString().slice(0,10),
-    scripts:window.scriptsList.map(({id,title,url,description})=>({id,title,url,description})),
+    scripts:window.scriptsList.map(({id,title,url,description,status,meta})=>
+      ({id,title,url,description,status,meta:meta||null})),
   },null,2)+"\n";
 }
 

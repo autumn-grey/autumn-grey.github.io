@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.0 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.2 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,30 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.12.2 — 2026-09-18
+
+- A script's title can be left empty. When the link is a Greasy Fork one the
+  panel names itself from the listing, as `OC Travel Guard - v 1.0.4`. Typing a
+  title still overrides it.
+- **Created** and **Updated** dates appear under the description, also read from
+  Greasy Fork.
+- Those are re-read every time the page opens, so a version bump on Greasy Fork
+  shows up here without the panel being opened and saved again. The last known
+  answer is kept in the file, so the page still reads properly if Greasy Fork
+  cannot be reached.
+- The Terms of Service and the *Your data* section now name greasyfork.org,
+  which the page talks to, and github.com, which only my own editing touches.
+  Neither carries anything about you. They previously said Torn and tornsy.com
+  and nowhere else, which stopped being true with this page.
+
+### v0.12.1 — 2026-09-18
+
+- Each script is now marked **WIP** or **Live** from its edit panel, and the
+  title takes the colour: green for live, orange for still being worked on.
+  Anything written before this existed reads as WIP, so nothing claims to be
+  finished on my behalf.
+- A line under the Scripts heading says what the two colours mean.
 
 ### v0.12.0 — 2026-09-18
 
