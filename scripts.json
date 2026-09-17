@@ -6,7 +6,27 @@
       "id": "smu664pw5ceh3",
       "title": "OC Travel Guard",
       "url": "https://greasyfork.org/en/scripts/594464-oc-travel-guard",
-      "description": "Blocks travel to any destination you could not fly back from before your current Organised Crime begins.\n\nAlso provides specific warnings when an Organised Crime is safe but cutting it fine."
+      "description": "Blocks travel to any destination you could not fly back from before your current Organised Crime begins.\n\nAlso provides specific warnings when an Organised Crime is safe but cutting it fine.",
+      "status": "wip",
+      "meta": {
+        "name": "OC Travel Guard",
+        "version": "1.0.4",
+        "created": "2026-09-05",
+        "updated": "2026-09-13"
+      }
+    },
+    {
+      "id": "smu66qwo0babb",
+      "title": "",
+      "url": "https://greasyfork.org/en/scripts/595680-spreadsheet-trade-filter",
+      "description": "Adds a 'MAX' button in trade view for quickly adding all of an item into a trade listing\n\nAllows users to link any public online spreadsheet to the Trade view to highlight items in their inventory for trade\n\n[Future Plan: Optional Torn ID input to connect spreadsheets to certain traders, so highlights only appear when trading with players you actually want to trade items in the spreadsheet with.]",
+      "status": "live",
+      "meta": {
+        "name": "Spreadsheet Trade Filter",
+        "version": "1.0.1",
+        "created": "2026-09-13",
+        "updated": "2026-09-13"
+      }
     }
   ]
 }
