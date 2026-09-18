@@ -470,18 +470,39 @@ async function fetchEducationIndex(){
   window.educationIndex=Object.fromEntries(Object.entries(raw).map(([id,x])=>[String(id),x.name]));
   // Course length and price, keyed to this app's own course checkboxes.
   const days={},costs={},samples=[];
-  Object.values(raw).forEach(x=>{
+  // What the Education & Job planner needs on top of length and price: which
+  // courses have to come first, and what finishing one actually gets you.
+  // Torn numbers its courses, and prerequisites are given as those numbers, so
+  // they are translated to this app's own ids here rather than at every use.
+  const info={},appIdOf={};
+  Object.entries(raw).forEach(([apiId,x])=>{
     const id=educationIdFor(x.name);
     if(!id) return;
+    appIdOf[String(apiId)]=id;
     const cost=+x.money_cost;
     if(cost>0) costs[id]=cost;
     const dur=+x.duration;
     if(dur>0) samples.push({id,duration:dur});
   });
+  Object.entries(raw).forEach(([apiId,x])=>{
+    const id=appIdOf[String(apiId)];
+    if(!id) return;
+    const r=x.results||{};
+    // Anything the API lists that this app has no checkbox for is dropped from
+    // the prerequisites rather than left as a number nothing can satisfy.
+    info[id]={
+      needs:(Array.isArray(x.prerequisites)?x.prerequisites:[])
+        .map(n=>appIdOf[String(n)]).filter(Boolean),
+      gains:["manual_labor","intelligence","endurance","perk"]
+        .flatMap(k=>Array.isArray(r[k])?r[k]:[])
+        .map(s=>String(s).trim()).filter(Boolean)
+    };
+  });
   const unit=calibrateCourseDuration(samples);
   if(unit) samples.forEach(x=>{ days[x.id]=x.duration/unit.per });
   window.live.courseCosts=Object.keys(costs).length?costs:null;
   window.live.courseDays=Object.keys(days).length?days:null;
+  window.live.courseInfo=Object.keys(info).length?info:null;
   window.live.notes=[unit?`course length in ${unit.unit}`:"course length unit unrecognised, using built-in weeks"];
   window.educationIndexError=null;
 }
@@ -1315,10 +1336,11 @@ function populateStatItems(){
 function remainingCourseDays(){
   return Object.keys(COURSE_WEEKS).reduce((sum,id)=>sum+($(id)?.checked?0:courseDaysFor(id)),0);
 }
-// Course time is cut by 2% per Education Length merit and 10% for a WSU
-// block, and those stack on the base time rather than compounding, which is
-// also why WSU saves the same 10% whatever your merits are. (Topping out the
-// education job adds another 10% that this app doesn't model.)
+// Course time is cut by 2% per Education Length merit, 10% for a WSU block and
+// 10% for topping out the education job, and those stack on the base time
+// rather than compounding, which is also why WSU saves the same 10% whatever
+// your merits are. All three together are the most there is, at 40%. They only
+// apply to a course started after you have them: one already running is set.
 const EDU_MERIT_REDUCTION=0.02;
 // ======================================================================
 // JOB POINT SPECIALS

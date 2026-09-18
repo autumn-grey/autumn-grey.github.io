@@ -33,6 +33,7 @@ did. Order matters: a file can call anything defined in a file above it, and
 | `js/export.js` | CSV export |
 | `js/entry.js` | Refresh, sorting and the Investments page wiring |
 | `js/banking.js` | Basic Banking |
+| `js/edjob.js` | Education & Job Planner |
 | `js/pages.js` | Start-up, page switching, the top buttons and footer links |
 | `js/feedback.js` | Feedback & Reporting form |
 | `js/testing.js` | Testing feedback survey |

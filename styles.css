@@ -378,13 +378,65 @@ a:hover,.site-footer a:hover{text-decoration:underline;filter:brightness(1.15)}
 .tf-cta-wrap{margin:0 0 12px;text-align:center}
 .tf-cta{background:#2ea043;border-color:#3fb950;color:#f4fff7;font-weight:700}
 .tf-cta:hover:not(:disabled){background:#3fb950;border-color:#56d364}
-/* Coming Soon scales with the window: the SVG keeps its square aspect and the
-   text inside it is sized in viewBox units, so it grows and shrinks as one. */
-.soon-wrap{display:flex;align-items:center;justify-content:center;
-  height:calc(100vh - 330px);min-height:200px}
-.soon-svg{width:100%;height:100%}
-.soon-text{fill:#9458d3;font-family:Georgia,"Times New Roman",serif;font-size:38px;
-  font-style:italic;font-weight:700;text-decoration:underline}
+/* EDUCATION & JOB PLANNER
+   Reads the accent like everything else, so it comes out aqua here without
+   naming the colour once. The course list is the long part of the page, so it
+   gets its own column rules rather than the single stack the panels use. */
+.edjob-wrap{max-width:1100px;margin:auto;display:flex;flex-direction:column;gap:18px}
+.edjob-panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.edjob-panel h3{margin:0 0 12px;font-size:16px;color:var(--accent)}
+#edJobSource{margin:0}
+#edJobSource.warn{color:var(--warn)}
+/* The four figures across the top. They wrap to two and then one across a
+   narrowing window rather than shrinking the type. */
+.edjob-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.edjob-tiles{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.edjob-tiles{grid-template-columns:1fr}}
+.edjob-tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+.edjob-tile-label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.edjob-tile-value{font-size:20px;font-weight:700;color:var(--accent);margin:4px 0 2px}
+.edjob-tile-note{color:var(--muted);font-size:12px}
+/* One row per reduction, dimmed until it is actually earned, so what is
+   missing reads as plainly as what is there. */
+.edjob-reductions{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.edjob-red{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:baseline;
+  padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--muted)}
+.edjob-red.on{color:var(--text)}
+.edjob-red.total{border-color:var(--accent);color:var(--text);font-weight:700}
+.edjob-red-cut{font-variant-numeric:tabular-nums;color:var(--accent)}
+.edjob-red-note{color:var(--muted);font-size:12px;font-weight:400;text-align:right}
+@media(max-width:620px){.edjob-red{grid-template-columns:1fr auto}.edjob-red-note{grid-column:1/-1;text-align:left}}
+.edjob-controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:12px}
+.edjob-find{display:flex;flex-direction:column;gap:4px}
+.edjob-find span{color:var(--muted);font-size:12px}
+.edjob-find input{background:var(--panel2);color:var(--text);border:1px solid var(--line);
+  border-radius:8px;padding:7px 10px;font:inherit;min-width:220px}
+.edjob-find input:focus{outline:none;border-color:var(--accent)}
+.edjob-faculty{border:1px solid var(--line);border-radius:8px;margin-bottom:8px;background:var(--panel2)}
+.edjob-faculty>summary{cursor:pointer;padding:9px 12px;font-weight:700;
+  display:flex;justify-content:space-between;gap:10px}
+.edjob-faculty-count{color:var(--muted);font-weight:400;font-size:12px}
+.edjob-course-list{padding:4px 12px 12px;display:flex;flex-direction:column;gap:2px}
+/* The name, then the figures, then anything worth saying underneath. A done
+   course stays readable rather than being struck through: it is still a row
+   you might want to read, it just is not in the plan. */
+.edjob-course{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;
+  align-items:baseline;padding:6px 8px;border-radius:6px}
+.edjob-course:hover{background:var(--panel)}
+.edjob-course-name{min-width:0}
+.edjob-course-meta{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.edjob-course-notes{grid-column:2/-1;color:var(--muted);font-size:12px}
+.edjob-course.done .edjob-course-name{color:var(--muted)}
+.edjob-course.locked .edjob-course-name{color:var(--muted)}
+.edjob-course.locked .edjob-course-notes{color:var(--warn)}
+.edjob-plan{overflow-x:auto}
+.edjob-table{border-collapse:collapse;width:100%;min-width:620px}
+.edjob-table th,.edjob-table td{border-bottom:1px solid var(--line);padding:7px 10px;
+  text-align:left;white-space:nowrap}
+.edjob-table th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.edjob-table td:nth-child(4),.edjob-table td:nth-child(5),
+.edjob-table td:nth-child(6),.edjob-table td:nth-child(7){font-variant-numeric:tabular-nums}
+.edjob-table tbody tr:hover{background:var(--panel2)}
 
 /* SCRIPTS PAGE
    Two views of the same list. Everyone gets the read-only panels; the owner

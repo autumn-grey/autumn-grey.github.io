@@ -54,6 +54,9 @@ function setPage(page){
   // anyone who never looks at this page.
   if(scripts&&typeof loadScripts==="function"){ loadScripts(); renderScripts() }
   if(testing&&typeof openTestingForm==="function") openTestingForm();
+  // Drawn on open rather than kept up to date in the background, because the
+  // ticks it reads live on the Investments page and can change while it is shut.
+  if(eduJob&&typeof renderEdJob==="function") renderEdJob();
   const cta=$("testingCta");
   if(cta) cta.hidden=testing;
   // Each button shows whether its own page is the one open. Education & Job is

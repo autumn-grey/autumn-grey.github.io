@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.5 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.14.0 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,36 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.14.0 — 2026-09-18
+
+- **The Education & Job Planner opens for business.** Where *Coming Soon* was,
+  there is now a course planner: every course, what you have done, and the
+  order to do the rest in.
+- Across the top: how many courses are left, how long they will take, what
+  they will cost in fees, and the date you would finish if you studied them
+  back to back.
+- **Your time reductions** breaks down where your shorter courses come from —
+  Education Length merits, a WSU block and the Principal job perk — what each
+  is worth and what the three together come to. Forty per cent is the most
+  there is, and the panel says which of them you are still missing. Job point
+  specials are listed underneath, as hours a day off the course you are on.
+  These are all still set under *Education Stuff* on the Investments page, so
+  there is one place to change them.
+- **The order to study them in** puts anything a course depends on ahead of it,
+  then takes the shortest of whatever is open, so nothing quick is left waiting
+  behind something long. Every line carries the running total, so any course
+  can be read as "and I would be done by here, having spent this".
+- Courses are grouped by faculty, with a box to search by name and a switch to
+  hide the ones you have finished. A course you cannot start yet says what it
+  is waiting for, and every course says what finishing it gives you.
+- Ticking a course here ticks it on the Investments page and the other way
+  round: it is the same list, so the stocks that care how much studying you
+  have left stay right. As before, it is the **Save** button that keeps it.
+- Course lengths, fees, prerequisites and rewards come from Torn on refresh.
+  Without one, the built-in lengths and fees are used, prerequisites are
+  unknown and the order is simply shortest first — the page says so when that
+  is what you are looking at.
 
 ### v0.13.5 — 2026-09-18
 

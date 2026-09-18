@@ -254,7 +254,8 @@ function bankTermLabel(days){
 // Live figures from Torn's own reference lists. The hardcoded tables below
 // stay as fallbacks, so the app still works before a refresh or on a key
 // without the torn selections. Anything the API supplies simply wins.
-window.live={benefitReq:null,propertyPrices:null,courseDays:null,courseCosts:null,notes:[]};
+window.live={benefitReq:null,propertyPrices:null,courseDays:null,courseCosts:null,
+             courseInfo:null,notes:[]};
 // Shares needed for one benefit block, live where known.
 function blockShares(ticker,fallback){
   const v=window.live.benefitReq&&window.live.benefitReq[ticker];

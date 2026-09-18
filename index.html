@@ -594,11 +594,31 @@
 </div>
 <div class="page" id="pageEduJob" hidden>
   <h2 class="tos-title">Education &amp; Job Planner</h2>
-  <div class="soon-wrap">
-    <svg class="soon-svg" viewBox="0 0 240 240" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Coming soon">
-      <text class="soon-text" x="120" y="120" text-anchor="middle" dominant-baseline="middle"
-            transform="rotate(-45 120 120)">Coming Soon...</text>
-    </svg>
+  <div class="edjob-wrap">
+    <p class="help" id="edJobSource"></p>
+    <div class="edjob-tiles" id="edJobSummary"></div>
+    <section class="edjob-panel">
+      <h3>Your time reductions</h3>
+      <div class="edjob-reductions" id="edJobReductions"></div>
+      <p class="help">Set these under <strong>Education Stuff</strong> on the Investments page. They only
+        shorten a course you start after you have them &mdash; one already running keeps its original
+        length.</p>
+    </section>
+    <section class="edjob-panel">
+      <h3>Courses</h3>
+      <div class="edjob-controls">
+        <label class="edjob-find"><span>Find a course</span>
+          <input type="search" id="edJobFind" placeholder="Anatomy, Overclocking&hellip;"></label>
+        <label><input type="checkbox" id="edJobHideDone"> Hide the ones I have done</label>
+      </div>
+      <div id="edJobPicker"></div>
+    </section>
+    <section class="edjob-panel">
+      <h3>The order to study them in</h3>
+      <p class="help">Everything still to do, prerequisites first and the shortest of whatever is open
+        next, so nothing quick waits behind something long.</p>
+      <div class="edjob-plan" id="edJobPlan"></div>
+    </section>
   </div>
 </div>
 <div class="page" id="pageFeedback" hidden>
@@ -748,6 +768,7 @@
 <script src="js/export.js"></script>
 <script src="js/entry.js"></script>
 <script src="js/banking.js"></script>
+<script src="js/edjob.js"></script>
 <script src="js/pages.js"></script>
 <script src="js/feedback.js"></script>
 <script src="js/testing.js"></script>
