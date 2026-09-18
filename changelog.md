@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.3 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.4 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,14 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.12.4 — 2026-09-18
+
+- **Job & Education Planner** joins Basic Banking under *Which parts of the site
+  did you use?* on the testing feedback form, ready for the page itself.
+- As before, a half-finished form saved since the last release will have its
+  tick against *Other pages at the bottom* moved along by one. Basic Banking
+  stays where it was.
 
 ### v0.12.3 — 2026-09-18
 
