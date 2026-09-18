@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-09-17",
+  "updated": "2026-09-18",
   "scripts": [
     {
       "id": "smu664pw5ceh3",
@@ -26,6 +26,19 @@
         "version": "1.0.1",
         "created": "2026-09-13",
         "updated": "2026-09-13"
+      }
+    },
+    {
+      "id": "smu66xgr2052v",
+      "title": "",
+      "url": "https://greasyfork.org/en/scripts/595936-faction-elimination-team-checker",
+      "description": "Requires a public API key\n\nScans your faction (takes about a minute) and shows you which members are in which elimination team.\n\nEvery 12 hours it checks for eliminations, but this can be manually refreshed as well.\n\nMembers which leave a faction can be checked for manually, but unfortunately members who leave before your first scan will not be picked up.\n\nFuture proofed to work for elimination events in years to come - just make sure you run it from the get go, or you'll miss the leavers!\n\n[Known bug: If a chat is open when entering a faction page the checker panel will default to opening inside the chat. Requires stricter anchoring requirements]",
+      "status": "wip",
+      "meta": {
+        "name": "Faction Elimination Team Checker",
+        "version": "1.3.1",
+        "created": "2026-09-15",
+        "updated": "2026-09-15"
       }
     }
   ]
