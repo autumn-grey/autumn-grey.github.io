@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.4 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.5 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,16 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.12.5 — 2026-09-18
+
+- The option added in v0.12.4 is called **Education & Job Planner**, matching the
+  footer link and the page's own heading. It went out as "Job & Education
+  Planner".
+- It is no longer also listed under *Other pages at the bottom*, which left the
+  same page with two tickboxes under two different names. That list is now Docs,
+  Terms of Service, Feedback & Reporting and Scripts, so a tick inside it saved
+  under v0.12.4 moves up by one.
 
 ### v0.12.4 — 2026-09-18
 
