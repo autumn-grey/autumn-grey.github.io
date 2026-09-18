@@ -140,7 +140,7 @@ function resetEducationTab(){
   $("educationMerits").value="0";
   $("companyJp").value="0";
   setBool("wsuOwned",false);
-  setBool("eduJob",false);
+  setBool("edJobPerk",false);
   document.querySelectorAll(".education-course-check").forEach(cb=>cb.checked=false);
   calculate();
 }
@@ -264,7 +264,7 @@ const INVESTMENT_FIELDS=[
   "tciOwned",
   "fatCat",
   "wsuOwned",
-  "eduJob",
+  "edJobPerk",
   "happyItem",
   "energyItem",
   "nerveItem",
@@ -875,11 +875,11 @@ function applyUserData(d){
   else miss("Cayman Islands Bank",failed("money")?`needs User → money (${failed("money")})`:"not reported");
 
   // --- merits ---
-  const eduJobPerk=perks.find(p=>p.source==="job_perks"
+  const edJobPerk=perks.find(p=>p.source==="job_perks"
                                 &&/education|course/i.test(p.text)&&/%/.test(p.text));
   if(perks.length){
-    setBool("eduJob",!!eduJobPerk);
-    ok("Education job perk",eduJobPerk?eduJobPerk.text.trim():"none");
+    setBool("edJobPerk",!!edJobPerk);
+    ok("Education job perk",edJobPerk?edJobPerk.text.trim():"none");
   } else miss("Education job perk",failed("perks")?`needs User → perks (${failed("perks")})`:"not reported");
 
   const eduMeritKey=Object.keys(d.merits||{}).find(k=>/education\s*length/i.test(k));
@@ -1386,7 +1386,7 @@ function educationTimeReduction(){
   const merits=Math.max(0,Math.min(10,+($("educationMerits")?.value||0)));
   return Math.min(0.9,merits*EDU_MERIT_REDUCTION
                      +(boolVal("wsuOwned")?0.10:0)
-                     +(boolVal("eduJob")?0.10:0));
+                     +(boolVal("edJobPerk")?0.10:0));
 }
 // Days until every remaining course is finished, studying them back to back.
 function educationRemainingDays(){

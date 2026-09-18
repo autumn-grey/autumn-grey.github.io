@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.2 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.3 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,13 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.13.3 — 2026-09-18
+
+- The Education & Job page moves again, to `#edujob`, and the Education Job Perk
+  tick on the Investments page is now stored under its own name. The perk is
+  about to be used by both sections, so the two needed telling apart. A tick
+  saved before this update will need setting once more.
 
 ### v0.13.2 — 2026-09-18
 

@@ -1,7 +1,7 @@
 :root{--bg:#111315;--panel:#191c20;--panel2:#20242a;--line:#30363d;--text:#e8eaed;--muted:#9aa3ad;--orange:#e39b45;--orange-hi:#f0b768;--aqua:#46c8d0;--aqua-hi:#78e2e9;--accent:var(--orange);--accent-hi:var(--orange-hi);--good:#59c37a;--bad:#e06c75;--warn:#d9b15b}
 /* Education & Job is its own section, so it takes the whole page aqua:
    every rule already reads the accent, header and footer included. */
-body.edjob{--accent:var(--aqua);--accent-hi:var(--aqua-hi)}
+body.edujob{--accent:var(--aqua);--accent-hi:var(--aqua-hi)}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 header{padding:22px 28px;border-bottom:1px solid var(--line);background:#15181b} h1{margin:0 0 4px;font-size:24px} header p{margin:0;color:var(--muted)}
 /* The title is a button so it can act as a home link, but it has to look
@@ -111,13 +111,13 @@ body.planner .view-toggle,body.banking .view-toggle{display:none}
 .page-tab.tab-orange:hover{background:var(--orange-hi);border-color:var(--orange-hi);color:#0b0d10}
 /* Inside Education & Job the investment chrome has nothing to say, so the row
    is down to the single button that leaves again. */
-#goInvestmentsEdJob{display:none}
-body.edjob #goInvestmentsEdJob{display:inline-block}
-body.edjob .view-toggle,body.edjob #goInvestments,body.edjob #goPlanner,
-body.edjob #goBanking,body.edjob #goEdJob{display:none}
+#goInvestmentsEduJob{display:none}
+body.edujob #goInvestmentsEduJob{display:inline-block}
+body.edujob .view-toggle,body.edujob #goInvestments,body.edujob #goPlanner,
+body.edujob #goBanking,body.edujob #goEduJob{display:none}
 /* Footer links follow the accent, so they go aqua with the rest of the section.
    These two name their own destination instead, on every page. */
-.footer-tos .foot-edjob{color:var(--aqua)}
+.footer-tos .foot-edujob{color:var(--aqua)}
 .footer-tos .foot-inv{color:var(--orange)}
 /* ---- Basic Banking ---- */
 #noDataNoticeBank{display:none}body.no-data #noDataNoticeBank{display:block}

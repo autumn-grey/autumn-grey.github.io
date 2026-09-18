@@ -19,21 +19,18 @@ if(hadCache){
 }
 // Page switching. Basic/Advanced applies to the Investments page only, so the
 // view toggle is hidden while the Planner is open.
-const PAGES=["investments","planner","banking","tos","docs","feedback","testing","scripts","edjob"];
+const PAGES=["investments","planner","banking","tos","docs","feedback","testing","scripts","edujob"];
 function setPage(page){
-  // The section was reached at #eduplanner before it had a button of its own,
-  // so an old bookmark still lands on it rather than quietly on Investments.
-  if(page==="eduplanner") page="edjob";
   if(!PAGES.includes(page)) page="investments";
   const planner=page==="planner", tos=page==="tos", docs=page==="docs", feedback=page==="feedback";
-  const scripts=page==="scripts", edJob=page==="edjob", testing=page==="testing";
+  const scripts=page==="scripts", eduJob=page==="edujob", testing=page==="testing";
   const banking=page==="banking";
   document.body.classList.toggle("planner",planner);
   // Basic/Advanced is an Investments idea, so the toggle is hidden here too.
   document.body.classList.toggle("banking",banking);
   // Education & Job is a section of its own rather than a footer page, so it
   // keeps the full chrome and turns the accent aqua instead.
-  document.body.classList.toggle("edjob",edJob);
+  document.body.classList.toggle("edujob",eduJob);
   // Every page reached from the footer shares the ToS page's stripped-back chrome.
   document.body.classList.toggle("tos",tos||docs||feedback||testing||scripts);
   $("pageInvestments").hidden=page!=="investments";
@@ -44,7 +41,7 @@ function setPage(page){
   if($("pageFeedback")) $("pageFeedback").hidden=!feedback;
   if($("pageTesting")) $("pageTesting").hidden=!testing;
   if($("pageScripts")) $("pageScripts").hidden=!scripts;
-  if($("pageEdJob")) $("pageEdJob").hidden=!edJob;
+  if($("pageEduJob")) $("pageEduJob").hidden=!eduJob;
   // Opened fresh each time so the timestamp in the title is current.
   if(feedback&&typeof syncFeedbackType==="function") syncFeedbackType();
   // Fetched on first open rather than at boot, so the file costs nothing to
@@ -55,11 +52,11 @@ function setPage(page){
   if(cta) cta.hidden=testing;
   // The switch offers the other of the two working pages. From the ToS it
   // returns to Investments, which is where a first-time reader started.
-  const inv=$("goInvestments"), pln=$("goPlanner"), bnk=$("goBanking"), edj=$("goEdJob");
+  const inv=$("goInvestments"), pln=$("goPlanner"), bnk=$("goBanking"), edj=$("goEduJob");
   if(inv){ inv.classList.toggle("active",page==="investments"); inv.setAttribute("aria-pressed",String(page==="investments")) }
   if(pln){ pln.classList.toggle("active",planner); pln.setAttribute("aria-pressed",String(planner)) }
   if(bnk){ bnk.classList.toggle("active",banking); bnk.setAttribute("aria-pressed",String(banking)) }
-  if(edj){ edj.classList.toggle("active",edJob); edj.setAttribute("aria-pressed",String(edJob)) }
+  if(edj){ edj.classList.toggle("active",eduJob); edj.setAttribute("aria-pressed",String(eduJob)) }
   // The API panel follows the active page so the key is always reachable. The
   // ToS page has no slot for it, so it is parked back on the Investments page.
   const api=$("apiPanel");
@@ -101,13 +98,13 @@ $("goPlanner")?.addEventListener("click",()=>setPage("planner"));
 $("goBanking")?.addEventListener("click",()=>setPage("banking"));
 // Education & Job and the orange button that leaves it again are the same kind
 // of move as the three above, so they push a hash the same way.
-["goEdJob","edJobLink"].forEach(id=>$(id)?.addEventListener("click",e=>{
+["goEduJob","eduJobLink"].forEach(id=>$(id)?.addEventListener("click",e=>{
   e.preventDefault();
-  history.pushState(null,"","#edjob");
-  setPage("edjob");
+  history.pushState(null,"","#edujob");
+  setPage("edujob");
   window.scrollTo({top:0,behavior:"smooth"});
 }));
-["goInvestmentsEdJob","investmentsLink"].forEach(id=>$(id)?.addEventListener("click",e=>{
+["goInvestmentsEduJob","investmentsLink"].forEach(id=>$(id)?.addEventListener("click",e=>{
   e.preventDefault();
   history.pushState(null,"","#investments");
   setPage("investments");
@@ -180,7 +177,7 @@ function activePageEl(){
   if($("pageFeedback")&&!$("pageFeedback").hidden) return $("pageFeedback");
   if($("pageTesting")&&!$("pageTesting").hidden) return $("pageTesting");
   if($("pageScripts")&&!$("pageScripts").hidden) return $("pageScripts");
-  if($("pageEdJob")&&!$("pageEdJob").hidden) return $("pageEdJob");
+  if($("pageEduJob")&&!$("pageEduJob").hidden) return $("pageEduJob");
   if($("pageBanking")&&!$("pageBanking").hidden) return $("pageBanking");
   return document.body.classList.contains("planner")?$("pagePlanner"):$("pageInvestments");
 }
