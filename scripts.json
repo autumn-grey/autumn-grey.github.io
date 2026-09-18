@@ -40,6 +40,19 @@
         "created": "2026-09-15",
         "updated": "2026-09-15"
       }
+    },
+    {
+      "id": "smu66zxkh5uop",
+      "title": "",
+      "url": "https://greasyfork.org/en/scripts/595194-autumn-s-ui-enhancer",
+      "description": "Small quality-of-life fixes for Torn's interface \n- Stops filter links jumping the page. E.g. stops clicking a ranking list in the Hall of Fame jumping down the page\n- Adds an items-per-page selector to paged lists. E.g. See more up to 100 bounties on a single page!\n- Sorts most lists and the Torn Wiki's tables by column. E.g. Sort those 100 bounties you can now see at once by level or Hosp status\n- Adds a light/dark switch to the wiki\n- Scrolls the news ticker with arrows for stepping through the headlines\n- Offers a send form for anything bought in a shop --- WORK IN PROGRESS\n- Prefil item sends with a usual preferred recipient \n- All settings optional besides Wiki settings, and can be toggled within the Torn Settings page",
+      "status": "wip",
+      "meta": {
+        "name": "Autumn's UI Enhancer",
+        "version": "0.13.1",
+        "created": "2026-09-10",
+        "updated": "2026-09-15"
+      }
     }
   ]
 }
