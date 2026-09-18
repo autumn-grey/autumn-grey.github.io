@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.2 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.3 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,15 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.12.3 — 2026-09-18
+
+- **Basic Banking** is now one of the options under *Which parts of the site did
+  you use?* on the testing feedback form. It had been missing since the page was
+  added.
+- If you had a half-finished form saved, the tick against *Other pages at the
+  bottom* will have moved to *Basic Banking*. Re-tick it and everything you put
+  underneath is still there.
 
 ### v0.12.2 — 2026-09-18
 
