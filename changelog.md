@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.5 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.0 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,21 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.13.0 — 2026-09-18
+
+- **Education & Job** joins the buttons at the top of the page, in aqua. It is a
+  section in its own right rather than a page tucked away at the bottom, so it
+  keeps the full header and is where the education and job work will land.
+- Opening it turns the page aqua: the header, the links and everything else that
+  was orange follows the section you are in. The one button left at the top is
+  **Investments**, in orange, which takes you back.
+- The links along the bottom now include **Investments**, so there is a way home
+  from every page. Education & Job Planner is aqua down there too, and
+  Investments stays orange, so each names where it goes even on a page that has
+  gone the other colour.
+- The page itself is still *Coming Soon*; its **Back to Stonking** button is gone
+  now that the Investments button at the top does the same job.
 
 ### v0.12.5 — 2026-09-18
 
