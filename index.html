@@ -42,8 +42,8 @@
   <details open>
   <summary>API Key</summary>
   <div class="api-blurb">
-    <p>Use <a id="linkAccessOnly" href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPIAccessOnly&amp;user=profile&amp;torn=bank,items,stocks,education,properties&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPIAccessOnly</strong></a> to use the app with only public investment data. The app is set with default settings and can be manually configured and updated by the user.</p>
-    <p>Use <a id="linkCustomised" href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPICustomised&amp;user=profile,stocks,education,merits,money,properties,job,perks,races&amp;company=profile&amp;torn=bank,items,stocks,education,properties&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPICustomised</strong></a> to preconfigure settings with your personal statistics including, stocks owned, available funds, job perks, merits, and education courses studied.</p>
+    <p>Use <a href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPIAccessOnly&amp;user=profile&amp;torn=bank,items,stocks,education,properties&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPIAccessOnly</strong></a> to use the app with only public investment data. The app is set with default settings and can be manually configured and updated by the user.</p>
+    <p>Use <a href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPICustomised&amp;user=profile,stocks,education,merits,money,properties,job,perks,races&amp;company=profile&amp;torn=bank,items,stocks,education,properties&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPICustomised</strong></a> to preconfigure settings with your personal statistics including, stocks owned, available funds, job perks, merits, and education courses studied.</p>
     <p class="api-note">Click your preferred access level to generate a new custom key, then paste it below</p>
     <p class="api-privacy">All keys and saved data are stored locally on your device, this app sends no data, and saves no sensitive information.</p>
   </div>
@@ -309,7 +309,7 @@
     <label class="pref-row prio-all"><input type="checkbox" id="prioAll" checked> <span>Select all</span></label>
   </div>
   <p class="help" style="margin:0 0 8px">These benefits are only worth their value if you use them, uncheck them to mark them as low importance.</p>
-  <div id="prefsList">
+  <div class="prefs-list">
     <label class="pref-row"><input type="checkbox" class="pref-prio" data-ticker="EVL" checked> <span class="ticker">EVL</span> <strong>Evil Ducks Candy Corp</strong><div class="sub">1,000 happy per week</div></label>
     <label class="pref-row"><input type="checkbox" class="pref-prio" data-ticker="MCS" checked> <span class="ticker">MCS</span> <strong>Mc Smoogle Corp</strong><div class="sub">100 energy per week</div></label>
     <label class="pref-row"><input type="checkbox" class="pref-prio" data-ticker="CBD" checked> <span class="ticker">CBD</span> <strong>Herbal Releaf Co.</strong><div class="sub">50 nerve per week</div></label>
@@ -357,10 +357,10 @@
 <th>Benefit / Interest</th>
 <th class="sortable" data-sort="cost" tabindex="0" aria-sort="none">Cost <span class="sort-indicator">↕</span></th>
 <th>Frequency</th>
-<th class="sortable" data-sort="return" id="returnHeader" tabindex="0" aria-sort="none">Return <span class="sort-indicator">↕</span><br><select id="returnPeriodTable" class="th-select"><option value="daily">Daily</option><option value="weekly" selected>Weekly</option><option value="monthly">Monthly</option><option value="annual">Annual</option></select></th>
+<th class="sortable" data-sort="return" tabindex="0" aria-sort="none">Return <span class="sort-indicator">↕</span><br><select id="returnPeriodTable" class="th-select"><option value="daily">Daily</option><option value="weekly" selected>Weekly</option><option value="monthly">Monthly</option><option value="annual">Annual</option></select></th>
 <th class="sortable" data-sort="roi" tabindex="0" aria-sort="none">ROI <span class="sort-indicator">↕</span></th>
 <th class="basic-col sortable" data-sort="breakeven" tabindex="0" aria-sort="none">Break-even <span class="sort-indicator">↕</span></th>
-<th class="sortable" data-sort="compare" id="compareHeader" tabindex="0" aria-sort="none">City Bank diff. <span class="sort-indicator">↕</span><br><select id="compareTermTable" class="th-select"><option value="7">7 days</option><option value="14">14 days</option><option value="30" selected>1 month</option><option value="60">2 months</option><option value="90">3 months</option></select></th>
+<th class="sortable" data-sort="compare" tabindex="0" aria-sort="none">City Bank diff. <span class="sort-indicator">↕</span><br><select id="compareTermTable" class="th-select"><option value="7">7 days</option><option value="14">14 days</option><option value="30" selected>1 month</option><option value="60">2 months</option><option value="90">3 months</option></select></th>
 </tr></thead><tbody id="tbody"></tbody></table></div>
 </details>
 </section>

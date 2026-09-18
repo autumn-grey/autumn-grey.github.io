@@ -19,7 +19,14 @@ if(hadCache){
 }
 // Page switching. Basic/Advanced applies to the Investments page only, so the
 // view toggle is hidden while the Planner is open.
-const PAGES=["investments","planner","banking","tos","docs","feedback","testing","scripts","edujob"];
+// Every page, and the element it shows. One table rather than a list of names
+// and a line per page, so a new section is one entry here.
+const PAGE_ELS={
+  investments:"pageInvestments", planner:"pagePlanner", banking:"pageBanking",
+  tos:"pageTos", docs:"pageDocs", feedback:"pageFeedback", testing:"pageTesting",
+  scripts:"pageScripts", edujob:"pageEduJob",
+};
+const PAGES=Object.keys(PAGE_ELS);
 function setPage(page){
   if(!PAGES.includes(page)) page="investments";
   const planner=page==="planner", tos=page==="tos", docs=page==="docs", feedback=page==="feedback";
@@ -33,15 +40,14 @@ function setPage(page){
   document.body.classList.toggle("edujob",eduJob);
   // Every page reached from the footer shares the ToS page's stripped-back chrome.
   document.body.classList.toggle("tos",tos||docs||feedback||testing||scripts);
-  $("pageInvestments").hidden=page!=="investments";
-  $("pagePlanner").hidden=!planner;
-  if($("pageBanking")) $("pageBanking").hidden=!banking;
-  $("pageTos").hidden=!tos;
-  $("pageDocs").hidden=!docs;
-  if($("pageFeedback")) $("pageFeedback").hidden=!feedback;
-  if($("pageTesting")) $("pageTesting").hidden=!testing;
-  if($("pageScripts")) $("pageScripts").hidden=!scripts;
-  if($("pageEduJob")) $("pageEduJob").hidden=!eduJob;
+  Object.entries(PAGE_ELS).forEach(([key,id])=>{
+    const el=$(id);
+    if(el) el.hidden=key!==page;
+  });
+  // These three live in other files, and a file can fail to load on its own now
+  // that they are separate requests. The check is what keeps a missing one to a
+  // page that does not fill in, rather than a half-switched page with no way
+  // back. Anything defined in this file is called without one.
   // Opened fresh each time so the timestamp in the title is current.
   if(feedback&&typeof syncFeedbackType==="function") syncFeedbackType();
   // Fetched on first open rather than at boot, so the file costs nothing to
@@ -67,7 +73,7 @@ function setPage(page){
     else $("collapseConfig")?.after(api);
   }
   if(location.hash!=="#"+page) history.replaceState(null,"","#"+page);
-  if(typeof syncToTop==="function") syncToTop();
+  syncToTop();
 }
 $("planPrioAll")?.addEventListener("change",e=>{
   document.querySelectorAll(".plan-prio").forEach(cb=>cb.checked=e.target.checked);

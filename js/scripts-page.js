@@ -37,7 +37,7 @@ function scriptsStatus(msg,kind){
 /* ---- Storage ------------------------------------------------------------ */
 function scriptsToken(){
   try{ return localStorage.getItem(SCRIPTS_TOKEN_KEY)||"" }
-  catch(e){ return "" }
+  catch{ return "" }
 }
 function saveScriptsDraft(){
   window.scriptsDirty=true;
@@ -47,7 +47,7 @@ function saveScriptsDraft(){
 function clearScriptsDraft(){
   window.scriptsDirty=false;
   try{ localStorage.removeItem(SCRIPTS_DRAFT_KEY) }
-  catch(e){ /* nothing stored means nothing to clear */ }
+  catch{ /* nothing stored means nothing to clear */ }
 }
 
 /** Normalises whatever came back, so one bad entry can't take the page down. */
@@ -113,7 +113,7 @@ async function refreshScriptsMeta(){
   if(!targets.length) return;
   const results=await Promise.all(targets.map(async s=>{
     try{ return [s,await fetchGreasyForkMeta(s.url)] }
-    catch(e){ return [s,null] }
+    catch{ return [s,null] }
   }));
   let changed=false;
   results.forEach(([s,meta])=>{
@@ -405,7 +405,7 @@ $("scriptsTokenSave")?.addEventListener("click",async()=>{
   if(v&&window.scriptsDirty) await publishScripts("Update scripts.json");
 });
 $("scriptsTokenForget")?.addEventListener("click",()=>{
-  try{ localStorage.removeItem(SCRIPTS_TOKEN_KEY) }catch(e){ /* already gone */ }
+  try{ localStorage.removeItem(SCRIPTS_TOKEN_KEY) }catch{ /* already gone */ }
   const t=$("scriptsToken");
   if(t) t.value="";
   scriptsStatus("Token forgotten.");
@@ -439,7 +439,7 @@ $("scriptsList")?.addEventListener("dragstart",e=>{
   card.classList.add("dragging");
   e.dataTransfer.effectAllowed="move";
   // Firefox refuses to start a drag unless something is set.
-  try{ e.dataTransfer.setData("text/plain",scriptsDragId) }catch(err){ /* optional */ }
+  try{ e.dataTransfer.setData("text/plain",scriptsDragId) }catch{ /* optional */ }
 });
 $("scriptsList")?.addEventListener("dragover",e=>{
   if(!scriptsDragId) return;

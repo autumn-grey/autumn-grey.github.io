@@ -39,6 +39,13 @@ did. Order matters: a file can call anything defined in a file above it, and
 | `js/scripts-page.js` | Scripts page, including the GitHub save |
 | `js/boot.js` | The four lines that start everything |
 
+Two rules that come out of the files being separate requests. A call into
+another file is guarded with `typeof fn==="function"`, because one file can fail
+to load while the rest of the app is fine, and the guard keeps that to a page
+that does not fill in rather than a half-switched page with no way back. Calls
+within a file are not guarded. And a page is one entry in `PAGE_ELS` in
+`js/pages.js`, which is also where the list of valid page names comes from.
+
 Colours come from the variables at the top of `styles.css`. `--accent` is
 whichever colour the section you are in uses: orange on Investments, Planner and
 Basic Banking, aqua under `body.edujob` for Education & Job. `--orange` and

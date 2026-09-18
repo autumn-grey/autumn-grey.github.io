@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.4 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.5 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,12 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.13.5 — 2026-09-18
+
+- Tidying only, with nothing to see: the page switcher now works from a single
+  list of pages, and some leftover names in the markup are gone. Ahead of the
+  Education & Job build, so that section starts on clean ground.
 
 ### v0.13.4 — 2026-09-18
 
