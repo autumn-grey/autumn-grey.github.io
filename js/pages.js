@@ -50,8 +50,8 @@ function setPage(page){
   if(testing&&typeof openTestingForm==="function") openTestingForm();
   const cta=$("testingCta");
   if(cta) cta.hidden=testing;
-  // The switch offers the other of the two working pages. From the ToS it
-  // returns to Investments, which is where a first-time reader started.
+  // Each button shows whether its own page is the one open. Education & Job is
+  // the exception: on its own page the row is replaced by the way back out.
   const inv=$("goInvestments"), pln=$("goPlanner"), bnk=$("goBanking"), edj=$("goEduJob");
   if(inv){ inv.classList.toggle("active",page==="investments"); inv.setAttribute("aria-pressed",String(page==="investments")) }
   if(pln){ pln.classList.toggle("active",planner); pln.setAttribute("aria-pressed",String(planner)) }
@@ -91,8 +91,8 @@ document.querySelectorAll(".plan-extra").forEach(cb=>cb.addEventListener("change
 // mark it out of date, and the button does the work.
 ["planGoal","planTarget","planTargetBlock","planTci","planIncMax","planPiOwn","planPiRent","planCayman","planCityBank"]
   .forEach(id=>$(id)?.addEventListener("change",planSettingChanged));
-// Two separate buttons rather than one toggle, so the page you are on is
-// always shown filled in rather than being inferred from the other one's label.
+// One button per page rather than a toggle, so the page you are on is always
+// shown filled in rather than being inferred from another button's label.
 $("goInvestments")?.addEventListener("click",()=>setPage("investments"));
 $("goPlanner")?.addEventListener("click",()=>setPage("planner"));
 $("goBanking")?.addEventListener("click",()=>setPage("banking"));
@@ -170,7 +170,7 @@ $("tosOk")?.addEventListener("click",()=>{
   window.scrollTo({top:0,behavior:"smooth"});
 });
 addEventListener("hashchange",()=>setPage(location.hash.replace("#","")||"investments"));
-// Whichever of the two modules is on screen is the one the button returns to.
+// Whichever page is on screen is the one the jump-to-top tab measures against.
 function activePageEl(){
   if(!$("pageDocs").hidden) return $("pageDocs");
   if(!$("pageTos").hidden) return $("pageTos");

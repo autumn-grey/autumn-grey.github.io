@@ -23,8 +23,6 @@ window.scriptsEditing=false;
 window.scriptsEditingId=null;   // the one panel currently showing its form
 window.scriptsDirty=false;      // local changes not yet in the repo
 
-const scriptsEsc=s=>String(s??"").replace(/[&<>"']/g,c=>
-  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const isScriptsOwner=()=>+(window.userId||0)===SCRIPTS_OWNER_ID;
 const scriptsById=id=>window.scriptsList.find(s=>s.id===id)||null;
 const newScriptId=()=>"s"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -158,51 +156,54 @@ async function loadScripts(){
 function scriptCardHtml(s){
   const cls="script-title "+(s.status==="live"?"live":"wip");
   const shown=scriptDisplayTitle(s);
-  const link=s.url
-    ? `<a class="${cls}" href="${scriptsEsc(s.url)}" target="_blank" rel="noopener noreferrer">${scriptsEsc(shown)}</a>`
-    : `<span class="${cls}" style="text-decoration:none">${scriptsEsc(shown)}</span>`;
+  // Escaping keeps the attribute intact, but a "javascript:" URL would still
+  // run on click, so a panel only links out to the web.
+  const href=/^https?:\/\//i.test(String(s.url||""))?s.url:"";
+  const link=href
+    ? `<a class="${cls}" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(shown)}</a>`
+    : `<span class="${cls}" style="text-decoration:none">${esc(shown)}</span>`;
   const dates=(s.meta?.created||s.meta?.updated)
-    ? `<p class="script-dates">${s.meta.created?`<span>Created: ${scriptsEsc(s.meta.created)}</span>`:""}${
-        s.meta.updated?`<span>Updated: ${scriptsEsc(s.meta.updated)}</span>`:""}</p>`
+    ? `<p class="script-dates">${s.meta.created?`<span>Created: ${esc(s.meta.created)}</span>`:""}${
+        s.meta.updated?`<span>Updated: ${esc(s.meta.updated)}</span>`:""}</p>`
     : "";
-  return `<div class="script-card" data-id="${scriptsEsc(s.id)}">
+  return `<div class="script-card" data-id="${esc(s.id)}">
     <div class="script-card-head">
       <div>${link}</div>
       <div class="script-card-tools scripts-edit-only">
-        <button type="button" class="icon-btn" data-act="edit" data-id="${scriptsEsc(s.id)}"
+        <button type="button" class="icon-btn" data-act="edit" data-id="${esc(s.id)}"
                 title="Edit this script" aria-label="Edit this script">&#9998;</button>
-        <button type="button" class="icon-btn danger" data-act="del" data-id="${scriptsEsc(s.id)}"
+        <button type="button" class="icon-btn danger" data-act="del" data-id="${esc(s.id)}"
                 title="Delete this script" aria-label="Delete this script">&minus;</button>
       </div>
     </div>
-    ${s.description?`<p class="script-desc">${scriptsEsc(s.description)}</p>`:""}
+    ${s.description?`<p class="script-desc">${esc(s.description)}</p>`:""}
     ${dates}
   </div>`;
 }
 
 function scriptFormHtml(s){
-  return `<div class="script-card" data-id="${scriptsEsc(s.id)}">
+  return `<div class="script-card" data-id="${esc(s.id)}">
     <div class="script-form">
       <div>
         <label for="sfTitle">Title</label>
-        <input id="sfTitle" type="text" value="${scriptsEsc(s.title)}"
+        <input id="sfTitle" type="text" value="${esc(s.title)}"
                placeholder="Leave empty to use the Greasy Fork name and version">
       </div>
       <div>
         <label for="sfUrl">URL</label>
-        <input id="sfUrl" type="url" value="${scriptsEsc(s.url)}" placeholder="https://…" spellcheck="false">
+        <input id="sfUrl" type="url" value="${esc(s.url)}" placeholder="https://…" spellcheck="false">
       </div>
       <div>
         <label for="sfDesc">Description</label>
-        <textarea id="sfDesc" placeholder="What it does">${scriptsEsc(s.description)}</textarea>
+        <textarea id="sfDesc" placeholder="What it does">${esc(s.description)}</textarea>
       </div>
       <div class="script-status">
         <label><input type="radio" name="sfStatus" value="wip"${s.status!=="live"?" checked":""}> WIP</label>
         <label><input type="radio" name="sfStatus" value="live"${s.status==="live"?" checked":""}> Live</label>
       </div>
       <div class="script-form-buttons">
-        <button type="button" class="btn primary" data-act="save" data-id="${scriptsEsc(s.id)}">Save</button>
-        <button type="button" class="btn" data-act="cancel" data-id="${scriptsEsc(s.id)}">Cancel</button>
+        <button type="button" class="btn primary" data-act="save" data-id="${esc(s.id)}">Save</button>
+        <button type="button" class="btn" data-act="cancel" data-id="${esc(s.id)}">Cancel</button>
       </div>
     </div>
   </div>`;

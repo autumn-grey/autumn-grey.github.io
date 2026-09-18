@@ -2,7 +2,11 @@
 // HELPERS  ·  DOM lookup, escaping, number and date formatting
 // ======================================================================
 const $=id=>document.getElementById(id);
-const esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+// Anything dropped into HTML goes through here first, text or attribute:
+// the quotes matter inside an attribute, and null reads as nothing rather
+// than the word "null".
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 // Yes/no settings are checkboxes; these keep the read/write sites tidy.
 const boolVal=id=>!!$(id)?.checked;
 const setBool=(id,v)=>{const el=$(id);if(el)el.checked=!!v};
@@ -1303,7 +1307,7 @@ function populateStatItems(){
     const el=$(id);
     el.innerHTML='<option value="">Select an item</option>'+
       list.sort((a,b)=>a.name.localeCompare(b.name))
-        .map(x=>`<option value="${x.id}">${x.name} · ${refillableDisplay(x.effect)} · ${money(x.market)}</option>`)
+        .map(x=>`<option value="${esc(x.id)}">${esc(x.name)} · ${refillableDisplay(x.effect)} · ${money(x.market)}</option>`)
         .join("");
   });
 }

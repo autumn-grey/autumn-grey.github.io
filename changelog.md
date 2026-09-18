@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.3 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.4 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,15 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.13.4 — 2026-09-18
+
+- Item names from Torn are now escaped before they reach the booster dropdowns,
+  so a name containing an `&` or a quote can no longer come out mangled.
+- A script panel only links out to a normal web address now. Anything else is
+  shown as plain text rather than being made clickable.
+- The GitHub token box on the Scripts page announces itself properly to screen
+  readers.
 
 ### v0.13.3 — 2026-09-18
 
