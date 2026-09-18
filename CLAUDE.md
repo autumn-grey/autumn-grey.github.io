@@ -41,7 +41,7 @@ did. Order matters: a file can call anything defined in a file above it, and
 
 Colours come from the variables at the top of `styles.css`. `--accent` is
 whichever colour the section you are in uses: orange on Investments, Planner and
-Basic Banking, aqua under `body.edu` for Education & Job. `--orange` and
+Basic Banking, aqua under `body.edjob` for Education & Job. `--orange` and
 `--aqua` name the two fixed hues for the few places that need one regardless of
 the section, and `--accent-hi` is the lit-up shade for hovers.
 

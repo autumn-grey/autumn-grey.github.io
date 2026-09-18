@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.1 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.2 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,12 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.13.2 — 2026-09-18
+
+- The Education & Job page now sits at `#edjob` in the address bar instead of
+  `#eduplanner`, ready for it to grow separate education and job parts. An old
+  bookmark to `#eduplanner` still opens the right page.
 
 ### v0.13.1 — 2026-09-18
 
