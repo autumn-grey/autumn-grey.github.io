@@ -1,0 +1,663 @@
+:root{--bg:#111315;--panel:#191c20;--panel2:#20242a;--line:#30363d;--text:#e8eaed;--muted:#9aa3ad;--orange:#e39b45;--orange-hi:#f0b768;--aqua:#46c8d0;--aqua-hi:#78e2e9;--accent:var(--orange);--accent-hi:var(--orange-hi);--good:#59c37a;--bad:#e06c75;--warn:#d9b15b}
+/* Education & Job is its own section, so it takes the whole page aqua:
+   every rule already reads the accent, header and footer included. */
+body.edu{--accent:var(--aqua);--accent-hi:var(--aqua-hi)}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{padding:22px 28px;border-bottom:1px solid var(--line);background:#15181b} h1{margin:0 0 4px;font-size:24px} header p{margin:0;color:var(--muted)}
+/* The title is a button so it can act as a home link, but it has to look
+   like the heading it replaced: no chrome, inherited type, no cursor change
+   on the pages it would not move you away from. */
+.home-btn{all:unset;display:inline;font:inherit;color:inherit;cursor:default}
+body.tos .home-btn{cursor:pointer}
+body.tos .home-btn:hover{color:var(--accent)}
+.home-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.head-row .tagline{flex-basis:100%;order:3}
+@media(max-width:760px){.head-row h1{order:1}.head-row .tagline{order:2}.head-row .head-controls{order:3}}
+main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}.grid-left{display:flex;flex-direction:column;gap:18px;align-self:start;grid-column:1;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px}.grid-left::-webkit-scrollbar{width:8px}.grid-left::-webkit-scrollbar-track{background:transparent}.grid-left::-webkit-scrollbar-thumb{background:#2f353d;border-radius:4px}.grid-left::-webkit-scrollbar-thumb:hover{background:#3d4550}.grid-right{display:flex;flex-direction:column;gap:18px;align-self:start;min-width:0;grid-column:2}.config-tab{display:none;grid-column:1;grid-row:1;align-self:start;writing-mode:vertical-rl;background:var(--panel);color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:14px 8px;cursor:pointer;font:inherit;font-weight:700;letter-spacing:.06em;position:sticky;top:20px}.config-tab:hover{color:var(--text);border-color:var(--accent)}.grid.config-collapsed{grid-template-columns:38px 1fr}.grid.config-collapsed .grid-left{display:none}.grid.config-collapsed .config-tab{display:block}
+/* With the config column hidden, let the table shrink to the available width
+   instead of forcing its 1400px minimum and scrolling horizontally. */
+.grid.config-collapsed .table{min-width:0}
+.grid.config-collapsed .table th,.grid.config-collapsed .table td{white-space:normal}
+.grid.config-collapsed .table td:nth-child(2){min-width:150px}.collapse-btn{align-self:flex-start;background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:5px 9px;font-size:11px;cursor:pointer}.collapse-btn:hover{color:var(--text);border-color:var(--accent)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}.panel h2{font-size:15px;margin:0 0 12px}.panel>details{margin:0}.panel>details>summary{font-size:15px;font-weight:700;cursor:pointer;user-select:none;list-style:none;display:inline-flex;align-items:center;gap:8px;margin:0;width:max-content;max-width:100%}.panel>details[open]>summary{margin-bottom:12px}.panel>details>summary::-webkit-details-marker{display:none}.panel>details>summary::before{content:"▸";color:var(--accent);font-size:17px;line-height:1;transition:transform .15s}.panel>details[open]>summary::before{content:"▾"}.field{margin:0 0 13px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%;background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:8px}
+.field input:disabled,.field select:disabled{opacity:.4;color:var(--muted);background:#0c0e10;border-color:#2a2f36;cursor:not-allowed}
+.field:has(input:disabled) label,.field:has(select:disabled) label,.field:has(input:disabled) .help,.field:has(select:disabled) .help{opacity:.45}.api-blurb{font-size:12px;color:var(--muted);margin:0 0 13px}
+.api-blurb p{margin:0 0 8px;line-height:1.5}
+.api-blurb a{color:var(--accent);text-decoration:underline}
+.api-blurb a:hover{color:var(--accent-hi)}
+.api-blurb .api-privacy{color:#9fd8b4}
+.api-blurb .api-note{color:#8f98a3;font-style:italic}
+.sub-collapse{border-top:1px solid var(--line);margin-top:15px;padding-top:12px}
+.sub-collapse>summary{cursor:pointer;user-select:none;list-style:none;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text);width:max-content;max-width:100%}
+.sub-collapse>summary::-webkit-details-marker{display:none}
+.sub-collapse>summary::before{content:"▸";color:var(--accent);font-size:15px;line-height:1}
+.sub-collapse[open]>summary::before{content:"▾"}
+.sub-collapse .sub-body{margin-top:8px}
+.sub-collapse .sub-body>.prio-all{border-bottom:0;padding:0 0 7px;display:flex;justify-content:flex-end}
+.user-status{margin-top:8px;position:relative}
+/* Sits in the panel's top right corner and only while the panel is open, so a
+   folded-away report is still one clean line. */
+.us-copy{position:absolute;top:6px;right:6px;z-index:2}
+.us-copy[hidden]{display:none}
+.user-status .us-line{display:block}
+.user-status .us-ok{color:var(--good)}
+.user-status .us-miss{color:var(--warn)}
+.user-status .us-wrap>summary{cursor:pointer;user-select:none;list-style:none;display:inline-flex;align-items:center;gap:8px;width:max-content;max-width:100%}
+.user-status .us-wrap>summary::-webkit-details-marker{display:none}
+.user-status .us-wrap>summary::before{content:"▸";color:var(--accent);font-size:15px;line-height:1}
+.user-status .us-wrap[open]>summary::before{content:"▾"}
+.user-status .us-wrap[open]>summary{margin-bottom:6px}
+.user-status .us-diag{margin-top:8px;border-top:1px solid var(--line);padding-top:7px}
+.user-status .us-diag summary{cursor:pointer;color:var(--muted)}
+.user-status .us-diag .us-line{color:#8f98a3;word-break:break-word;margin-top:3px}
+.api-key-wrap{display:flex;gap:7px}.api-key-wrap input{flex:1;min-width:0}.api-key-toggle{flex:0 0 auto;padding:8px 10px;border:1px solid #3a4048;background:#252a31;color:var(--text);border-radius:6px;cursor:pointer}.api-key-toggle:hover{background:#30363d}.help{font-size:11px;color:var(--muted);margin-top:5px}.panel-desc{margin:0 0 12px;line-height:1.7}.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-items:start}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;align-items:start}.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;align-items:start}@media(max-width:760px){.row4{grid-template-columns:1fr 1fr}}.check{display:flex;align-items:center;gap:8px;margin:8px 0;color:#d7dbe0}.check input{width:auto}.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #49515a;background:#252a31;color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer}.btn.primary{background:var(--accent);border-color:var(--accent);color:#17120c;font-weight:700}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:disabled:hover{border-color:#49515a}
+/* Every control answers the same way: the outline picks up the accent and the
+   label brightens under the pointer, and the whole thing dips a little while
+   it's held down. */
+.btn,.page-tab,.view-btn,.api-key-toggle,.collapse-btn,.config-tab,.grp-toggle,.pref-row,.pin-stock,
+.plan-nav .pg-num,.plan-nav .pg-arrow,.plan-nav .pg-current,.table th.sortable{
+  transition:background-color .15s,border-color .15s,color .15s,transform .07s}
+.btn:hover:not(:disabled){background:#30363d;border-color:var(--accent)}
+.btn.primary:hover:not(:disabled){background:var(--accent-hi);border-color:var(--accent-hi)}
+.view-btn:hover{color:var(--text);background:#20242a}
+/* The pair share one outline, so it lights up whichever half you're over. */
+.view-toggle{transition:border-color .15s}
+.view-toggle:hover{border-color:var(--accent)}
+.view-btn.active:hover{background:var(--accent-hi);color:#0b0d10}
+.api-key-toggle:hover{background:#30363d;border-color:var(--accent)}
+.grp-toggle:hover{color:var(--accent)}
+.pref-row:hover{color:var(--text)}
+.btn:not(:disabled):active,.page-tab:active,.view-btn:active,.api-key-toggle:active,
+.collapse-btn:active,.config-tab:active,.grp-toggle:active,.pin-stock:active,
+.plan-nav .pg-num:active,.plan-nav .pg-current:active,
+.plan-nav .pg-arrow:not([disabled]):active{transform:scale(.97)}
+/* Rows are big, so they dip less than a button would. */
+#tbody tr:active>td,#tbodyPlan tr:active>td,#tbodyUndefined tr:active>td{transform:scale(.998)}.status{margin-top:12px;padding:9px;border-radius:6px;background:#111417;color:var(--muted);font-size:12px}.status.good{color:var(--good)}.status.bad{color:var(--bad)}
+.debug-log{margin-top:9px;padding:9px;border-radius:6px;background:#1a1214;border:1px solid #6b3a3a}
+.debug-log>summary{cursor:pointer;user-select:none;list-style:none;font-size:12px;font-weight:700;color:var(--bad);display:inline-flex;align-items:center;gap:8px;width:max-content;max-width:100%}
+.debug-log>summary::-webkit-details-marker{display:none}
+.debug-log>summary::before{content:"▸";font-size:15px;line-height:1}
+.debug-log[open]>summary::before{content:"▾"}
+.debug-log-body{margin-top:8px;max-height:220px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.5;color:var(--bad)}
+.debug-log-body div{padding:3px 0;border-bottom:1px solid #3a2426;white-space:pre-wrap;word-break:break-word}
+.debug-log-body div:last-child{border-bottom:0}
+.debug-log-time{color:var(--muted);margin-right:6px}
+.debug-log-actions{display:flex;gap:7px;margin-top:8px}
+.debug-log-actions .btn{padding:4px 9px;font-size:11px}
+.toolbar .toolbar label{white-space:nowrap}.toolbar label:nth-of-type(1){grid-column:1}.toolbar label:nth-of-type(2){grid-column:4}.toolbar label:nth-of-type(3){grid-column:6}.toolbar .grow{flex:1}.toolbar select,.toolbar input{background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:7px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:8px}.table{width:100%;border-collapse:separate;border-spacing:0;min-width:1400px}.table.table-compact{min-width:0}.table td.benefit-cell{text-align:left;white-space:normal;min-width:190px}
+#tbodyPlan td:nth-child(3),#tbodyPlan td:nth-child(4){text-align:center}
+#tbodyPlan td.benefit-cell{text-align:center;min-width:150px}#tbodyPlan td.paid-cell{text-align:left;white-space:normal;min-width:180px}.paid-with{display:flex;flex-direction:column;gap:2px;font-size:11px}.pw-line{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:baseline}.pw-src{color:var(--muted)}.pw-src::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;background:currentColor;vertical-align:middle}.pw-bank{color:#b586e0}.pw-cayman{color:#5fc9d8}.pw-invest{color:#2ee56a}.pw-input{color:#e39b45}.pw-sale{color:#e0655f}.pw-amt{color:var(--text);font-variant-numeric:tabular-nums}.pw-pct{color:var(--muted);font-variant-numeric:tabular-nums;min-width:30px;text-align:right}.table th,.table td{padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}.table th{text-align:center;vertical-align:bottom}.table th:first-child{text-align:center}.th-select{display:block;margin:4px auto 0;font:inherit;font-size:11px;font-weight:400;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:4px;padding:2px 4px}/* ---- Basic / Advanced view ---- */
+.head-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.head-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.page-tab{background:none;border:1px solid var(--line);border-radius:7px;color:var(--muted);font:inherit;font-size:12px;font-weight:700;padding:6px 14px;cursor:pointer}
+.page-tab:hover{color:var(--text);border-color:var(--accent)}
+/* The page you are on is filled in, the same way the Basic/Advanced switch
+   marks its active half. Both buttons are always present, so the Basic and
+   Advanced switch appearing or disappearing never moves them. */
+.page-tab.active{background:var(--accent);border-color:var(--accent);color:#0b0d10}
+.page-tab.active:hover{background:var(--accent-hi);color:#0b0d10}
+.page[hidden]{display:none}
+body.planner .view-toggle,body.banking .view-toggle{display:none}
+/* Education & Job carries its own colour wherever it is shown, so the tab reads
+   as a door into another section rather than another page of this one. */
+.page-tab.tab-aqua{color:var(--aqua);border-color:rgba(70,200,208,.45)}
+.page-tab.tab-aqua:hover{color:var(--aqua-hi);border-color:var(--aqua)}
+.page-tab.tab-aqua.active{background:var(--aqua);border-color:var(--aqua);color:#08191b}
+.page-tab.tab-aqua.active:hover{background:var(--aqua-hi);color:#08191b}
+/* The way back out of it, in the colour of the section it returns to. */
+.page-tab.tab-orange{background:var(--orange);border-color:var(--orange);color:#0b0d10}
+.page-tab.tab-orange:hover{background:var(--orange-hi);border-color:var(--orange-hi);color:#0b0d10}
+/* Inside Education & Job the investment chrome has nothing to say, so the row
+   is down to the single button that leaves again. */
+#goInvestmentsEdu{display:none}
+body.edu #goInvestmentsEdu{display:inline-block}
+body.edu .view-toggle,body.edu #goInvestments,body.edu #goPlanner,
+body.edu #goBanking,body.edu #goEducation{display:none}
+/* Footer links follow the accent, so they go aqua with the rest of the section.
+   These two name their own destination instead, on every page. */
+.footer-tos .foot-edu{color:var(--aqua)}
+.footer-tos .foot-inv{color:var(--orange)}
+/* ---- Basic Banking ---- */
+#noDataNoticeBank{display:none}body.no-data #noDataNoticeBank{display:block}
+body.no-data #bankSummaryPanel,body.no-data #bankDetailPanel{display:none}
+#pageBanking .table th,#pageBanking .table td{text-align:right}
+#pageBanking .bank-label-first th:first-child,#pageBanking .bank-label-first td:first-child{text-align:left;background:#191c20}
+#pageBanking .bank-totals{margin-top:12px}
+#pageBanking #tbodyBankTotals td{font-weight:700;background:#15181c;border-bottom:none}
+#pageBanking #tbodyBankSummary tr.bank-best td{background:rgba(46,160,67,.20)}
+#pageBanking #tbodyBankSummary tr.bank-worst td{background:rgba(248,113,113,.22)}
+#pageBanking .bank-pick{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 12px;font-size:12px;color:var(--muted)}
+#pageBanking .bank-pick select{background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:7px 8px;font:inherit}
+
+.view-toggle{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.view-btn{background:none;border:0;color:var(--muted);font:inherit;font-size:12px;font-weight:700;padding:6px 14px;cursor:pointer}
+.view-btn:hover{color:var(--text)}
+.view-btn.active{background:var(--accent);color:#0b0d10}
+.basic-only{display:none}
+.table td.nil{text-align:center}
+.check-field label,.field label:has(input[type=checkbox]){display:flex;align-items:center;gap:7px;cursor:pointer;font-size:12px;color:var(--muted)}
+.check-field input[type=checkbox],.field input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;margin:0}
+body.basic #pageInvestments .row-desc{display:none}
+body.basic #pageInvestments .tag-key{display:none}
+body.basic #pageInvestments #tbodyUndefined .tag{display:none}
+/* Basic view: the row itself carries the colour the tag would have shown. */
+body.basic #pageInvestments #tbody tr.tint-money>td{background:rgba(74,222,128,.24)!important}
+body.basic #pageInvestments #tbody tr.tint-items>td{background:rgba(56,189,248,.24)!important}
+body.basic #pageInvestments #tbody tr.tint-booster>td{background:rgba(255,105,180,.24)!important}
+body.basic #pageInvestments #tbody tr.tint-bank>td{background:rgba(192,110,255,.26)!important}
+body.basic #pageInvestments #tbody tr.tint-situational>td{background:rgba(250,204,86,.24)!important}
+body.basic #pageInvestments #tbody tr.tint-awful>td{background:rgba(248,113,113,.25)!important}
+body.basic #pageInvestments #tbody tr.tint-money{--own:#59c37a}
+body.basic #pageInvestments #tbody tr.tint-items{--own:#4fb6ff}
+body.basic #pageInvestments #tbody tr.tint-booster{--own:#ff6fae}
+body.basic #pageInvestments #tbody tr.tint-bank{--own:#c77dff}
+body.basic #pageInvestments #tbody tr.tint-situational{--own:#d9b15b}
+body.basic #pageInvestments #tbody tr.tint-awful{--own:#e06c75}
+body.basic #pageInvestments #tbody tr.tint-money{--own-fill:rgba(89,195,122,.14)}
+body.basic #pageInvestments #tbody tr.tint-items{--own-fill:rgba(79,182,255,.14)}
+body.basic #pageInvestments #tbody tr.tint-booster{--own-fill:rgba(255,111,174,.14)}
+body.basic #pageInvestments #tbody tr.tint-bank{--own-fill:rgba(199,125,255,.14)}
+body.basic #pageInvestments #tbody tr.tint-situational{--own-fill:rgba(217,177,91,.14)}
+body.basic #pageInvestments #tbody tr.tint-awful{--own-fill:rgba(224,108,117,.14)}
+body.basic #pageInvestments #tbody td:nth-child(2){cursor:help}
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px 18px}
+.plan-cards{display:flex;gap:11px;flex-wrap:wrap;margin:0 0 12px}
+.plan-card{flex:1 1 220px;border:1px solid var(--line);border-radius:8px;padding:11px 13px;background:#12161b}
+.pc-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.pc-value{font-size:15px;font-weight:700;margin:3px 0}
+.pc-sub{font-size:12px;color:var(--muted)}
+.plan-card.pc-sell{border-color:var(--bad)}
+.pc-warn{color:var(--bad);font-weight:700;font-size:12px;margin:1px 0 3px}
+/* Completed steps use the same treatment as an owned row in the tables:
+   the row keeps its colour, lifted slightly, with a matching outline. */
+#tbodyPlan tr.plan-done{--own:#2ee56a;--own-fill:rgba(46,229,106,.14)}
+#tbodyPlan tr.plan-done>td{background-image:linear-gradient(var(--own-fill),var(--own-fill));box-shadow:inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+#tbodyPlan tr.plan-done>td:first-child{border-radius:8px 0 0 8px;box-shadow:inset 2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+#tbodyPlan tr.plan-done>td:last-child{border-radius:0 8px 8px 0;box-shadow:inset -2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+#tbodyPlan tr.plan-parking>td:nth-child(2){position:relative}
+#tbodyPlan tr.plan-parking>td:nth-child(2)::before{content:"";position:absolute;left:0;top:0;bottom:0;
+  width:calc(var(--rails,1) * 18px);pointer-events:none;
+  background:repeating-linear-gradient(to right,var(--warn) 0 2px,transparent 2px 18px)}
+@keyframes planFlash{
+  0%{background-image:linear-gradient(rgba(46,229,106,0),rgba(46,229,106,0));box-shadow:inset 0 2px 0 rgba(46,229,106,0),inset 0 -2px 0 rgba(46,229,106,0)}
+  25%,37.5%{background-image:linear-gradient(rgba(46,229,106,.22),rgba(46,229,106,.22));box-shadow:inset 0 2px 0 rgba(46,229,106,1),inset 0 -2px 0 rgba(46,229,106,1)}
+  100%{background-image:linear-gradient(rgba(46,229,106,0),rgba(46,229,106,0));box-shadow:inset 0 2px 0 rgba(46,229,106,0),inset 0 -2px 0 rgba(46,229,106,0)}
+}
+#tbodyPlan tr.plan-flash>td{animation:planFlash 1.6s linear}
+#tbodyPlan tr.plan-flash>td:first-child{border-radius:8px 0 0 8px}
+#tbodyPlan tr.plan-flash>td:last-child{border-radius:0 8px 8px 0}
+.step-tick{color:var(--text)}
+.table-tools{display:flex;align-items:center;gap:9px;margin:0 0 11px}
+.table-tools .btn{font-size:12px;padding:6px 12px}
+/* The download buttons are drawn rather than typed. An emoji here was a
+   mistake: the document and arrow characters aren't in the font on plenty of
+   Android builds, so the button came out as two empty boxes. An inline SVG
+   can't miss, scales cleanly, and takes its colour from the button. */
+.table-tools .btn.btn-icon,.plan-tools .btn.btn-icon{padding:5px 13px;line-height:0}
+.btn-icon .ic{display:block;color:var(--text)}
+.btn-icon:hover .ic{color:var(--accent)}
+.table-tools .help{margin-top:0}
+.plan-tools{margin:0 0 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.plan-tools .btn{font-size:12px;padding:6px 12px}
+.plan-pagesize{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-left:auto}
+.plan-pagesize select{background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:5px 7px;font:inherit;font-size:12px}
+.plan-nav{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:10px 0}
+.plan-nav:empty{display:none}
+.plan-nav .pg-num,.plan-nav .pg-arrow{min-width:33px;padding:5px 9px;border:1px solid var(--line);background:#181c21;color:var(--muted);border-radius:6px;font:inherit;font-size:12px;cursor:pointer}
+.plan-nav .pg-num:hover,.plan-nav .pg-arrow:hover:not([disabled]){color:var(--text);border-color:var(--accent)}
+.plan-nav .pg-num.is-current{background:var(--accent);border-color:var(--accent);color:#0b0d10;font-weight:700}
+.plan-nav .pg-arrow[disabled]{opacity:.35;cursor:not-allowed}
+.plan-nav .pg-gap{color:var(--muted);padding:0 1px}
+.plan-nav .pg-jump{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);margin-left:4px}
+.plan-nav .pg-input{width:60px;background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:5px 7px;font:inherit;font-size:12px}
+.plan-nav .pg-current{margin-left:auto;border:1px solid #49515a;background:#252a31;color:var(--text);border-radius:6px;padding:6px 12px;font:inherit;font-size:12px;cursor:pointer}
+.plan-nav .pg-current:hover{border-color:var(--accent)}
+@keyframes rowShake{
+  0%,100%{transform:translateX(0)}
+  16%,48%,80%{transform:translateX(-3px)}
+  32%,64%,96%{transform:translateX(3px)}
+}
+#tbody tr.row-shake>td{animation:rowShake .5s ease-in-out}
+@keyframes planJump{
+  0%,100%{box-shadow:inset 0 0 0 0 rgba(227,155,69,0)}
+  25%,65%{box-shadow:inset 0 2px 0 var(--accent),inset 0 -2px 0 var(--accent)}
+}
+#tbodyPlan tr.plan-jump>td{animation:planJump 1.5s ease-in-out}
+.grp-toggle{display:block;margin:0 0 4px;background:none;border:0;padding:0;color:var(--muted);font:inherit;font-size:11px;cursor:pointer}
+.grp-caret{font-size:15px;line-height:1;color:var(--accent);vertical-align:-2px}
+.grp-toggle:hover{color:var(--text)}
+/* Fixed to the corner, and only present once the top of whichever module is
+   open has scrolled off. */
+/* A tab stuck to the right edge rather than a floating pill: it reads bottom
+   to top, sits flush against the side, and syncToTop() lifts it clear of the
+   footer once that scrolls into view so it never covers anything. The button
+   is rotated 180 degrees so the text runs upward, which turns the arrow with
+   it, so the arrow is turned back on its own. */
+.to-top{position:fixed;right:0;bottom:96px;z-index:70;
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  display:flex;align-items:center;gap:7px;
+  border:1px solid var(--accent);border-left:0;border-radius:0 8px 8px 0;
+  background:var(--panel);color:var(--text);font:inherit;font-size:12px;font-weight:700;
+  padding:13px 6px;cursor:pointer}
+/* The vertical writing mode lays the glyph on its side and the button is then
+   turned 180 degrees, so the arrow needs both undone: upright keeps the glyph
+   off its side, and the 180 cancels the button. */
+.to-top-arrow{display:inline-block;text-orientation:upright;transform:rotate(180deg)}
+.to-top:hover{background:#20242a;border-color:var(--accent-hi)}
+.to-top:active{filter:brightness(1.1)}
+.to-top[hidden]{display:none}
+@media(max-width:820px){.to-top{bottom:80px;padding:11px 5px}}
+.plan-toast{position:absolute;z-index:60;background:rgba(32,36,42,.7);border:1px solid var(--accent);border-radius:7px;padding:7px 12px;font-size:13px;font-weight:400;color:var(--text);white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+#tbodyPlan tr.plan-sell>td{box-shadow:inset 0 2px 0 var(--bad),inset 0 -2px 0 var(--bad)}
+#tbodyPlan tr.plan-sell>td:first-child{border-radius:8px 0 0 8px;color:var(--bad);font-weight:700;box-shadow:inset 2px 0 0 var(--bad),inset 0 2px 0 var(--bad),inset 0 -2px 0 var(--bad)}
+#tbodyPlan tr.plan-sell>td:last-child{border-radius:0 8px 8px 0;box-shadow:inset -2px 0 0 var(--bad),inset 0 2px 0 var(--bad),inset 0 -2px 0 var(--bad)}
+#tbodyPlan tr{cursor:pointer}
+#tbodyPlan tr:hover>td{background:#1a1f25}
+#tbodyPlan tr.plan-next>td{background:#12161b!important;box-shadow:inset 0 2px 0 rgba(227,155,69,var(--nx,1)),inset 0 -2px 0 rgba(227,155,69,var(--nx,1))}
+#tbodyPlan tr.plan-next>td:first-child{border-radius:8px 0 0 8px;box-shadow:inset 2px 0 0 rgba(227,155,69,var(--nx,1)),inset 0 2px 0 rgba(227,155,69,var(--nx,1)),inset 0 -2px 0 rgba(227,155,69,var(--nx,1))}
+#tbodyPlan tr.plan-next>td:last-child{border-radius:0 8px 8px 0;box-shadow:inset -2px 0 0 rgba(227,155,69,var(--nx,1)),inset 0 2px 0 rgba(227,155,69,var(--nx,1)),inset 0 -2px 0 rgba(227,155,69,var(--nx,1))}
+.prio-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0 7px}
+.prio-head .prio-all{padding:0;border-bottom:0}
+.pref-row{display:block;padding:6px 0;font-size:12px;cursor:pointer;border-bottom:1px solid var(--line)}
+.pref-row:last-child{border-bottom:0}
+.pref-row input{margin-right:7px}
+.pref-row .sub{margin:2px 0 0 22px}
+.plan-grid-rule{grid-column:1/-1;border-top:1px solid var(--line);margin:10px 0 2px}
+.pin-stock{display:inline-block;background:none;border:1px solid #3a4048;border-radius:6px;padding:3px 8px;margin:1px 0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.pin-stock:hover{border-color:#59616c}
+.pin-stock.pinned{border-color:var(--good);box-shadow:0 0 0 1px var(--good) inset}
+.pin-stock.pin-dud.pinned{border-color:var(--bad);box-shadow:0 0 0 1px var(--bad) inset}
+.goal-desc{margin:2px 0 0;padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:#12161b;line-height:1.5}
+.site-footer{margin:26px 0 4px;padding-top:14px;border-top:1px solid var(--line);text-align:center;font-size:12px;color:var(--muted)}
+.site-footer p{margin:0 0 6px}
+.site-footer p:last-child{margin-bottom:0}
+/* Links are underlined everywhere, so they read as links without relying on
+   colour alone. */
+a,.site-footer a{color:var(--accent);text-decoration:underline}
+.site-footer .footer-me{color:inherit}
+a:hover,.site-footer a:hover{text-decoration:underline;filter:brightness(1.15)}
+/* The ToS is the only thing on its page, so it needs no panel around it. */
+.tos-wrap{max-width:1000px;margin:0 auto;line-height:1.6}
+.tos-title{margin:0 0 4px;text-align:center;font-size:26px}
+.tos-sub{margin:0 0 24px;text-align:center;color:var(--muted);font-size:13px}
+.tos-wrap p{text-align:left;margin:0 0 14px}
+.tos-table{min-width:0;width:100%;table-layout:fixed;border-collapse:collapse}
+/* The shared .table rules tint the second column and light a row on hover.
+   Neither belongs on a static terms table, so both are overridden here for
+   every cell, whatever its position or state. */
+.tos-table td,
+.tos-table th:nth-child(2),.tos-table td:nth-child(2),
+.tos-table tr:hover>td,.tos-table tr:hover{
+  background:none!important;
+  text-align:left;vertical-align:top;padding:9px 10px;font-size:12px;line-height:1.5;
+  white-space:normal;overflow-wrap:break-word;border:1px solid var(--muted);border-radius:0}
+.tos-table tr.tos-head td{font-weight:700;color:var(--text)}
+/* Square corners: the shared wrapper rounds its box, which clipped the table's
+   own square corners into an odd shape. */
+.tos-wrap .tablewrap{border-radius:0;border:0;overflow-x:auto}
+/* Portrait screens can't fit five columns legibly, so let the table keep a
+   readable width and scroll sideways instead of crushing the text. */
+@media (max-aspect-ratio:1/1){
+  .tos-table{table-layout:auto;min-width:720px}
+  .tos-wrap .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+.tos-ok-wrap{margin:26px 0 8px;text-align:center}
+.fb-wrap{max-width:820px;margin:0 auto}
+.fb-wrap .field{margin-bottom:14px}
+/* Generated, not typed, so it reads as a heading rather than a filled-in box. */
+.fb-title{margin:0 0 14px;font-size:16px;color:var(--text);word-break:break-word}
+.fb-wrap label{display:block;margin-bottom:5px;font-weight:700;font-size:13px}
+.fb-wrap select,.fb-wrap input[type=text],.fb-wrap textarea{width:100%;background:var(--panel2);
+  color:var(--text);border:1px solid var(--line);border-radius:7px;padding:9px 10px;font:inherit}
+.fb-wrap textarea{resize:vertical;min-height:180px;line-height:1.5}
+.fb-wrap select:focus,.fb-wrap input:focus,.fb-wrap textarea:focus{outline:0;border-color:var(--accent)}
+.fb-wrap textarea::placeholder{color:var(--muted)}
+/* The submit sits at the bottom right of the body section it belongs to. */
+.fb-body-field{position:relative}
+/* The count sits inside the box's bottom right corner. The textarea is padded
+   to match so a long body never runs underneath it, and the count ignores the
+   pointer so it can't steal a click meant for the text. */
+.fb-body-box{position:relative;border-radius:7px}
+.fb-body-box textarea{display:block;padding-bottom:26px}
+/* Opaque, because padding-bottom only clears the last line when the box is
+   scrolled to the end. Mid-scroll any line can sit under the count. */
+.fb-count{position:absolute;right:5px;bottom:5px;font-size:11px;color:var(--muted);
+  pointer-events:none;background:var(--panel2);padding:2px 6px;border-radius:5px}
+.fb-count.full{color:var(--bad)}
+/* Typing past the limit: a small shake, and a red outline that fades in over
+   0.1s, holds for 0.2s and fades out over 0.3s. */
+@keyframes fb-shake{
+  0%,100%{transform:translateX(0)}
+  15%{transform:translateX(-4px)}
+  35%{transform:translateX(4px)}
+  55%{transform:translateX(-3px)}
+  75%{transform:translateX(2px)}
+}
+@keyframes fb-flash{
+  0%{box-shadow:0 0 0 2px rgba(224,108,117,0)}
+  16.7%{box-shadow:0 0 0 2px rgba(224,108,117,1)}
+  50%{box-shadow:0 0 0 2px rgba(224,108,117,1)}
+  100%{box-shadow:0 0 0 2px rgba(224,108,117,0)}
+}
+.fb-body-box.fb-limit{animation:fb-shake .3s ease, fb-flash .6s linear}
+@media(prefers-reduced-motion:reduce){.fb-body-box.fb-limit{animation:fb-flash .6s linear}}
+.fb-submit-row{display:flex;justify-content:flex-end;margin-top:9px}
+.fb-note{margin:2px 0 0;color:var(--warn);font-size:12.5px}
+.fb-note[hidden]{display:none}
+.fb-status{margin-top:14px;display:flex;align-items:flex-start;gap:10px}
+.fb-status[hidden]{display:none}
+.fb-status-text{flex:1;min-width:0}
+.fb-ok{color:var(--good);font-size:12.5px;line-height:1.55;margin:0 0 6px;white-space:pre-wrap}
+.fb-bad{color:var(--bad);font-size:12.5px;line-height:1.55;margin:0;white-space:pre-wrap}
+.fb-copy{flex:0 0 auto}
+.fb-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:90;
+  background:var(--panel);border:1px solid var(--accent);border-radius:8px;
+  padding:9px 14px;font-size:12.5px;font-weight:700;color:var(--text)}
+.fb-toast[hidden]{display:none}
+/* Testing Feedback. The questions are built from a spec, so the styling here
+   covers every level of the tree rather than one hand-written form. */
+.tf-group{border:1px solid var(--line);border-radius:8px;background:var(--panel);
+  margin:0 0 14px;padding:10px 13px 12px}
+.tf-group legend{padding:0 6px;font-weight:700;font-size:13px;color:var(--text)}
+.fb-wrap .tf-check{display:flex;align-items:flex-start;gap:8px;margin:7px 0;font-size:13px;
+  color:#d7dbe0;cursor:pointer;font-weight:400}
+.fb-wrap .tf-check input[type=checkbox]{width:15px;height:15px;margin:2px 0 0;flex:0 0 auto;
+  accent-color:var(--accent);cursor:pointer}
+.tf-sub{margin:4px 0 12px 23px;padding-left:11px;border-left:2px solid var(--line)}
+.tf-sub .tf-group{margin-bottom:9px;background:var(--panel2)}
+.tf-sub .tf-group:last-child{margin-bottom:0}
+.tf-sub[hidden]{display:none}
+.fb-wrap .tf-question{margin:0 0 6px;font-weight:700;font-size:13px;color:var(--text)}
+.fb-wrap .tf-text textarea{min-height:96px}
+.fb-wrap .tf-share{margin:2px 0 12px;font-weight:700;color:var(--text)}
+.tf-buttons{display:flex;justify-content:flex-end;gap:8px;margin-top:9px}
+.tf-help{margin:6px 0 0;color:var(--good);font-size:12.5px;text-align:right}
+/* The green call to action that sits above the footer links. */
+.tf-cta-wrap{margin:0 0 12px;text-align:center}
+.tf-cta{background:#2ea043;border-color:#3fb950;color:#f4fff7;font-weight:700}
+.tf-cta:hover:not(:disabled){background:#3fb950;border-color:#56d364}
+/* Coming Soon scales with the window: the SVG keeps its square aspect and the
+   text inside it is sized in viewBox units, so it grows and shrinks as one. */
+.soon-wrap{display:flex;align-items:center;justify-content:center;
+  height:calc(100vh - 330px);min-height:200px}
+.soon-svg{width:100%;height:100%}
+.soon-text{fill:#9458d3;font-family:Georgia,"Times New Roman",serif;font-size:38px;
+  font-style:italic;font-weight:700;text-decoration:underline}
+
+/* SCRIPTS PAGE
+   Two views of the same list. Everyone gets the read-only panels; the owner
+   also gets the edit chrome, which is shown by body.scripts-owner and only
+   becomes active under .scripts-editing. Nothing here is security: the gate
+   is window.userId, which lives in the browser like the faction check does.
+   It keeps the page tidy for everyone else, it does not lock it. The token
+   is what actually stops anyone but me writing to the repo. */
+.scripts-wrap{max-width:900px;margin:0 auto;position:relative}
+.scripts-intro{max-width:640px;margin:0 auto 18px;text-align:center;
+  color:var(--muted);font-size:13px;line-height:1.6}
+.scripts-head{display:flex;justify-content:flex-end;gap:12px;margin:0 0 14px}
+.scripts-head-tools{display:flex;gap:8px;flex:0 0 auto}
+/* Square icon buttons, used for + at the top of the page and for - and the
+   pencil on each panel, so they all read as the same control. */
+.icon-btn{width:28px;height:28px;flex:0 0 auto;display:inline-flex;
+  align-items:center;justify-content:center;padding:0;line-height:1;
+  font-size:15px;border:1px solid #49515a;background:#252a31;color:var(--text);
+  border-radius:6px;cursor:pointer}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+.icon-btn.danger:hover{border-color:var(--bad);color:var(--bad)}
+body:not(.scripts-owner) .scripts-owner-only{display:none}
+body:not(.scripts-editing) .scripts-edit-only{display:none}
+.scripts-list{display:flex;flex-direction:column;gap:10px}
+.script-card{position:relative;padding:14px 14px 13px;border:1px solid var(--line);
+  border-radius:8px;background:var(--panel)}
+.script-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+/* The two states the intro line promises: green is finished, orange is not. */
+.script-title{font-weight:700;font-size:15px;text-decoration:underline;color:var(--accent)}
+.script-title.live{color:var(--good)}
+.script-title.wip{color:var(--accent)}
+.script-title:hover{filter:brightness(1.15)}
+/* Two radios sharing a row, so the choice reads as one control. */
+.script-status{display:flex;gap:16px;align-items:center}
+.script-status label{display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--text);cursor:pointer}
+.script-status input{width:auto;margin:0}
+.script-desc{margin:6px 0 0;color:var(--text);font-size:13px;line-height:1.6;
+  white-space:pre-wrap}
+.script-dates{margin:7px 0 0;color:var(--muted);font-size:11.5px}
+.script-dates span+span{margin-left:12px}
+.script-card-tools{display:flex;gap:6px;flex:0 0 auto}
+/* The handle only exists while editing, so the cursor only changes then. */
+.script-card.draggable{cursor:grab}
+.script-card.dragging{opacity:.4}
+.script-card.drop-before{box-shadow:0 -2px 0 0 var(--accent)}
+.script-card.drop-after{box-shadow:0 2px 0 0 var(--accent)}
+.script-form{display:flex;flex-direction:column;gap:9px}
+.script-form label{font-size:12px;color:var(--muted)}
+.script-form input,.script-form textarea{width:100%;padding:8px 9px;border-radius:6px;
+  border:1px solid #3a4048;background:#1c2025;color:var(--text);font:inherit}
+.script-form textarea{min-height:76px;resize:vertical}
+.script-form-buttons{display:flex;justify-content:flex-end;gap:8px}
+.scripts-empty{padding:18px;text-align:center;color:var(--muted);font-size:13px;
+  border:1px dashed var(--line);border-radius:8px}
+.scripts-status{margin:10px 0 0;font-size:12.5px;line-height:1.5;color:var(--muted);
+  text-align:center;min-height:18px}
+.scripts-status.ok{color:var(--good)}
+.scripts-status.err{color:var(--bad)}
+/* The token bar. Only the owner sees it, only while editing. */
+.scripts-token{margin:0 0 14px;padding:11px 12px;border:1px solid #5b4a29;
+  border-radius:7px;background:#201d16}
+.scripts-token p{margin:0 0 8px;font-size:12px;color:#d9c18e;line-height:1.55}
+.scripts-token-row{display:flex;gap:7px;flex-wrap:wrap}
+.scripts-token-row input{flex:1;min-width:180px;padding:8px 9px;border-radius:6px;
+  border:1px solid #3a4048;background:#1c2025;color:var(--text);font:inherit}
+/* Confirm dialog, floated over the page rather than inline, so a delete asks
+   in the same place whichever panel it came from. */
+.scripts-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;
+  justify-content:center;padding:20px;background:rgba(0,0,0,.62)}
+.scripts-modal[hidden]{display:none}
+.scripts-modal-box{max-width:380px;width:100%;padding:18px;border-radius:9px;
+  border:1px solid var(--line);background:var(--panel2);text-align:center}
+.scripts-modal-box p{margin:0 0 14px;font-size:13.5px;line-height:1.6}
+.scripts-modal-box .buttons{justify-content:center}
+.btn.danger{background:#40222a;border-color:#7a3b46;color:#f0c9cf}
+.btn.danger:hover{background:#512a33;border-color:var(--bad)}
+
+/* One row of equal tiles that wraps onto further rows as the screen narrows.
+   align-items:stretch is what keeps every tile in a row the height of the
+   tallest, so the one with a blurb sets the height for the rest. */
+.docs-list{max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;
+  justify-content:center;align-items:stretch;gap:10px}
+.docs-card{flex:0 0 172px;min-height:88px;display:flex;flex-direction:column;
+  justify-content:center;gap:4px;padding:12px;border:1px solid var(--line);
+  border-radius:8px;background:var(--panel);text-decoration:none;color:inherit;
+  text-align:center}
+.docs-card:hover{border-color:var(--accent)}
+.docs-name{display:block;font-weight:700;font-size:13.5px;color:var(--accent);text-decoration:underline}
+.docs-blurb{display:block;font-size:11.5px;color:var(--muted);line-height:1.45}
+.kudos{position:relative;max-width:1000px;margin:30px auto 0;padding:22px 0}
+/* Centred behind the text and scaled to the block, so it stays a backdrop
+   whatever the names wrap to. */
+.kudos-heart{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(300px,62%);height:auto;opacity:.28;pointer-events:none;z-index:0}
+.kudos-body{position:relative;z-index:1;text-align:center;line-height:1.7}
+.kudos-title{margin:0 0 10px;font-size:17px}
+.kudos-body p{margin:0 0 4px}
+.tos-ok-wrap .btn{min-width:150px}
+/* On the ToS page the chrome is noise: only the app title stays. */
+body.tos .head-controls,
+body.tos .tagline,
+body.tos details.banner,
+body.tos .banner-green{display:none}
+.stale-note{position:relative;margin:10px auto 0;max-width:640px;padding:10px 34px 10px 12px;background:#201d16;border:1px solid #5b4a29;border-radius:7px;color:#d9c18e;font-size:12px;line-height:1.5}
+.stale-x{position:absolute;top:4px;right:6px;background:none;border:0;padding:2px 6px;color:#d9c18e;font-size:17px;line-height:1;cursor:pointer;opacity:.75}
+.stale-x:hover{opacity:1}
+.stale-x:active{transform:scale(.9)}
+#tbody tr.depri td:nth-child(2) strong{opacity:.72}
+#noDataNotice,#noDataNoticePlan{display:none}
+body.no-data #noDataNotice{display:block}
+/* The planner has no data to plan from either, so the same notice stands in
+   for the plan itself while its configuration stays usable. */
+body.no-data #noDataNoticePlan{display:block}
+body.no-data .plan-go-wrap,body.no-data #planPanel,body.no-data #totalsPanelPlan{display:none}
+/* Basic view puts the notice under Quick Settings: the settings are worth
+   filling in while the key is still being fetched. */
+body.basic.no-data .grid-right>section#basicBar{display:block}
+body.basic.no-data #noDataNotice{order:1}
+body.no-data .grid-right>section:not(#apiPanel){display:none}
+/* Basic view moves the API panel into the right column, so the left column
+   (and its collapse controls) are not needed. */
+body.basic #pageInvestments .grid-left,body.basic #pageInvestments #collapseConfig,body.basic #pageInvestments .config-tab{display:none}
+body.basic #pageInvestments .grid{grid-template-columns:1fr}
+body.basic #pageInvestments .grid-right{grid-column:1}
+.basic-controls{display:flex;flex-wrap:wrap;gap:11px 22px;align-items:center}
+.basic-check{display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer}
+.basic-check input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer}
+.basic-check .sub{font-size:11px}
+.basic-num{display:flex;align-items:center;gap:7px;font-size:13px}
+.basic-num input,.basic-num select{width:86px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:5px 7px;font:inherit;font-size:13px}
+#bBankDeposit{width:160px}
+body.basic #pageInvestments #basicBar{display:block}
+body.basic #pageInvestments .adv-only{display:none !important}
+body.basic #pageInvestments .basic-only{display:block}
+.key-item{display:inline-flex;align-items:center;gap:5px}
+/* Main table columns: 1 pick, 2 Investment, 3 Benefit, 4 Cost, 5 Frequency,
+   6 Return, 7 ROI, 8 Break-even, 9 City Bank diff.
+   Basic hides 3, 5, 7 and 9; Advanced hides 8. */
+body.basic #pageInvestments #tbody tr>*:nth-child(3),body.basic #pageInvestments #tbody tr>*:nth-child(5),
+body.basic #pageInvestments #tbody tr>*:nth-child(7),body.basic #pageInvestments #tbody tr>*:nth-child(9),
+body.basic #pageInvestments #tbody~thead th:nth-child(3){display:none}
+body.basic #pageInvestments .table-main thead th:nth-child(3),body.basic #pageInvestments .table-main thead th:nth-child(5),
+body.basic #pageInvestments .table-main thead th:nth-child(7),body.basic #pageInvestments .table-main thead th:nth-child(9){display:none}
+.basic-col{display:none}
+body.basic #pageInvestments #tbodyTotals tr.plan-total,
+body.basic #pageInvestments #totalsPanel .buttons{display:none}
+body.basic #pageInvestments .table th.pick,body.basic #pageInvestments .table td.pick{display:none}
+#tbody tr{cursor:pointer}
+#tbody tr:hover{background:#1a1f25}
+/* Owned rows keep their normal background and are outlined instead, in a
+   vivid version of whatever colour that row already is. */
+#tbody tr.owned{--own:#9fb3c8;--own-fill:rgba(159,179,200,.13)}
+#tbody tr.owned.stock-first{--own:#2ee56a;--own-fill:rgba(46,229,106,.14)}
+#tbody tr.owned.special-purple{--own:#c77dff;--own-fill:rgba(199,125,255,.16)}
+#tbody tr.owned>td{background-image:linear-gradient(var(--own-fill),var(--own-fill))!important;box-shadow:inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+/* Advanced: the outline starts at the checkbox cell and ends at the last column. */
+#tbody tr.owned>td:first-child{border-radius:8px 0 0 8px;box-shadow:inset 2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+#tbody tr.owned>td:last-child{border-radius:0 8px 8px 0;box-shadow:inset -2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+/* Basic hides columns 1, 3, 5, 7 and 9, so the visible ends are 2 and 8. */
+body.basic #pageInvestments #tbody tr.owned>td:nth-child(2){border-radius:8px 0 0 8px;box-shadow:inset 2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+body.basic #pageInvestments #tbody tr.owned>td:nth-child(8){border-radius:0 8px 8px 0;box-shadow:inset -2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+/* Skipped rows do the opposite of owned ones: no fill, a dashed muted outline
+   in place of the solid vivid one, and the whole row stepped back. The dashes
+   are drawn as background gradients because a box-shadow can't be dashed.
+   Written after the Basic category tints so it beats them at equal specificity. */
+#tbody tr.skipped>td,body.basic #pageInvestments #tbody tr.skipped>td{
+  --dash:#c9d1d9;
+  opacity:.5;
+  box-shadow:none!important;
+  background-image:repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),
+                   repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px)!important;
+  background-size:100% 1px,100% 1px!important;
+  background-position:0 0,0 calc(100% - 1px)!important;
+  background-repeat:no-repeat!important}
+/* The ends of the outline, matching where the owned outline caps off. */
+#tbody tr.skipped>td:first-child,body.basic #pageInvestments #tbody tr.skipped>td:first-child{
+  border-radius:8px 0 0 8px;
+  background-image:repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),
+                   repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),
+                   repeating-linear-gradient(to bottom,var(--dash) 0 5px,transparent 5px 11px)!important;
+  background-size:100% 1px,100% 1px,1px 100%!important;
+  background-position:0 0,0 calc(100% - 1px),0 0!important}
+#tbody tr.skipped>td:last-child,body.basic #pageInvestments #tbody tr.skipped>td:last-child{
+  border-radius:0 8px 8px 0;
+  background-image:repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),
+                   repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),
+                   repeating-linear-gradient(to bottom,var(--dash) 0 5px,transparent 5px 11px)!important;
+  background-size:100% 1px,100% 1px,1px 100%!important;
+  background-position:0 0,0 calc(100% - 1px),100% 0!important}
+/* Basic hides columns 1, 3, 5, 7 and 9, so the caps move to 2 and 8. */
+body.basic #pageInvestments #tbody tr.skipped>td:nth-child(2),
+body.basic #pageInvestments #tbody tr.skipped>td:nth-child(8){
+  background-image:repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),
+                   repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),
+                   repeating-linear-gradient(to bottom,var(--dash) 0 5px,transparent 5px 11px)!important;
+  background-size:100% 1px,100% 1px,1px 100%!important}
+body.basic #pageInvestments #tbody tr.skipped>td:nth-child(2){border-radius:8px 0 0 8px;background-position:0 0,0 calc(100% - 1px),0 0!important}
+body.basic #pageInvestments #tbody tr.skipped>td:nth-child(8){border-radius:0 8px 8px 0;background-position:0 0,0 calc(100% - 1px),100% 0!important}
+.tag.skipped{color:#9aa3ad;border-color:#454c55}
+#buyNext .bn-target{font-size:11px;color:var(--muted);margin-top:5px}
+#buyNext .bn-bank{font-size:11px;color:#b98ade;margin-top:6px}
+#ownedHint{font-size:11px;color:var(--text);font-weight:700;margin-bottom:9px}
+body.basic #pageInvestments .basic-col{display:table-cell}
+body.basic #pageInvestments .table{min-width:0}
+body.basic #pageInvestments .tag.situational,body.basic #pageInvestments .tag.awful,body.basic #pageInvestments .tag.booster{display:none}
+#buyNext{border:1px solid var(--accent);border-radius:8px;padding:11px 13px;margin-bottom:11px;background:#12161b}
+#buyNext .bn-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+#buyNext .bn-name{font-size:16px;font-weight:700;margin:3px 0}
+#buyNext .bn-figs{font-size:12px;color:var(--muted)}
+#buyNext .bn-figs strong{color:var(--good)}
+.tag-key{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--muted);align-items:center;margin-bottom:10px}.table th{position:sticky;top:0;background:#20242a;color:#aeb6bf;font-size:11px;text-transform:uppercase;letter-spacing:.04em;z-index:2}.table th:nth-child(2),.table td:nth-child(2){text-align:left;background:#191c20}.table th:nth-child(2){text-align:center}.table th.pick,.table td.pick{width:46px;padding:9px 4px;text-align:center}.table th.pick input{display:block;margin:4px auto 0}.table td.pick input{cursor:pointer;width:15px;height:15px;accent-color:var(--accent)}.totals-row td{border-bottom:none;font-weight:700;background:#15181c;text-align:center}#tbodyTotals td:nth-child(2),#tbodyTotals th:nth-child(2),#tbodyTotalsPlan td:nth-child(2),#tbodyTotalsPlan th:nth-child(2){background:transparent;text-align:center}.table th:first-child{z-index:3}.education-courses h3{margin:16px 0 8px;font-size:14px}.education-topic{border:1px solid #30353d;border-radius:6px;margin:5px 0;background:#111418}.education-topic summary{cursor:pointer;padding:8px 10px;font-weight:600;user-select:none}.education-course-list{padding:4px 10px 8px;border-top:1px solid #30353d}.education-course{display:block;padding:4px 0;font-size:12px;cursor:pointer}.education-course input{margin-right:7px}.edu-note{font-size:11px;color:var(--good);margin:1px 0 0 22px}.table tbody tr.stock-first td{background:rgba(46,160,67,.20)!important}.table tbody tr.special-purple td{background:rgba(148,88,211,.30)!important}.table th.sortable{cursor:pointer;user-select:none}.table th.sortable:hover{background:#292e35;color:var(--text)}.table th.sortable:focus{outline:2px solid var(--accent);outline-offset:-2px}.sort-indicator{font-size:12px;color:var(--muted);margin-left:4px}.table th.sort-asc .sort-indicator::after{content:"";}.table th.sort-desc .sort-indicator::after{content:"";}.table tr:hover td{background:#252a30}.ticker{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700}.sub{font-size:11px;color:var(--muted)}.good{color:var(--good)}.bad{color:var(--bad)}.muted{color:var(--muted)}.tag{display:inline-block;border:1px solid #414852;border-radius:4px;padding:2px 5px;font-size:10px;color:#b8c0c8;margin-left:5px}.tag.situational{color:var(--warn);border-color:#5b4a29}.tag.awful{color:var(--bad);border-color:#6b3a3a}.tag.money{color:var(--good);border-color:#2f5c3e}.tag.items{color:#4fb6ff;border-color:#2b5b85}.tag.bank{color:#c77dff;border-color:#6a3fa0}.tag.booster{color:#ff6fae;border-color:#8a2f5c}.note{font-size:12px;color:var(--muted);margin:8px 0 0}.banner{padding:10px 12px;background:#201d16;border:1px solid #5b4a29;border-radius:7px;color:#d9c18e;margin-bottom:14px}
+/* The heading is only useful when the body is hidden; open, the first line
+   already says "Prototype:". */
+details.banner:not([open]){padding:10px 12px}
+details.banner[open]>summary .banner-head{display:none}
+details.banner[open]>summary{margin-bottom:0}.banner.banner-green{background:#16241b;border-color:#2f5c3e;color:#9fd8b4}
+/* The warning folds away once it has been read. Only the prototype banner is
+   a <details>; the others on the page stay plain divs. */
+.banner>summary{cursor:pointer;user-select:none;list-style:none;display:inline-flex;align-items:center;gap:8px;font-weight:700;width:max-content;max-width:100%;vertical-align:baseline}
+/* Open, the summary sits inline so the sentence continues after "Prototype:"
+   on the same line, and only the triangle and that word are clickable. */
+details.banner[open]>summary{font-weight:400}
+.banner-body{display:none}
+details.banner[open] .banner-body{display:inline}
+.banner-label{display:none}
+details.banner[open] .banner-label{display:inline}
+details.banner[open]>summary::before{margin-right:8px}
+.banner>summary::-webkit-details-marker{display:none}
+.banner>summary::before{content:"▸";font-size:16px;line-height:1;opacity:.9}
+.banner[open]>summary::before{content:"▾"}
+.banner[open]>summary{margin-bottom:0}
+@media(max-width:820px){.banner>summary{min-height:40px}}
+.banner-note{margin-top:8px;padding-top:8px;border-top:1px solid rgba(217,177,91,.28);font-size:12px;line-height:1.5;opacity:.9}.banner a{color:var(--accent);font-weight:700;text-decoration:underline}.banner a:hover{color:var(--accent-hi)}
+.banner .banner-ask{color:var(--good)}
+.banner .banner-ask a{color:var(--good);font-weight:700;text-decoration:underline}
+.banner .banner-ask a:hover{color:#7fe09b}
+/* ---- Build-the-plan button ----
+   The planner no longer rebuilds itself on every keystroke, so this is what
+   actually runs it. Big, green, and hard to miss between the settings and
+   the plan they feed. */
+.plan-go-wrap{margin:14px 0;text-align:center}
+.plan-go{display:inline-block;max-width:100%;background:#2ea043;border:1px solid #3fb950;color:#f4fff7;font:inherit;font-size:17px;font-weight:800;letter-spacing:.02em;padding:10px;border-radius:10px;cursor:pointer;
+  transition:background-color .15s,border-color .15s,transform .07s}
+.plan-go:hover{background:#3fb950;border-color:#56d364}
+.plan-go:active{transform:scale(.995)}
+@media(max-width:950px){.grid{grid-template-columns:1fr}.grid-left,.grid-right{grid-column:1}.grid-left{position:static;max-height:none;overflow-y:visible;padding-right:0}.grid.config-collapsed{grid-template-columns:1fr}.config-tab{writing-mode:horizontal-tb;width:100%;position:static}main{padding:14px}.panel{padding:13px}}
+/* Phones and portrait tablets. iOS zooms the whole page in whenever you focus
+   a field smaller than 16px and never zooms back out, so every input is given
+   16px here; the rest is making things big enough to hit with a thumb. */
+@media(max-width:820px){
+  input,select,textarea{font-size:16px}
+  /* These carry their own smaller size elsewhere, so they need matching
+     specificity or iOS still zooms when they're tapped. */
+  .plan-pagesize select,.plan-nav .pg-input,.th-select,
+  .basic-num input,.basic-num select{font-size:16px}
+  .basic-num input,.basic-num select{width:110px}
+  .field input,.field select,.api-key-wrap input,.basic-num input,.basic-num select{padding:10px}
+  .btn,.page-tab,.view-btn{min-height:42px}
+  .api-key-toggle{min-height:42px;padding:8px 14px}
+  .panel>details>summary,.sub-collapse>summary,.education-topic summary,.api-howto summary{
+    min-height:40px;display:flex;align-items:center}
+  .pref-row{padding:11px 0}
+  .check-field input[type=checkbox],.field input[type=checkbox],.pref-row input,.education-course input{
+    width:20px;height:20px}
+  .education-course{padding:9px 0}
+  .plan-nav .pg-num,.plan-nav .pg-arrow{min-height:40px;min-width:40px}
+  .plan-nav .pg-current{min-height:40px}
+  .plan-pagesize{margin-left:0}
+  /* The out-of-order toast is a full sentence and can't sit on one line. */
+  .plan-toast{white-space:normal;max-width:min(86vw,340px);line-height:1.4}
+  /* Both tables scroll sideways inside their own box; make that discoverable
+     and keep the momentum scroll on iOS. */
+  .tablewrap{-webkit-overflow-scrolling:touch}
+  .table th,.table td{padding:11px 10px}
+}

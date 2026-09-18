@@ -15,6 +15,36 @@ Four HTML pages are built from markdown by `build-docs.py`. Editing the HTML is 
 
 `index.html` is the app itself. It is **not** generated — edit it directly.
 
+## How the app is laid out
+
+`index.html` holds the markup only. The styling is in `styles.css` and the
+script is in `js/`, loaded in order as plain (non-module) scripts at the end of
+the body, so they share one global scope exactly as the single inline script
+did. Order matters: a file can call anything defined in a file above it, and
+`js/boot.js` runs last because it starts the app.
+
+| File | What's in it |
+|---|---|
+| `js/version.js` | `APP_VERSION` and `APP_UPDATED` |
+| `js/data.js` | Stock table, benefit metadata, tags, game constants |
+| `js/core.js` | Helpers, settings UI, localStorage, API fetching, user data |
+| `js/investments.js` | Row builders, selection, undo/redo, recommendation, rendering |
+| `js/planner.js` | Goal selection, the purchase simulation, the plan table |
+| `js/export.js` | CSV export |
+| `js/entry.js` | Refresh, sorting and the Investments page wiring |
+| `js/banking.js` | Basic Banking |
+| `js/pages.js` | Start-up, page switching, the top buttons and footer links |
+| `js/feedback.js` | Feedback & Reporting form |
+| `js/testing.js` | Testing feedback survey |
+| `js/scripts-page.js` | Scripts page, including the GitHub save |
+| `js/boot.js` | The four lines that start everything |
+
+Colours come from the variables at the top of `styles.css`. `--accent` is
+whichever colour the section you are in uses: orange on Investments, Planner and
+Basic Banking, aqua under `body.edu` for Education & Job. `--orange` and
+`--aqua` name the two fixed hues for the few places that need one regardless of
+the section, and `--accent-hi` is the lit-up shade for hovers.
+
 ## scripts.json
 
 The Scripts page's panel list. `index.html` fetches it at page open; the Scripts
@@ -60,7 +90,7 @@ The version string lives in four places, and they must agree:
 
 | File | What to change |
 |---|---|
-| `index.html` | `APP_VERSION` and `APP_UPDATED` (near the top of the script) |
+| `js/version.js` | `APP_VERSION` and `APP_UPDATED` |
 | `changelog.md` | the `_Reference for …_` line, plus a new `### vX.Y.Z — YYYY-MM-DD` entry at the top of **Released** |
 | `README.md` | the `_Reference for …_` line |
 | `invLogic.md` | the `_Reference for …_` line |

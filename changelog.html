@@ -63,12 +63,21 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="changelog">Changelog</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.13.0 · Updated: 2026-09-18</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.13.1 · Updated: 2026-09-18</em></p>
 <p>Newest first. Version numbers follow <a href="https://semver.org">semantic versioning</a>:
 <code>MAJOR.MINOR.PATCH</code>. Still on <code>0.x</code> because the app isn't deployment-ready
 until it has a real access layer.</p>
 <hr />
 <h2 id="released">Released</h2>
+<h3 id="v0131-2026-09-18">v0.13.1 — 2026-09-18</h3>
+<ul>
+<li>Housekeeping before the Education &amp; Job work starts: the app used to be one
+  very large file, and its styling and script now live in <code>styles.css</code> and a
+  handful of files under <code>js/</code>. Nothing about the app itself has changed, but
+  the very first load now fetches a few small files instead of one big one.</li>
+<li>If a page looks odd straight after this update, a hard refresh
+  (<kbd>Ctrl</kbd>+<kbd>F5</kbd>) will pick up the new files.</li>
+</ul>
 <h3 id="v0130-2026-09-18">v0.13.0 — 2026-09-18</h3>
 <ul>
 <li><strong>Education &amp; Job</strong> joins the buttons at the top of the page, in aqua. It is a

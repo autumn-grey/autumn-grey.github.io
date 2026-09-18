@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.0 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.13.1 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,15 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.13.1 — 2026-09-18
+
+- Housekeeping before the Education & Job work starts: the app used to be one
+  very large file, and its styling and script now live in `styles.css` and a
+  handful of files under `js/`. Nothing about the app itself has changed, but
+  the very first load now fetches a few small files instead of one big one.
+- If a page looks odd straight after this update, a hard refresh
+  (<kbd>Ctrl</kbd>+<kbd>F5</kbd>) will pick up the new files.
 
 ### v0.13.0 — 2026-09-18
 
