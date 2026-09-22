@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.12.5 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.14.0 · Updated: 2026-09-18_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,88 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.14.0 — 2026-09-18
+
+- **The Education & Job Planner opens for business.** Where *Coming Soon* was,
+  there is now a course planner: every course, what you have done, and the
+  order to do the rest in.
+- Across the top: how many courses are left, how long they will take, what
+  they will cost in fees, and the date you would finish if you studied them
+  back to back.
+- **Your time reductions** breaks down where your shorter courses come from —
+  Education Length merits, a WSU block and the Principal job perk — what each
+  is worth and what the three together come to. Forty per cent is the most
+  there is, and the panel says which of them you are still missing. Job point
+  specials are listed underneath, as hours a day off the course you are on.
+  These are all still set under *Education Stuff* on the Investments page, so
+  there is one place to change them.
+- **The order to study them in** puts anything a course depends on ahead of it,
+  then takes the shortest of whatever is open, so nothing quick is left waiting
+  behind something long. Every line carries the running total, so any course
+  can be read as "and I would be done by here, having spent this".
+- Courses are grouped by faculty, with a box to search by name and a switch to
+  hide the ones you have finished. A course you cannot start yet says what it
+  is waiting for, and every course says what finishing it gives you.
+- Ticking a course here ticks it on the Investments page and the other way
+  round: it is the same list, so the stocks that care how much studying you
+  have left stay right. As before, it is the **Save** button that keeps it.
+- Course lengths, fees, prerequisites and rewards come from Torn on refresh.
+  Without one, the built-in lengths and fees are used, prerequisites are
+  unknown and the order is simply shortest first — the page says so when that
+  is what you are looking at.
+
+### v0.13.5 — 2026-09-18
+
+- Tidying only, with nothing to see: the page switcher now works from a single
+  list of pages, and some leftover names in the markup are gone. Ahead of the
+  Education & Job build, so that section starts on clean ground.
+
+### v0.13.4 — 2026-09-18
+
+- Item names from Torn are now escaped before they reach the booster dropdowns,
+  so a name containing an `&` or a quote can no longer come out mangled.
+- A script panel only links out to a normal web address now. Anything else is
+  shown as plain text rather than being made clickable.
+- The GitHub token box on the Scripts page announces itself properly to screen
+  readers.
+
+### v0.13.3 — 2026-09-18
+
+- The Education & Job page moves again, to `#edujob`, and the Education Job Perk
+  tick on the Investments page is now stored under its own name. The perk is
+  about to be used by both sections, so the two needed telling apart. A tick
+  saved before this update will need setting once more.
+
+### v0.13.2 — 2026-09-18
+
+- The Education & Job page now sits at `#edjob` in the address bar instead of
+  `#eduplanner`, ready for it to grow separate education and job parts. An old
+  bookmark to `#eduplanner` still opens the right page.
+
+### v0.13.1 — 2026-09-18
+
+- Housekeeping before the Education & Job work starts: the app used to be one
+  very large file, and its styling and script now live in `styles.css` and a
+  handful of files under `js/`. Nothing about the app itself has changed, but
+  the very first load now fetches a few small files instead of one big one.
+- If a page looks odd straight after this update, a hard refresh
+  (<kbd>Ctrl</kbd>+<kbd>F5</kbd>) will pick up the new files.
+
+### v0.13.0 — 2026-09-18
+
+- **Education & Job** joins the buttons at the top of the page, in aqua. It is a
+  section in its own right rather than a page tucked away at the bottom, so it
+  keeps the full header and is where the education and job work will land.
+- Opening it turns the page aqua: the header, the links and everything else that
+  was orange follows the section you are in. The one button left at the top is
+  **Investments**, in orange, which takes you back.
+- The links along the bottom now include **Investments**, so there is a way home
+  from every page. Education & Job Planner is aqua down there too, and
+  Investments stays orange, so each names where it goes even on a page that has
+  gone the other colour.
+- The page itself is still *Coming Soon*; its **Back to Stonking** button is gone
+  now that the Investments button at the top does the same job.
 
 ### v0.12.5 — 2026-09-18
 
