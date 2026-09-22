@@ -351,6 +351,16 @@ addEventListener("keydown",e=>{
 });
 $("planStaleDismiss")?.addEventListener("click",dismissStaleNote);
 $("collapseConfig")?.addEventListener("click",()=>setConfigCollapsed(true));
+/** Collapses the bank settings column to a vertical tab. */
+function setBankConfigCollapsed(collapsed){
+  $("bankGrid")?.classList.toggle("config-collapsed",collapsed);
+  try{localStorage.setItem("tornBankConfigCollapsed",collapsed?"1":"0")}
+  catch(e){ logProblem("Bank settings panel state could not be saved",e) }
+}
+$("collapseBankConfig")?.addEventListener("click",()=>setBankConfigCollapsed(true));
+$("bankConfigTab")?.addEventListener("click",()=>setBankConfigCollapsed(false));
+try{ if(localStorage.getItem("tornBankConfigCollapsed")==="1") setBankConfigCollapsed(true) }
+catch(e){ logProblem("Bank settings panel state could not be read",e) }
 
 // The pin buttons sit inside a <label>, so a plain click would also toggle
 // that label's checkbox. preventDefault stops the label association firing.
@@ -405,3 +415,11 @@ $("viewAdvanced")?.addEventListener("click",()=>setView(false));
   const tosEl=$("tosUpdated");
   if(tosEl) tosEl.textContent=APP_UPDATED;
 }
+
+/** Folds the prototype warning away from its opening word. */
+$("protoToggle")?.addEventListener("click",()=>{
+  const box=$("protoBanner"),btn=$("protoToggle");
+  if(!box||!btn) return;
+  const open=box.classList.toggle("collapsed")===false;
+  btn.setAttribute("aria-expanded",String(open));
+});

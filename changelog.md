@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.14.0 · Updated: 2026-09-18_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.14.1 · Updated: 2026-09-23_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,20 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.14.1 — 2026-09-23
+
+- The **Education & Job** button is filled aqua, the way the **Investments**
+  button is filled orange, instead of sitting outlined next to it.
+- **Bank Settings** moves to a column on the left of the Basic Banking page and
+  folds away to a tab, the same as the settings on Advanced Investments. It
+  remembers whether you left it open.
+- The prototype warning is red, so it is not mistaken for the amber notes
+  elsewhere, and reads as one sentence: *Prototype:* and the text that follows
+  it now sit on the same line. Only the triangle and the word *Prototype* fold
+  it away, so a link in the warning no longer closes it.
+- The testing feedback form opens with a question about finding your way around
+  without a guide.
 
 ### v0.14.0 — 2026-09-18
 

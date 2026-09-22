@@ -25,14 +25,14 @@
 </div>
 </header>
 <main>
-<details class="banner" open>
-<summary><span class="banner-head">Prototype Warning</span><strong class="banner-label">Prototype:</strong></summary><span class="banner-body"> some things might still be broken, currently only open to members of AutumnGrey's faction, or Torn staff. A custom API key is required to verify access, this is only saved on your local browser, and only if you choose. As later updates are made new custom api keys may be required making your old key redundant, this will be communicated clearly. <br>
+<div class="banner banner-proto" id="protoBanner">
+<button type="button" class="banner-toggle" id="protoToggle" aria-expanded="true" aria-controls="protoBody"><span class="banner-arrow" aria-hidden="true"></span><span class="banner-head">Prototype Warning</span><strong class="banner-label">Prototype:</strong></button><span class="banner-body" id="protoBody"> some things might still be broken, currently only open to members of AutumnGrey's faction, or Torn staff. A custom API key is required to verify access, this is only saved on your local browser, and only if you choose. As later updates are made new custom api keys may be required making your old key redundant, this will be communicated clearly. <br>
   This app doesn't play well with extensions like Dark Reader, so please disable for this site (it's already permanently in dark mode anyway). <br>
   <s>If you have suggestions, feedback or question, please message me, <a href="https://www.torn.com/profiles.php?XID=4386333" target="_blank" rel="noopener noreferrer">AutumnGrey</a> directly, or via a <a href="#feedback" class="fb-jump" data-fb="fsq">feedback form</a>. If you encounter bugs or other problems please submit an <a href="#feedback" class="fb-jump" data-fb="inc">incident form</a>.</s> <br>
   <span class="banner-ask">When you've had a chance to check out the site and have a play around pretty please complete my <a href="#testing" class="tf-jump">testing feedback form</a>.</span> <br>
   One more thing, if anyone can figure out a way to work out the ROI for any of the investments in the <em>Undefined ROI Stocks</em> table, I will send you a xanax and a kiss on the mouth xox &lt;3</span>
 <div class="banner-note">This tool is a guide only. Values are accurate at the time of request, but are subject to fluctuation. Stock sales profits are not considered for the purpose of this investment planner, as past trade performance is not a reliable indicator of future outcomes.</div>
-</details>
+</div>
 <div class="page" id="pageInvestments">
 <div class="grid" id="grid">
 <button class="config-tab" id="configTab" type="button" aria-label="Show configuration">Configuration</button>
@@ -495,6 +495,10 @@
 
 </div>
 <div class="page" id="pageBanking" hidden>
+  <div class="grid" id="bankGrid">
+  <button class="config-tab" id="bankConfigTab" type="button" aria-label="Show bank settings">Bank Settings</button>
+  <div class="grid-left">
+  <button class="collapse-btn" id="collapseBankConfig" type="button">‹ Hide Bank Settings</button>
   <div id="bankingApiSlot"></div>
   <section class="panel">
     <details open>
@@ -513,6 +517,8 @@
     </details>
   </section>
 
+  </div>
+  <div class="grid-right">
   <div class="banner" id="noDataNoticeBank">Please enter a valid custom API key and click <strong>Refresh Data</strong> to calculate and display bank returns.</div>
 
   <section class="panel" id="bankSummaryPanel">
@@ -532,6 +538,8 @@
       <th>First Initial Capital</th><th>Total Amount Added</th><th>Total Profit Returned</th><th>Total Amount Returned</th>
     </tr></thead><tbody id="tbodyBankTotals"></tbody></table></div>
   </section>
+  </div>
+  </div>
 </div>
 <div class="page" id="pageDocs" hidden>
   <h2 class="tos-title">Docs</h2>
