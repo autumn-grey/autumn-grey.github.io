@@ -522,14 +522,17 @@
   <div class="banner" id="noDataNoticeBank">Please enter a valid custom API key and click <strong>Refresh Data</strong> to calculate and display bank returns.</div>
 
   <section class="panel" id="bankSummaryPanel">
-    <h2>One Year of Banking</h2>
+    <details open>
+    <summary>One Year of Banking</summary>
     <div class="tablewrap"><table class="table table-compact bank-label-first"><thead><tr>
       <th>Term Length</th><th>New Deposits per Year</th><th>Total Profit Returned</th><th>ROI</th><th>Absolute Total</th>
     </tr></thead><tbody id="tbodyBankSummary"></tbody></table></div>
+    </details>
   </section>
 
   <section class="panel" id="bankDetailPanel">
-    <h2>Breakdown</h2>
+    <details open>
+    <summary>Breakdown</summary>
     <div class="bank-pick"><label for="bkDetailTerm">Term Length</label><select id="bkDetailTerm"></select></div>
     <div class="tablewrap"><table class="table table-compact bank-label-first"><thead><tr>
       <th>Deposit</th><th>Initial Capital</th><th>Amount Added</th><th>Interest Rate</th><th>Profit Returned</th><th>Total Amount Returned</th><th>Daily Return</th>
@@ -537,6 +540,7 @@
     <div class="tablewrap bank-totals"><table class="table table-compact"><thead><tr>
       <th>First Initial Capital</th><th>Total Amount Added</th><th>Total Profit Returned</th><th>Total Amount Returned</th>
     </tr></thead><tbody id="tbodyBankTotals"></tbody></table></div>
+    </details>
   </section>
   </div>
   </div>

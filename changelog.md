@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.14.1 · Updated: 2026-09-23_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.14.2 · Updated: 2026-09-23_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,12 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.14.2 — 2026-09-23
+
+- **One Year of Banking** and **Breakdown** fold away from their headings, the
+  same as **Bank Settings** above them, so a long table can be put aside while
+  you read the other one.
 
 ### v0.14.1 — 2026-09-23
 
