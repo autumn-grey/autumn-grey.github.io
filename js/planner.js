@@ -360,23 +360,6 @@ function bestBankOptionAt(day){
   const opts=bankOptionsAt(day);
   return opts.length?opts.reduce((a,b)=>b.roi>a.roi?b:a):null;
 }
-// Whichever currently-unlocked term reaches the cap soonest from here.
-function fastestFillOptionAt(cash,income,cap,day){
-  const opts=bankOptionsAt(day);
-  if(!opts.length) return null;
-  let best=null,bestDays=Infinity;
-  for(const o of opts){
-    let held=0,c=cash,d=0,ok=false;
-    for(let i=0;i<600;i++){
-      const dep=Math.min(cap,held+c); c-=dep-held; held=dep;
-      if(held>=cap-1){ok=true;break}
-      d+=o.days; c+=o.days*income+held*o.roi*o.days/365;
-      if(day+d>PLAN_MAX_DAYS) break;
-    }
-    if(ok&&d<bestDays){bestDays=d;best=o}
-  }
-  return best||bestBankOptionAt(day);
-}
 // A newbie has no faction or Oil Rig bonus on Cayman either, so base rate only.
 function newbieCaymanMonthlyRate(){ return 0.005 }
 function newbieCaymanAnnualRoi(){ return Math.pow(1.005,12)-1 }
@@ -387,12 +370,6 @@ const NEWBIE_IIL_UNLOCK_DAY=360;
 // years in, so a Private Island is planned at the discounted price and not
 // bought before then.
 const NEWBIE_PROPERTY_LAW_DAY=720;
-// Two different questions, with two different answers.
-//
-// While FILLING, a shorter term matters more than a higher rate: income can
-// only be deposited when a term matures, so a long lock leaves it idle.
-// Once FULL, no more can be added, so interest overflows as cash and never
-// compounds - the yield is simply the APR, and the highest one wins.
 function cityBankTerms(){
   return rows.filter(r=>r.kind==="bank"&&r.roi!=null&&isFinite(r.roi)&&r.days>0);
 }
@@ -401,22 +378,23 @@ function bestCityBankTerm(){
   const t=cityBankTerms();
   return t.length?t.reduce((a,b)=>b.roi>a.roi?b:a):null;
 }
-// Whichever term reaches the cap soonest from here.
-function fastestFillTerm(cash,income,cap){
-  const terms=cityBankTerms();
-  if(!terms.length) return null;
-  let best=null,bestDays=Infinity;
-  for(const t of terms){
-    let held=0,c=cash,day=0,ok=false;
-    for(let i=0;i<600;i++){
-      const dep=Math.min(cap,held+c); c-=dep-held; held=dep;
-      if(held>=cap-1){ok=true;break}
-      day+=t.days; c+=t.days*income+held*t.roi*t.days/365;
-      if(day>PLAN_MAX_DAYS) break;
+const FILL_HORIZON_DAYS=365;
+const PARK_CHECK_DAYS=7;
+/** Returns the term that leaves the most money after a year of filling the bank. */
+function richestFillOption(opts,cash,income,held,cap,idleRate=()=>0){
+  let best=null,bestWorth=-Infinity;
+  for(const o of opts){
+    const idle=Math.max(0,idleRate(o)||0);
+    let h=held,c=cash,d=0;
+    while(d<FILL_HORIZON_DAYS){
+      const dep=Math.min(cap,h+c); c-=dep-h; h=dep;
+      const span=Math.min(o.days,FILL_HORIZON_DAYS-d);
+      c+=span*income*(1+idle*span/2/365)+h*o.roi*span/365;
+      d+=span;
     }
-    if(ok&&day<bestDays){bestDays=day;best=t}
+    if(h+c>bestWorth){bestWorth=h+c;best=o}
   }
-  return best||bestCityBankTerm();
+  return best;
 }
 // Days to save `target` from `cash` at `income` per day, with spare cash held
 // in Cayman at `m` per month.
@@ -984,15 +962,91 @@ function simulatePlan(){
     return true;
   }
 
-  // Fill City Bank once nothing left to buy beats its rate. It has no purchase
-  // price, just a capped deposit that locks for a term: put everything in, run
-  // the term buying only what pays out before it matures, then redeposit the
-  // lot including interest. Nothing that earns less than the bank is bought
-  // until the cap is reached.
-  function runCityBank(remaining=[]){
+  /** Sells `h` from what is held and returns what the sale raised. */
+  const sellHeld=h=>{
+    const proceeds=h.row.cost*(1-SELL_FEE);
+    cash+=proceeds;
+    potCredit("sale",proceeds);
+    held.splice(held.indexOf(h),1);
+    owned.delete(rowKey(h.row));
+    return proceeds;
+  };
+  let parkPool=null;
+  /** Returns the stocks that can be parked in while the bank is locked. */
+  const bankParkPool=()=>parkPool||(parkPool=planCandidates()
+    .filter(r=>r.kind==="stock"&&r.ticker!=="TCI"&&!isFlexibleStock(r)
+             &&r.days>0&&dailyReturn(r)>0&&(!useCayman||r.roi>caymanRoi)));
+  /** Returns the best rate the income from one term of `o` could be parked at. */
+  const idleParkRate=o=>{
+    const inc=income(),fits=bankParkPool()
+      .filter(r=>!owned.has(rowKey(r))&&r.cost<=inc*o.days/2&&r.days<=o.days/2);
+    return fits.length?Math.max(...fits.map(r=>r.roi)):0;
+  };
+  /** Buys stocks that pay out within `span` days, to be sold into the bank when it opens. */
+  let parkSeq=0;
+  const parkUntilBank=(span,fund)=>{
+    const cands=bankParkPool()
+      .filter(r=>r.kind==="stock"&&r.ticker!=="TCI"&&!isFlexibleStock(r)
+               &&!owned.has(rowKey(r))&&r.days>0&&r.days<=span&&dailyReturn(r)>0
+               &&(!useCayman||r.roi>caymanRoi))
+      .map(r=>({row:r,net:Math.floor(span/r.days)*r.annual*r.days/365-r.cost*SELL_FEE}))
+      .filter(c=>c.net>0);
+    const pick=list=>{
+      const keys=new Set(owned),out=[];
+      let left=cash,net=0;
+      for(const c of list){
+        const r=c.row;
+        if(r.cost>left||keys.has(rowKey(r))) continue;
+        if((r.block||1)>1&&!keys.has(rowKey({...r,block:r.block-1}))) continue;
+        keys.add(rowKey(r)); out.push(c); left-=r.cost; net+=c.net;
+      }
+      return {out,net};
+    };
+    const byRate=pick([...cands].sort((x,y)=>y.net/y.row.cost-x.net/x.row.cost));
+    const byNet=pick([...cands].sort((x,y)=>y.net-x.net));
+    for(const c of (byNet.net>byRate.net?byNet:byRate).out){
+      const r=c.row;
+      if(steps.length>=PLAN_MAX_ACTIONS){outOfRoom=true;return false}
+      const paidWith=potSpend(r.cost);
+      cash-=r.cost;
+      owned.add(rowKey(r));
+      const step={row:r,day,sold:[],unreachable:false,parking:true,depth:1,parentOcc:fund,
+                  occId:`bankpark${parkSeq++}`,paidWith,parkForBank:true};
+      held.push({row:r,forOcc:fund,net:c.net,step});
+      steps.push(step);
+    }
+    return true;
+  };
+  /** Turns a stock parked for the bank into an ordinary holding. */
+  const keepParked=h=>{
+    h.forOcc=null;
+    if(h.step){ h.step.parking=false; h.step.parentOcc=null; h.step.depth=0; h.step.parkForBank=false }
+  };
+  /** Sells what was parked for `fund`, weakest first, until the bank's free room is covered. */
+  const settleParking=fund=>{
+    const room=Math.max(0,bankCap-bankHeld);
+    const sold=[];
+    held.filter(h=>h.forOcc===fund).sort((x,y)=>x.row.roi-y.row.roi).forEach(h=>{
+      if(cash<room){ sellHeld(h); sold.push(h.row) }
+      else keepParked(h);
+    });
+    return sold;
+  };
+  /** Sells holdings that earn less than `rate`, weakest first, until the bank's free room is covered. */
+  const sellIntoBank=rate=>{
+    const room=Math.max(0,bankCap-bankHeld);
+    const sold=[];
+    held.filter(h=>!h.forOcc&&h.row.kind==="stock"&&h.row.ticker!=="TCI"&&!isFlexibleStock(h.row)
+                   &&h.row.roi!=null&&isFinite(h.row.roi)&&h.row.roi<rate)
+        .sort((x,y)=>x.row.roi-y.row.roi)
+        .forEach(h=>{ if(cash<room){ sellHeld(h); sold.push(h.row) } });
+    return sold;
+  };
+
+  /** Fills City Bank to its cap, choosing each term by what it leaves after a year. */
+  let fundSeq=0;
+  function runCityBank(){
     if(!bankRowAt(day)||bankHeld>=bankCap) return true;
-    // Moves the clock on, buying anything from `remaining` that completes a
-    // payout before the wait is over.
     const waitOut=(days,interest)=>{
       if(!(days>0)) days=1;
       if(day+days>PLAN_MAX_DAYS){outOfRoom=true;return false}
@@ -1001,41 +1055,27 @@ function simulatePlan(){
       cash+=interest||0;
       potCredit("bank",interest||0);
       creditMaturedBank();
-      for(const t of remaining){
-        if(owned.has(rowKey(t))||t.kind!=="stock") continue;
-        // A deprioritised situational stock is deliberately left to the end of
-        // the plan. Being cheap enough to afford mid-term is not a reason to
-        // jump it ahead of everything the user actually asked for.
-        if(deferred.has(t.ticker)) continue;
-        if(!(t.days>0)||t.days>days||t.cost>cash) continue;
-        if(steps.length>=PLAN_MAX_ACTIONS){outOfRoom=true;return false}
-        const paidWith=potSpend(t.cost);
-        cash-=t.cost;
-        owned.add(rowKey(t));
-        held.push({row:t,forOcc:null,net:0});
-        steps.push({row:t,day,sold:[],unreachable:false,parking:false,depth:0,
-                    parentOcc:null,occId:`term${steps.length}`,
-                    duringTerm:true,paidWith});
-      }
       return true;
     };
-    // Do not lower: a fill runs for as many terms as the cap takes, and
-    // stopping early leaves the plan buying things the bank beats.
+    let fundOcc=null,soldForDeposit=[];
+    // Do not lower: a fill runs for as many terms as the cap takes.
     let guard=0;
     while(bankHeld<bankCap&&guard++<PLAN_MAX_ACTIONS){
       if(steps.length>=PLAN_MAX_ACTIONS){outOfRoom=true;return false}
       const bankRow=bankRowAt(day);
       if(!bankRow) break;
       creditMaturedBank();
-      // Nothing can be added while a term is running, so wait it out.
       if(pendingBank){
-        if(!waitOut(pendingBank.day-day,0)) return false;
+        const until=pendingBank.day-day;
+        fundOcc=`bankfund${fundSeq++}`;
+        if(!parkUntilBank(until,fundOcc)) return false;
+        if(!waitOut(until,0)) return false;
+        soldForDeposit=settleParking(fundOcc);
         continue;
       }
-      // Fill on whichever term gets there soonest, then hold the highest rate.
-      const fillRow=isNewbie
-        ?(fastestFillOptionAt(cash,income(),bankCap,day)||bankRow)
-        :(fastestFillTerm(cash,income(),bankCap)||bankRow);
+      soldForDeposit=soldForDeposit.concat(sellIntoBank(bankRow.roi));
+      const fillRow=richestFillOption(isNewbie?bankOptionsAt(day):cityBankTerms(),
+                                      cash,income(),bankHeld,bankCap,idleParkRate)||bankRow;
       // TCI Active: worth a week of the deposit sitting out of the bank only
       // when the 10% it adds over the term beats that wait plus the sale fee.
       if(tciActive&&tciRow&&!tciHeld&&cash>tciRow.cost){
@@ -1081,13 +1121,15 @@ function simulatePlan(){
         days:usingRow.days,roi:usingRoi,annual:bankDepositValue()*usingRoi};
       // Return on everything the deposit now holds, not just this top-up:
       // the whole balance earns the rate from here on.
-      steps.push({row:{...usingRowFull,cost:added,roi:usingRoi,annual:deposit*usingRoi},day,sold:[],unreachable:false,
+      steps.push({row:{...usingRowFull,cost:added,roi:usingRoi,annual:deposit*usingRoi},day,
+                  sold:soldForDeposit,unreachable:false,
                   parking:false,depth:0,parentOcc:null,paidWith,bankBalance:deposit,
-                  occId:`bank${steps.length}`,cityBank:true,
+                  occId:fundOcc||`bank${steps.length}`,cityBank:true,
                   bankNote:(deposit>=bankCap
                     ? `At maximum, ${moneyShort(deposit)} held on the ${bankTermLabel(bankRow.days)} term`
-                    : `Locked ${fillRow.days} days, ${moneyShort(deposit)} held`)
+                    : `Locked ${bankTermLabel(fillRow.days)}, ${moneyShort(deposit)} held`)
                     +(tciHeld?" · TCI bonus rate":"")});
+      fundOcc=null; soldForDeposit=[];
       // The rate is locked in now, so the block has done its job.
       if(tciHeld&&tciRow){
         const proceeds=tciRow.cost*(1-SELL_FEE);
@@ -1099,9 +1141,20 @@ function simulatePlan(){
                     bankNote:`Sold · rate locked, ${moneyShort(proceeds)} freed up`});
       }
       if(deposit>=bankCap) break;
-      // Run the term: income accrues, and the deposit pays out at maturity.
-      if(!waitOut(fillRow.days,deposit*usingRoi*fillRow.days/365)) return false;
+      fundOcc=`bankfund${fundSeq++}`;
+      let left=fillRow.days;
+      while(left>0){
+        const span=Math.min(PARK_CHECK_DAYS,left);
+        if(!waitOut(span,0)) return false;
+        left-=span;
+        if(left>0&&!parkUntilBank(left,fundOcc)) return false;
+      }
+      const interest=deposit*usingRoi*fillRow.days/365;
+      cash+=interest;
+      potCredit("bank",interest);
+      soldForDeposit=settleParking(fundOcc);
     }
+    if(fundOcc) held.filter(h=>h.forOcc===fundOcc).forEach(keepParked);
     return true;
   }
 
@@ -1118,10 +1171,8 @@ function simulatePlan(){
     const curBankRow=bankRowAt(day);
     if(curBankRow&&bankHeld<bankCap&&!pinnedGoal(target)
        &&(target.roi==null||target.roi<=curBankRow.roi)){
-      const idx=targets.indexOf(target);
-      if(!runCityBank(idx>=0?targets.slice(idx):[target])) return false;
-      // runCityBank buys anything that pays out inside the term, and this
-      // target is in that list. Without re-checking, it gets bought twice.
+      if(!runCityBank()) return false;
+      // Do not remove: a stock parked for the bank can be kept as this target.
       if(owned.has(rowKey(target))) return true;
     }
     return acquire(target,null,0);
@@ -1144,7 +1195,7 @@ function simulatePlan(){
   // returns can be put to work rather than being left off the end of the plan.
   if(pendingBank&&!outOfRoom){ day=Math.max(day,pendingBank.day); creditMaturedBank(); }
   // Anything still uninvested belongs in the bank.
-  if(bankRowAt(day)&&bankHeld<bankCap&&!outOfRoom) runCityBank([]);
+  if(bankRowAt(day)&&bankHeld<bankCap&&!outOfRoom) runCityBank();
   // A "sell this first" step exists only to fund the next purchase, so it
   // hangs off that purchase: it indents underneath and folds away once that
   // investment is ticked off, like the parking steps do.
@@ -1404,9 +1455,10 @@ function renderPlan(){
 <td>${s.done&&!outOfOrder?'<span class="step-tick">✓</span> ':''}${i+1}</td>
 <td style="padding-left:${10+(s.depth||0)*18}px;--rails:${s.depth||1}">${s.groupSize?`<button type="button" class="grp-toggle" data-grp="${s.occ}"><span class="grp-caret">${open?"▴":"▸"}</span> ${s.groupSize} step${s.groupSize===1?"":"s"} first</button>`:""}<span class="ticker">${s.row.ticker}</span> <strong>${esc(s.row.name)}</strong>${s.sellFirst?`<div class="sub">Sell to help fund ${esc(s.parentName||"your next purchase")}</div>`
   :s.sellHolding?""
-  :dump?`<div class="sub">Sell now and put it toward ${esc(goalRow?goalRow.name:"your goal")}</div>`:(s.parking?`<div class="sub">Bought to earn while saving for ${esc(s.parentName||"the next purchase")}</div>`:"")}</td>
+  :dump?`<div class="sub">Sell now and put it toward ${esc(goalRow?goalRow.name:"your goal")}</div>`:(s.parkForBank?`<div class="sub">Bought to earn until the bank term ends, then sold into the bank</div>`
+  :s.parking?`<div class="sub">Bought to earn while saving for ${esc(s.parentName||"the next purchase")}</div>`:"")}</td>
 <td>${incrementCell(s.row)}</td>
-<td class="benefit-cell">${s.bankNote?esc(s.bankNote):sold}</td>
+<td class="benefit-cell">${s.bankNote?esc(s.bankNote)+(s.sold.length?" · "+sold:""):sold}</td>
 <td>${moneyShort(s.row.cost)}</td>
 <td class="paid-cell">${paidWithCell(s.paidWith)}</td>
 <td>${moneyShort(planReturnValue(s.row))}</td>

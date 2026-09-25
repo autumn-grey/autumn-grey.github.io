@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.14.2 · Updated: 2026-09-23_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.14.3 · Updated: 2026-09-26_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,26 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.14.3 — 2026-09-26
+
+- The investments with no measurable ROI, such as West Side University, can be
+  clicked to mark them owned, skipped or neither, the same as
+  the main table. Handy when your data says you own one and you want to see a
+  plan without it.
+- The planner no longer sits on your cash while a City Bank term runs out. It
+  buys stocks that will pay out before the term ends, then sells them into the
+  bank when it opens, instead of waiting a month to buy anything.
+- When the bank opens it gets filled first. The planner no longer spends the
+  money on stocks that earn less than the bank, and anything you already own
+  that earns less than the bank is sold into it, weakest first. Once the bank
+  is full, the best of what was bought in the meantime is kept.
+- Money that comes in while a bank term is locked is no longer left idle. Each
+  week the planner checks whether it can buy a stock that will pay out before
+  the term ends, and sells it into the bank at the next deposit.
+- The bank term is chosen by how much money it leaves you after a year of
+  filling, counting what that parked income earns, not by how fast it fills.
+  That is usually the 3 month term rather than rolling 14 day deposits.
 
 ### v0.14.2 — 2026-09-23
 

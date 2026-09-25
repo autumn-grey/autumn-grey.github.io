@@ -585,17 +585,17 @@ body.basic #pageInvestments .table-main thead th:nth-child(7),body.basic #pageIn
 body.basic #pageInvestments #tbodyTotals tr.plan-total,
 body.basic #pageInvestments #totalsPanel .buttons{display:none}
 body.basic #pageInvestments .table th.pick,body.basic #pageInvestments .table td.pick{display:none}
-#tbody tr{cursor:pointer}
+#tbody tr,#tbodyUndefined tr{cursor:pointer}
 #tbody tr:hover{background:#1a1f25}
 /* Owned rows keep their normal background and are outlined instead, in a
    vivid version of whatever colour that row already is. */
-#tbody tr.owned{--own:#9fb3c8;--own-fill:rgba(159,179,200,.13)}
-#tbody tr.owned.stock-first{--own:#2ee56a;--own-fill:rgba(46,229,106,.14)}
-#tbody tr.owned.special-purple{--own:#c77dff;--own-fill:rgba(199,125,255,.16)}
-#tbody tr.owned>td{background-image:linear-gradient(var(--own-fill),var(--own-fill))!important;box-shadow:inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+:is(#tbody,#tbodyUndefined) tr.owned{--own:#9fb3c8;--own-fill:rgba(159,179,200,.13)}
+:is(#tbody,#tbodyUndefined) tr.owned.stock-first{--own:#2ee56a;--own-fill:rgba(46,229,106,.14)}
+:is(#tbody,#tbodyUndefined) tr.owned.special-purple{--own:#c77dff;--own-fill:rgba(199,125,255,.16)}
+:is(#tbody,#tbodyUndefined) tr.owned>td{background-image:linear-gradient(var(--own-fill),var(--own-fill))!important;box-shadow:inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
 /* Advanced: the outline starts at the checkbox cell and ends at the last column. */
-#tbody tr.owned>td:first-child{border-radius:8px 0 0 8px;box-shadow:inset 2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
-#tbody tr.owned>td:last-child{border-radius:0 8px 8px 0;box-shadow:inset -2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+:is(#tbody,#tbodyUndefined) tr.owned>td:first-child{border-radius:8px 0 0 8px;box-shadow:inset 2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
+:is(#tbody,#tbodyUndefined) tr.owned>td:last-child{border-radius:0 8px 8px 0;box-shadow:inset -2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
 /* Basic hides columns 1, 3, 5, 7 and 9, so the visible ends are 2 and 8. */
 body.basic #pageInvestments #tbody tr.owned>td:nth-child(2){border-radius:8px 0 0 8px;box-shadow:inset 2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
 body.basic #pageInvestments #tbody tr.owned>td:nth-child(8){border-radius:0 8px 8px 0;box-shadow:inset -2px 0 0 var(--own),inset 0 2px 0 var(--own),inset 0 -2px 0 var(--own)}
@@ -603,7 +603,7 @@ body.basic #pageInvestments #tbody tr.owned>td:nth-child(8){border-radius:0 8px 
    in place of the solid vivid one, and the whole row stepped back. The dashes
    are drawn as background gradients because a box-shadow can't be dashed.
    Written after the Basic category tints so it beats them at equal specificity. */
-#tbody tr.skipped>td,body.basic #pageInvestments #tbody tr.skipped>td{
+:is(#tbody,#tbodyUndefined) tr.skipped>td,body.basic #pageInvestments #tbody tr.skipped>td{
   --dash:#c9d1d9;
   opacity:.5;
   box-shadow:none!important;
@@ -613,14 +613,14 @@ body.basic #pageInvestments #tbody tr.owned>td:nth-child(8){border-radius:0 8px 
   background-position:0 0,0 calc(100% - 1px)!important;
   background-repeat:no-repeat!important}
 /* The ends of the outline, matching where the owned outline caps off. */
-#tbody tr.skipped>td:first-child,body.basic #pageInvestments #tbody tr.skipped>td:first-child{
+:is(#tbody,#tbodyUndefined) tr.skipped>td:first-child,body.basic #pageInvestments #tbody tr.skipped>td:first-child{
   border-radius:8px 0 0 8px;
   background-image:repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),
                    repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),
                    repeating-linear-gradient(to bottom,var(--dash) 0 5px,transparent 5px 11px)!important;
   background-size:100% 1px,100% 1px,1px 100%!important;
   background-position:0 0,0 calc(100% - 1px),0 0!important}
-#tbody tr.skipped>td:last-child,body.basic #pageInvestments #tbody tr.skipped>td:last-child{
+:is(#tbody,#tbodyUndefined) tr.skipped>td:last-child,body.basic #pageInvestments #tbody tr.skipped>td:last-child{
   border-radius:0 8px 8px 0;
   background-image:repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),
                    repeating-linear-gradient(to right,var(--dash) 0 5px,transparent 5px 11px),

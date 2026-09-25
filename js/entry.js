@@ -305,11 +305,11 @@ $("tbodyPlan")?.addEventListener("click",e=>{
 });
 // Clicking a row marks it owned (both views). The checkbox column is for
 // building a hypothetical total and is handled separately above.
-$("tbody")?.addEventListener("click",e=>{
+["tbody","tbodyUndefined"].forEach(id=>$(id)?.addEventListener("click",e=>{
   if(e.target.closest("input,select,a,.pick")) return;
   const tr=e.target.closest("tr[data-key]");
   if(tr) cycleRowState(tr.dataset.key,tr);
-});
+}));
 document.querySelectorAll(".education-course-check").forEach(cb=>cb.addEventListener("change",calculate));
 document.querySelectorAll(".pref-prio").forEach(cb=>cb.addEventListener("change",()=>{syncPrioAll();calculate()}));
 // Header checkbox ticks or clears the whole list, and reflects a mixed state.

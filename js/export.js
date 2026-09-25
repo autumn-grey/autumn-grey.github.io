@@ -136,7 +136,7 @@ function planTableRows(){
       :s.parking?"parking":"to buy";
     out.push([
       i+1, s.row.ticker, s.row.name, outIncrement(s.row), status,
-      s.bankNote||(s.sold&&s.sold.length?s.sold.map(sellLabelPlain).join(" + "):""),
+      [s.bankNote,(s.sold&&s.sold.length?s.sold.map(sellLabelPlain).join(" + "):"")].filter(Boolean).join(" · "),
       outNum(s.row.cost),
       ...PAID_SOURCES.map(k=>outNum(s.paidWith?s.paidWith[k]:null)),
       outNum(planReturnValue(s.row)), outPct(s.row.roi),
