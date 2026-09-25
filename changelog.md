@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.14.3 · Updated: 2026-09-26_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.15.0 · Updated: 2026-09-26_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,37 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.15.0 — 2026-09-26
+
+- **Education & Job, rebuilt from the top.** The page drops its title, its
+  help text, the time reductions panel and the suggested study order, and is
+  now a row of small panels above the course list.
+- **Snapshot** shows how many courses you have completed and how many remain,
+  the study time each adds up to and its share of the whole, the time your
+  boosters have saved so far and will save on what is left, and your earliest
+  completion date if you study back to back. Times read as `5y 1m 0d`.
+- **Perk preferences** lists the kinds of perk courses can give. Click the ones
+  you care about and they light up aqua and move to the top, then drag them
+  into your order of priority. Courses that give a chosen perk are highlighted
+  in the course list, and the courses you need before them are highlighted in
+  a softer aqua. Medical is the only category with its courses filled in so
+  far. Your choices are kept by **Save Key/Settings**.
+- **Education Boosters** puts your company special, education merits, WSU
+  block and education job perk on this page, with what each one is worth and
+  your total reduction. They are the same settings as Education Stuff on the
+  Investments page, so changing one changes both.
+- The API key panel is on the Education & Job page too, in a column that folds
+  away.
+- Course fees are no longer shown anywhere on the page.
+- **Refresh data only** replaces *Refresh market data only*. It fetches
+  everything, your own account included, but leaves every setting as it is.
+- Money boxes keep the zeros you are typing. Deleting the 1 from $1,000,000 now
+  leaves $0,000,000 ready for a 2, instead of collapsing to $0. The number is
+  tidied when you leave the box.
+- The quick settings in Basic view add commas as you type.
+- The site tells Dark Reader it is already dark, so the extension should leave
+  it alone.
 
 ### v0.14.3 — 2026-09-26
 

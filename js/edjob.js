@@ -1,29 +1,13 @@
 // ======================================================================
-// EDUCATION & JOB  ·  The course planner
-//
-// The Investments page already keeps a tick per course, because several
-// stocks are worth more or less depending on how much studying is left. This
-// page is the other way round: the same ticks, read as a plan. Nothing is
-// stored here. The checkboxes on the Investments page remain the one record
-// of what has been studied, and ticking a course here ticks it there, so the
-// two can never drift apart and there is still only one thing to save.
-//
-// Course lengths, prices, prerequisites and rewards come from the game, via
-// the education selection fetched at refresh. Before a refresh there is only
-// the built-in length and price table, so nothing is known to come first and
-// the order is simply shortest course first. The page says so when that is
-// the case, because an order worked out without prerequisites is a weaker
-// thing and should not look the same as one worked out with them.
+// EDUCATION & JOB
 // ======================================================================
 
-// The faculty a course belongs to is the heading it sits under, rather than a
-// second list here that could fall out of step with the markup.
+/** Returns the faculty heading a course sits under. */
 function edJobFaculty(cb){
   const topic=cb.closest(".education-topic");
   return topic?.querySelector("summary")?.textContent.trim()||"Other";
 }
-// Every course, as the planner sees it: what it is, whether it is done, and
-// what the game says it costs, takes, needs first and gives back.
+/** Returns every course with its state, length, prerequisites and rewards. */
 function edJobCourses(){
   const info=(window.live&&window.live.courseInfo)||{};
   return [...document.querySelectorAll(".education-course-check")].map(cb=>{
@@ -34,53 +18,23 @@ function edJobCourses(){
       faculty:edJobFaculty(cb),
       done:cb.checked,
       days:courseDaysFor(cb.id),
-      cost:courseCostFor(cb.id),
       needs:extra.needs||[],
       gains:extra.gains||[]
     };
   });
 }
-// Days a single course takes for this player. The reductions are the same ones
-// the Investments page applies, so the two always quote the same figure.
+/** Returns the days a course takes this player after reductions. */
 function edJobCourseDays(course){
   return course.days*(1-educationTimeReduction())*educationJpFactor();
 }
-// The order to study what is left in. Repeatedly takes whatever is open —
-// every prerequisite either already done or already placed — and picks the
-// shortest of those, so quick courses are not left stranded behind long ones.
-// The prerequisites are what make the order valid, so the game's course tiers
-// are not consulted: a tier missing from the data would quietly reorder the
-// plan, and it would not say anything the prerequisites have not already.
-// A prerequisite naming a course this app has no tick for is ignored rather
-// than blocking it forever.
-function edJobOrder(list){
-  const known=new Set(list.map(c=>c.id));
-  const have=new Set(list.filter(c=>c.done).map(c=>c.id));
-  const left=list.filter(c=>!c.done);
-  const out=[], placed=new Set();
-  const open=c=>!placed.has(c.id)
-    && c.needs.every(n=>have.has(n)||placed.has(n)||!known.has(n));
-  for(;;){
-    const next=left.filter(open)
-      .sort((a,b)=>(a.days-b.days)||a.name.localeCompare(b.name))[0];
-    if(!next) break;
-    out.push(next);
-    placed.add(next.id);
-  }
-  // Nothing should reach here, but a prerequisite loop in the data would leave
-  // courses unplaced, and dropping them silently would understate the plan.
-  left.filter(c=>!placed.has(c.id)).forEach(c=>out.push(c));
-  return out;
-}
-// A course can be started when everything it needs is already done.
+/** Says whether every prerequisite of a course is done. */
 function edJobUnlocked(course,have){
   return course.needs.every(n=>have.has(n));
 }
-// "3 days", "2 weeks 3 days" — course lengths are short enough that the
-// calendar walk formatDuration does for whole plans is more than they need.
+/** Formats a course length as days, or weeks and days. */
 function edJobDays(days){
   const d=Math.round(days);
-  if(!(d>0)) return "—";
+  if(!(d>0)) return "-";
   if(d<14) return `${d} day${d===1?"":"s"}`;
   const weeks=Math.floor(d/7), rest=d%7;
   return `${weeks} week${weeks===1?"":"s"}`+(rest?` ${rest} day${rest===1?"":"s"}`:"");
@@ -89,61 +43,74 @@ function edJobDays(days){
 // ----------------------------------------------------------------------
 // Rendering
 // ----------------------------------------------------------------------
-// The four figures across the top: what is left, and what it will take.
-function renderEdJobSummary(list){
-  const box=$("edJobSummary");
-  if(!box) return;
-  const left=list.filter(c=>!c.done);
-  const days=left.reduce((n,c)=>n+edJobCourseDays(c),0);
-  const cost=left.reduce((n,c)=>n+c.cost,0);
-  const raw=left.reduce((n,c)=>n+c.days,0);
-  const tiles=[
-    ["Courses left",`${left.length}`,`of ${list.length}`],
-    // What is saved is a span of years like the total, not a course length, so
-    // it is read out the same way rather than as a pile of weeks.
-    ["Time to finish",formatDuration(days),
-      raw>days?`${formatDuration(raw-days)} saved`:"no reductions set"],
-    ["Course fees",money(cost),"waived by an IST block"],
-    ["Finished by",left.length?edJobFinishDate(days):"—","studying back to back"]
-  ];
-  box.innerHTML=tiles.map(([label,value,note])=>
-    `<div class="edjob-tile"><div class="edjob-tile-label">${esc(label)}</div>`
-    +`<div class="edjob-tile-value">${esc(value)}</div>`
-    +`<div class="edjob-tile-note">${esc(note)}</div></div>`).join("");
+/** Formats a day count as "Xy Ym Zd". */
+function edJobYmd(days){
+  const p=durationParts(days);
+  return p?`${p.years}y ${p.months}m ${p.days}d`:"100+y";
 }
+/** Draws the Snapshot panel. */
+function renderEdJobSummary(list){
+  const box=$("edJobProgress");
+  if(!box) return;
+  const done=list.filter(c=>c.done), left=list.filter(c=>!c.done);
+  const raw=arr=>arr.reduce((n,c)=>n+c.days,0);
+  const cut=arr=>arr.reduce((n,c)=>n+edJobCourseDays(c),0);
+  const pct=n=>list.length?`${Math.round(n/list.length*100)}%`:"0%";
+  const row=(title,count,days,share)=>
+    `<div class="edjob-stat-title">${esc(title)}</div>`
+    +`<span class="edjob-stat-num">${count}</span>`
+    +`<span class="edjob-stat-time">${esc(edJobYmd(days))}</span>`
+    +`<span class="edjob-stat-pct">${esc(share)}</span>`;
+  box.innerHTML=`<div class="edjob-module-head"><span>Snapshot</span>`
+    +`<span>${done.length}/${list.length}</span></div>`
+    +`<div class="edjob-stats">`
+    +row("Completed",done.length,cut(done),pct(done.length))
+    +row("Remaining",left.length,cut(left),pct(left.length))
+    +`<div class="edjob-stat-title">Saved</div>`
+    +`<div class="edjob-stat-saved">`
+    +`<span class="edjob-stat-num">${esc(edJobYmd(raw(done)-cut(done)))}<small>Saved so far</small></span>`
+    +`<span class="edjob-stat-time">${esc(edJobYmd(raw(left)-cut(left)))}<small>Saved on remaining</small></span>`
+    +`</div>`
+    +`<div class="edjob-stat-title">Earliest completion</div>`
+    +`<div class="edjob-stat-date">${esc(left.length?edJobFinishDate(cut(left)):"-")}</div>`
+    +`</div>`;
+}
+/** Returns the date a number of days from today. */
 function edJobFinishDate(days){
   const d=new Date();
   d.setHours(0,0,0,0);
   d.setDate(d.getDate()+Math.round(days));
   return d.toISOString().slice(0,10);
 }
-// Where the time reduction is coming from, broken out so it is obvious which
-// one is still missing. These are set on the Investments page rather than
-// here, so that there is one place to change them.
-function renderEdJobReductions(){
-  const box=$("edJobReductions");
-  if(!box) return;
-  const merits=Math.max(0,Math.min(10,+($("educationMerits")?.value||0)));
-  const rows=[
-    ["Education Length merits",merits*EDU_MERIT_REDUCTION,`${merits} of 10`],
-    ["WSU stock block",boolVal("wsuOwned")?0.10:0,boolVal("wsuOwned")?"owned":"not owned"],
-    ["Principal job perk",boolVal("edJobPerk")?0.10:0,boolVal("edJobPerk")?"earned":"not earned"]
-  ];
-  const total=educationTimeReduction();
-  const jp=companyJp();
-  box.innerHTML=rows.map(([label,cut,note])=>
-    `<div class="edjob-red${cut?" on":""}"><span>${esc(label)}</span>`
-    +`<span class="edjob-red-cut">-${Math.round(cut*100)}%</span>`
-    +`<span class="edjob-red-note">${esc(note)}</span></div>`).join("")
-    +`<div class="edjob-red total"><span>Total</span>`
-    +`<span class="edjob-red-cut">-${Math.round(total*100)}%</span>`
-    +`<span class="edjob-red-note">40% is the most there is</span></div>`
-    +`<div class="edjob-red${jp?" on":""}"><span>Job point specials</span>`
-    +`<span class="edjob-red-cut">${jp?hoursPerDayLabel(companyHoursPerDay()):"none"}</span>`
-    +`<span class="edjob-red-note">${jp?"off the course you are on":"Fitness Centre 1★ or Hair Salon 7★"}</span></div>`;
+/** Course names that give each perk category. */
+const PERK_COURSES={
+  "Company Ownership":[],
+  "Crime":[],
+  "Gym Gains":[],
+  "Jail":[],
+  "Medical":["Advanced Biochemistry","Intermediate Biochemistry","Intravenous Therapy"],
+  "Passive Stats":[],
+  "Profit":[],
+  "Viruses":[]
+};
+/** Returns the courses the chosen perk categories point to, and the prerequisites they need. */
+function edJobWanted(list){
+  const byName=Object.fromEntries(list.map(c=>[c.name.toLowerCase(),c]));
+  const byId=Object.fromEntries(list.map(c=>[c.id,c]));
+  const out=new Map(), direct=[];
+  (window.edJobPerkPrefs||[]).forEach(perk=>(PERK_COURSES[perk]||[]).forEach(n=>{
+    const c=byName[String(n).toLowerCase()];
+    if(c&&!out.has(c.id)){ out.set(c.id,{perk,direct:true}); direct.push(c) }
+  }));
+  const walk=(c,perk)=>c.needs.forEach(id=>{
+    if(out.has(id)||!byId[id]) return;
+    out.set(id,{perk,direct:false});
+    walk(byId[id],perk);
+  });
+  direct.forEach(c=>walk(c,out.get(c.id).perk));
+  return out;
 }
-// The picker. One block per faculty, open where something is still to do, so
-// a finished faculty folds itself away without hiding anything.
+/** Draws the course list, one block per faculty. */
 function renderEdJobPicker(list){
   const box=$("edJobPicker");
   if(!box) return;
@@ -152,6 +119,7 @@ function renderEdJobPicker(list){
   const have=new Set(list.filter(c=>c.done).map(c=>c.id));
   const name=Object.fromEntries(list.map(c=>[c.id,c.name]));
   const faculties=[...new Set(list.map(c=>c.faculty))];
+  const wanted=edJobWanted(list);
   const html=faculties.map(faculty=>{
     const all=list.filter(c=>c.faculty===faculty);
     const shown=all.filter(c=>(!hide||!c.done)
@@ -162,14 +130,16 @@ function renderEdJobPicker(list){
       const open=edJobUnlocked(c,have);
       const blockers=c.needs.filter(n=>!have.has(n)).map(n=>name[n]).filter(Boolean);
       const notes=[];
+      const want=wanted.get(c.id);
       if(!c.done&&blockers.length) notes.push(`needs ${blockers.join(", ")}`);
       c.gains.forEach(g=>notes.push(g));
-      return `<label class="edjob-course${c.done?" done":""}${!c.done&&!open?" locked":""}">`
+      const tag=want?`<span class="edjob-course-tag">${esc(want.direct?want.perk:`needed for ${want.perk}`)}</span>`:"";
+      return `<label class="edjob-course${c.done?" done":""}${!c.done&&!open?" locked":""}`
+        +`${want?(want.direct?" wanted":" wanted-pre"):""}">`
         +`<input type="checkbox" class="edjob-course-check" data-course-id="${esc(c.id)}"`
         +`${c.done?" checked":""}>`
-        +`<span class="edjob-course-name">${esc(c.name)}</span>`
-        +`<span class="edjob-course-meta">${esc(edJobDays(edJobCourseDays(c)))}`
-        +` · ${esc(money(c.cost))}</span>`
+        +`<span class="edjob-course-name">${esc(c.name)}${tag}</span>`
+        +`<span class="edjob-course-meta">${esc(edJobDays(edJobCourseDays(c)))}</span>`
         +(notes.length?`<span class="edjob-course-notes">${notes.map(n=>esc(n)).join(" · ")}</span>`:"")
         +`</label>`;
     }).join("");
@@ -180,71 +150,150 @@ function renderEdJobPicker(list){
   }).join("");
   box.innerHTML=html||`<p class="help">Nothing matches that.</p>`;
 }
-// The plan: everything still to do, in the order to do it, with the totals
-// running alongside so any course can be read as "and by then".
-function renderEdJobPlan(list){
-  const box=$("edJobPlan");
+/** Copies the Investments education settings into Education Boosters, with what each is worth. */
+function syncEdJobSettings(){
+  document.querySelectorAll("#pageEduJob [data-mirror]").forEach(el=>{
+    const master=$(el.dataset.mirror);
+    if(!master) return;
+    if(el.type==="checkbox") el.checked=master.checked;
+    else el.value=master.value;
+  });
+  const set=(id,t)=>{ const el=$(id); if(el) el.textContent=t };
+  set("ejBoostTotal",`-${Math.round(educationTimeReduction()*100)}%`);
+  set("ejCompanyEffect",hoursPerDayLabel(companyHoursPerDay()));
+  set("ejMeritsEffect",`-${Math.round(+($("educationMerits")?.value||0)*EDU_MERIT_REDUCTION*100)}%`);
+}
+const PERK_CATEGORIES=["Company Ownership","Crime","Gym Gains","Jail","Medical",
+  "Passive Stats","Profit","Viruses"];
+try{ window.edJobPerkPrefs=JSON.parse(localStorage.getItem("tornInvPerkPrefs")||"[]")
+  .filter(p=>PERK_CATEGORIES.includes(p)) }
+catch(e){ window.edJobPerkPrefs=[]; logProblem("Perk preferences could not be read",e) }
+/** Draws the perk preference list, chosen ones first in priority order. */
+function renderEdJobPerks(){
+  const box=$("edJobPerks");
   if(!box) return;
-  const order=edJobOrder(list);
-  if(!order.length){
-    box.innerHTML=`<p class="help">Every course is ticked. There is nothing left to study.</p>`;
-    return;
-  }
-  let days=0, cost=0;
-  const rows=order.map((c,i)=>{
-    days+=edJobCourseDays(c);
-    cost+=c.cost;
-    return `<tr><td>${i+1}</td><td>${esc(c.name)}</td><td>${esc(c.faculty)}</td>`
-      +`<td>${esc(edJobDays(edJobCourseDays(c)))}</td>`
-      +`<td>${esc(money(c.cost))}</td>`
-      +`<td>${esc(formatDuration(days))}</td>`
-      +`<td>${esc(money(cost))}</td></tr>`;
-  }).join("");
-  box.innerHTML=`<table class="edjob-table"><thead><tr>`
-    +`<th>#</th><th>Course</th><th>Faculty</th><th>Takes</th><th>Costs</th>`
-    +`<th>Done after</th><th>Spent by then</th></tr></thead>`
-    +`<tbody>${rows}</tbody></table>`;
+  const on=window.edJobPerkPrefs;
+  const rest=PERK_CATEGORIES.filter(p=>!on.includes(p));
+  const row=(p,i)=>i>=0
+    ? `<li class="edjob-perk on" tabindex="0" role="button" aria-pressed="true" data-perk="${esc(p)}">`
+      +`<span class="edjob-perk-grip" aria-hidden="true">⠿</span><span>${esc(p)}</span>`
+      +`<span class="edjob-perk-rank">${i+1}</span></li>`
+    : `<li class="edjob-perk" tabindex="0" role="button" aria-pressed="false" data-perk="${esc(p)}">`
+      +`<span class="edjob-perk-grip" aria-hidden="true"></span><span>${esc(p)}</span></li>`;
+  box.innerHTML=`<div class="edjob-module-head"><span>Perk preferences</span></div>`
+    +`<ul class="edjob-perk-list">${on.map((p,i)=>row(p,i)).join("")}${rest.map(p=>row(p,-1)).join("")}</ul>`;
 }
-// Says where the course details came from, because an order worked out without
-// the game's prerequisites is a weaker thing and should not look the same.
-function renderEdJobSource(){
-  const el=$("edJobSource");
-  if(!el) return;
-  if(window.live&&window.live.courseInfo){
-    el.textContent="Course lengths, fees, prerequisites and rewards are this"
-      +" refresh's, straight from Torn.";
-    el.classList.remove("warn");
-    return;
-  }
-  el.textContent=window.educationIndexError
-    ? `Course details couldn't be fetched (${window.educationIndexError}), so lengths and fees are the built-in ones and the order ignores prerequisites.`
-    : "Refresh to pick up course prerequisites and rewards from Torn. Until then lengths and fees are the built-in ones and the order ignores prerequisites.";
-  el.classList.add("warn");
+/** Chooses or unchooses a perk category. */
+function toggleEdJobPerk(name){
+  const on=window.edJobPerkPrefs, i=on.indexOf(name);
+  if(i>=0) on.splice(i,1); else on.push(name);
+  renderEdJobPerks();
+  renderEdJobPicker(edJobCourses());
+  focusEdJobPerk(name);
 }
+/** Puts keyboard focus back on a perk row after a redraw. */
+function focusEdJobPerk(name){
+  [...document.querySelectorAll("#edJobPerks .edjob-perk")].find(li=>li.dataset.perk===name)?.focus();
+}
+/** Draws the whole Education & Job page. */
 function renderEdJob(){
   const list=edJobCourses();
+  syncEdJobSettings();
   renderEdJobSummary(list);
-  renderEdJobReductions();
+  renderEdJobPerks();
   renderEdJobPicker(list);
-  renderEdJobPlan(list);
-  renderEdJobSource();
 }
 
 // ----------------------------------------------------------------------
 // Wiring
 // ----------------------------------------------------------------------
-// The tick goes to the Investments checkbox, and the page is redrawn from
-// that, so the planner never holds a copy of the answer.
+/** Ticks the matching Investments course and redraws both pages. */
 $("edJobPicker")?.addEventListener("change",e=>{
   const cb=e.target.closest(".edjob-course-check");
   if(!cb) return;
   const master=$(cb.dataset.courseId);
   if(!master) return;
   master.checked=cb.checked;
-  // Course ticks move several stock valuations, so the Investments page is
-  // brought up to date at the same time.
   if(typeof calculate==="function") calculate();
   renderEdJob();
 });
+/** Writes an Education Boosters change to the Investments setting it mirrors. */
+document.querySelectorAll("#pageEduJob [data-mirror]").forEach(el=>el.addEventListener("change",()=>{
+  const master=$(el.dataset.mirror);
+  if(!master) return;
+  if(el.type==="checkbox") master.checked=el.checked;
+  else master.value=el.value;
+  master.dispatchEvent(new Event("input"));
+  renderEdJob();
+}));
+/** Collapses the API key column to a vertical tab. */
+function setEdJobConfigCollapsed(collapsed){
+  $("eduJobGrid")?.classList.toggle("config-collapsed",collapsed);
+  try{localStorage.setItem("tornEdJobConfigCollapsed",collapsed?"1":"0")}
+  catch(e){ logProblem("Education & Job API key panel state could not be saved",e) }
+}
+$("collapseEduJobConfig")?.addEventListener("click",()=>setEdJobConfigCollapsed(true));
+$("eduJobConfigTab")?.addEventListener("click",()=>setEdJobConfigCollapsed(false));
+try{ if(localStorage.getItem("tornEdJobConfigCollapsed")==="1") setEdJobConfigCollapsed(true) }
+catch(e){ logProblem("Education & Job API key panel state could not be read",e) }
+/** Chooses a perk row on click, Enter or Space. */
+$("edJobPerks")?.addEventListener("click",e=>{
+  const li=e.target.closest(".edjob-perk");
+  if(edJobPerkDragged){ edJobPerkDragged=false; return }
+  if(li) toggleEdJobPerk(li.dataset.perk);
+});
+$("edJobPerks")?.addEventListener("keydown",e=>{
+  const li=e.target.closest(".edjob-perk");
+  if(!li||(e.key!=="Enter"&&e.key!==" ")) return;
+  e.preventDefault();
+  toggleEdJobPerk(li.dataset.perk);
+});
+/** Lets the chosen perk rows be dragged into priority order, shuffling the others live. */
+let edJobPerkDrag=null, edJobPerkDragged=false;
+$("edJobPerks")?.addEventListener("pointerdown",e=>{
+  const li=e.target.closest(".edjob-perk.on");
+  if(!li||e.button!==0) return;
+  edJobPerkDrag={li,startY:e.clientY,grab:e.clientY-li.getBoundingClientRect().top,moving:false};
+  li.setPointerCapture(e.pointerId);
+});
+$("edJobPerks")?.addEventListener("pointermove",e=>{
+  const d=edJobPerkDrag;
+  if(!d) return;
+  if(!d.moving){
+    if(Math.abs(e.clientY-d.startY)<4) return;
+    d.moving=true;
+    d.li.classList.add("dragging");
+  }
+  const list=d.li.parentElement;
+  const top=e.clientY-list.getBoundingClientRect().top-d.grab;
+  const mid=top+d.li.offsetHeight/2;
+  const prev=d.li.previousElementSibling, next=d.li.nextElementSibling;
+  if(next?.classList.contains("on")&&mid>next.offsetTop+next.offsetHeight/2) edJobPerkShift(next,()=>list.insertBefore(d.li,next.nextSibling));
+  else if(prev?.classList.contains("on")&&mid<prev.offsetTop+prev.offsetHeight/2) edJobPerkShift(prev,()=>list.insertBefore(d.li,prev));
+  d.li.style.transform=`translateY(${top-d.li.offsetTop}px)`;
+});
+/** Moves the dragged row past a neighbour and slides that neighbour into its new place. */
+function edJobPerkShift(el,move){
+  const before=el.offsetTop;
+  move();
+  el.style.transition="none";
+  el.style.transform=`translateY(${before-el.offsetTop}px)`;
+  void el.offsetHeight;
+  el.style.transition="transform .15s ease";
+  el.style.transform="";
+}
+/** Ends a drag and records the new order. */
+function endEdJobPerkDrag(){
+  const d=edJobPerkDrag;
+  edJobPerkDrag=null;
+  if(!d||!d.moving) return;
+  edJobPerkDragged=true;
+  setTimeout(()=>{ edJobPerkDragged=false },0);
+  window.edJobPerkPrefs=[...document.querySelectorAll("#edJobPerks .edjob-perk.on")].map(li=>li.dataset.perk);
+  renderEdJobPerks();
+  renderEdJobPicker(edJobCourses());
+}
+$("edJobPerks")?.addEventListener("pointerup",endEdJobPerkDrag);
+$("edJobPerks")?.addEventListener("pointercancel",endEdJobPerkDrag);
 $("edJobHideDone")?.addEventListener("change",renderEdJob);
 $("edJobFind")?.addEventListener("input",()=>renderEdJobPicker(edJobCourses()));

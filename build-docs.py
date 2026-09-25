@@ -67,6 +67,8 @@ TEMPLATE = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="darkreader-lock">
 <title>{title} · Autumn's Stonking Awesome Torn App</title>
 <style>{style}</style>
 </head>

@@ -336,6 +336,7 @@ function saveLocal(){
     localStorage.setItem("tornInvView",document.body.classList.contains("basic")?"basic":"advanced");
     localStorage.setItem("tornInvPrio",JSON.stringify([...prioritisedTickers()]));
     localStorage.setItem("tornInvPlanDone",JSON.stringify([...window.planDone]));
+    if(window.edJobPerkPrefs) localStorage.setItem("tornInvPerkPrefs",JSON.stringify(window.edJobPerkPrefs));
     if($("apiKey").value)localStorage.setItem("tornInvApiKey",$("apiKey").value);
   }catch(e){
     logProblem("Settings could not be saved. Storage may be full, or private mode is on",e);
@@ -346,7 +347,7 @@ function saveLocal(){
 }
 // Wipes everything this page has stored, on screen and in localStorage.
 function clearLocal(){
-  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched","tornInvScriptsDraft","tornInvGhToken",MARKET_CACHE_KEY]
+  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched","tornInvScriptsDraft","tornInvGhToken","tornInvPerkPrefs",MARKET_CACHE_KEY]
     .forEach(k=>localStorage.removeItem(k));
   window.ownedRows.clear();
   window.skippedRows.clear();
@@ -358,6 +359,8 @@ function clearLocal(){
   window.pinnedStocks.clear();
   window.dudPinned=false;
   if(typeof syncPinnedButtons==="function") syncPinnedButtons();
+  if(window.edJobPerkPrefs) window.edJobPerkPrefs.length=0;
+  if(typeof renderEdJobPerks==="function") renderEdJobPerks();
   $("apiKey").value="";
   window.savedBoosters=null;
   render();
@@ -470,10 +473,6 @@ async function fetchEducationIndex(){
   window.educationIndex=Object.fromEntries(Object.entries(raw).map(([id,x])=>[String(id),x.name]));
   // Course length and price, keyed to this app's own course checkboxes.
   const days={},costs={},samples=[];
-  // What the Education & Job planner needs on top of length and price: which
-  // courses have to come first, and what finishing one actually gets you.
-  // Torn numbers its courses, and prerequisites are given as those numbers, so
-  // they are translated to this app's own ids here rather than at every use.
   const info={},appIdOf={};
   Object.entries(raw).forEach(([apiId,x])=>{
     const id=educationIdFor(x.name);
@@ -1418,14 +1417,11 @@ function educationTimeReduction(){
 function educationRemainingDays(){
   return Math.max(0,remainingCourseDays()*(1-educationTimeReduction())*educationJpFactor());
 }
-// Formats a day count as a calendar-accurate duration measured from today,
-// so month lengths reflect the actual calendar rather than a 30-day estimate.
-// Units that would be zero at the front are omitted.
-function formatDuration(totalDays){
+/** Splits a day count into calendar years, months and days from today, or null past a century. */
+function durationParts(totalDays){
   const days=Math.round(totalDays);
-  if(!isFinite(days)||days<=0) return "0 days";
-  // Beyond a century the calendar walk is pointless, and slow.
-  if(days>36500) return "100+ years";
+  if(!isFinite(days)||days<=0) return {years:0,months:0,days:0};
+  if(days>36500) return null;
   const addMonths=(date,n)=>{
     const d=new Date(date), day=d.getDate();
     d.setDate(1);
@@ -1442,13 +1438,17 @@ function formatDuration(totalDays){
   let cur=new Date(start), years=0, months=0;
   while(addMonths(cur,12)<=target){cur=addMonths(cur,12);years++}
   while(addMonths(cur,1)<=target){cur=addMonths(cur,1);months++}
-  const rem=Math.round((target-cur)/86400000);
-
+  return {years,months,days:Math.round((target-cur)/86400000)};
+}
+/** Formats a day count as a calendar-accurate duration from today, like "2 years 3 months 4 days". */
+function formatDuration(totalDays){
+  const p=durationParts(totalDays);
+  if(!p) return "100+ years";
   const unit=(n,word)=>`${n} ${word}${n===1?"":"s"}`;
   const parts=[];
-  if(years) parts.push(unit(years,"year"));
-  if(years||months) parts.push(unit(months,"month"));
-  parts.push(unit(rem,"day"));
+  if(p.years) parts.push(unit(p.years,"year"));
+  if(p.years||p.months) parts.push(unit(p.months,"month"));
+  parts.push(unit(p.days,"day"));
   return parts.join(" ");
 }
 // Plain-language summary of what a stock pays, used for the basic-view tooltip.

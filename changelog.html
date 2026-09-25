@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="darkreader-lock">
 <title>Changelog · Autumn's Stonking Awesome Torn App</title>
 <style>
 :root{--bg:#111315;--panel:#191c20;--panel2:#20242a;--line:#30363d;
@@ -63,12 +65,43 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="changelog">Changelog</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.14.3 · Updated: 2026-09-26</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.15.0 · Updated: 2026-09-26</em></p>
 <p>Newest first. Version numbers follow <a href="https://semver.org">semantic versioning</a>:
 <code>MAJOR.MINOR.PATCH</code>. Still on <code>0.x</code> because the app isn't deployment-ready
 until it has a real access layer.</p>
 <hr />
 <h2 id="released">Released</h2>
+<h3 id="v0150-2026-09-26">v0.15.0 — 2026-09-26</h3>
+<ul>
+<li><strong>Education &amp; Job, rebuilt from the top.</strong> The page drops its title, its
+  help text, the time reductions panel and the suggested study order, and is
+  now a row of small panels above the course list.</li>
+<li><strong>Snapshot</strong> shows how many courses you have completed and how many remain,
+  the study time each adds up to and its share of the whole, the time your
+  boosters have saved so far and will save on what is left, and your earliest
+  completion date if you study back to back. Times read as <code>5y 1m 0d</code>.</li>
+<li><strong>Perk preferences</strong> lists the kinds of perk courses can give. Click the ones
+  you care about and they light up aqua and move to the top, then drag them
+  into your order of priority. Courses that give a chosen perk are highlighted
+  in the course list, and the courses you need before them are highlighted in
+  a softer aqua. Medical is the only category with its courses filled in so
+  far. Your choices are kept by <strong>Save Key/Settings</strong>.</li>
+<li><strong>Education Boosters</strong> puts your company special, education merits, WSU
+  block and education job perk on this page, with what each one is worth and
+  your total reduction. They are the same settings as Education Stuff on the
+  Investments page, so changing one changes both.</li>
+<li>The API key panel is on the Education &amp; Job page too, in a column that folds
+  away.</li>
+<li>Course fees are no longer shown anywhere on the page.</li>
+<li><strong>Refresh data only</strong> replaces <em>Refresh market data only</em>. It fetches
+  everything, your own account included, but leaves every setting as it is.</li>
+<li>Money boxes keep the zeros you are typing. Deleting the 1 from $1,000,000 now
+  leaves $0,000,000 ready for a 2, instead of collapsing to $0. The number is
+  tidied when you leave the box.</li>
+<li>The quick settings in Basic view add commas as you type.</li>
+<li>The site tells Dark Reader it is already dark, so the extension should leave
+  it alone.</li>
+</ul>
 <h3 id="v0143-2026-09-26">v0.14.3 — 2026-09-26</h3>
 <ul>
 <li>The investments with no measurable ROI, such as West Side University, can be

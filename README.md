@@ -1,6 +1,6 @@
 # Autumn's Stonking Awesome Torn App
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.14.3 · Updated: 2026-09-26_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.15.0 · Updated: 2026-09-26_
 
 A passive-investment planner for [Torn](https://www.torn.com). The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.
 
@@ -55,7 +55,7 @@ Access is gated on faction membership. Your key's profile is checked first, and 
 | **AutumnAPIAccessOnly** | `user > profile`, `torn > bank, items, stocks, education, properties`, `market > pointsmarket` | Public market data only. Every personal setting stays at its default and is configured by hand. |
 | **AutumnAPICustomised** | the above, plus `user > stocks, education, merits, money, properties, job, perks, races`, `company > profile` | The app preconfigures itself from your account. |
 
-There are two refresh buttons. **Refresh all API data** does the market pull plus the personal pull; **Refresh market data only** skips everything personal.
+There are two refresh buttons. **Refresh all API data** pulls everything from Torn and tornsy.com and preconfigures your settings from it; **Refresh data only** makes the same pull but leaves every setting as it is.
 
 ### What the customised key fills in
 

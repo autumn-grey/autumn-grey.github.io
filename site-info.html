@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="darkreader-lock">
 <title>Site Info · Autumn's Stonking Awesome Torn App</title>
 <style>
 :root{--bg:#111315;--panel:#191c20;--panel2:#20242a;--line:#30363d;
@@ -63,7 +65,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="autumns-stonking-awesome-torn-app">Autumn's Stonking Awesome Torn App</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.14.3 · Updated: 2026-09-26</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.15.0 · Updated: 2026-09-26</em></p>
 <p>A passive-investment planner for <a href="https://www.torn.com">Torn</a>. The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.</p>
 <p>Currently restricted to members of <strong>The ZOO - Night Shift</strong>.</p>
 <p>The version number and last-updated date sit in the footer, and the version is stamped into every export, so a bug report can be tied to an exact build.</p>
@@ -122,7 +124,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
 </tr>
 </tbody>
 </table>
-<p>There are two refresh buttons. <strong>Refresh all API data</strong> does the market pull plus the personal pull; <strong>Refresh market data only</strong> skips everything personal.</p>
+<p>There are two refresh buttons. <strong>Refresh all API data</strong> pulls everything from Torn and tornsy.com and preconfigures your settings from it; <strong>Refresh data only</strong> makes the same pull but leaves every setting as it is.</p>
 <h3 id="what-the-customised-key-fills-in">What the customised key fills in</h3>
 <p>Stocks you own · cash on hand · City Bank balance and time left on the deposit · Cayman balance · bank merits · education merits · courses studied · job perks (Fat Cat, Tax Haven, education course time) · faction Cayman bonus · Private Island rent you pay or charge · WSU block ownership · whether you direct a company (ticks TCP, TGP and SYS) · whether you have raced (ticks TCM) · job point specials from your company's star rating (Oil Mogul, Healthy Mind, Cutting Corners, Interior Connections).</p>
 <p>Anything it can't read stays on its default, and the results panel lists every setting line by line so you can see what worked. Open <strong>Diagnostics</strong> inside it if something looks wrong. It shows exactly what your key returned, including the raw bank rates and the City Bank fields.</p>

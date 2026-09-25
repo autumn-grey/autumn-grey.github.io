@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="darkreader-lock">
 <title>Torn Investments by Autumn</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -49,7 +51,7 @@
   </div>
   <div class="field"><label for="apiKey">Torn API Key</label><div class="api-key-wrap"><input id="apiKey" type="password" autocomplete="off" placeholder="AutumnAPIAccessOnly or AutumnAPICustomised key"><button class="api-key-toggle" id="toggleApiKey" type="button" aria-label="Show Torn API key" aria-pressed="false">Show</button></div></div>
 
-  <div class="buttons"><button class="btn primary" id="refresh">Refresh all API data</button><button class="btn" id="refreshMarket">Refresh market data only</button><button class="btn" id="save">Save Key/Settings</button><button class="btn" id="clear">Clear Saved Key/Settings</button></div>
+  <div class="buttons"><button class="btn primary" id="refresh">Refresh all API data</button><button class="btn" id="refreshData">Refresh data only</button><button class="btn" id="save">Save Key/Settings</button><button class="btn" id="clear">Clear Saved Key/Settings</button></div>
 <div id="status" class="status">Not loaded.</div>
 <div id="userStatus" class="status user-status" hidden></div>
 <details id="debugLog" class="debug-log" hidden>
@@ -605,17 +607,30 @@
   </div>
 </div>
 <div class="page" id="pageEduJob" hidden>
-  <h2 class="tos-title">Education &amp; Job Planner</h2>
+  <div class="grid" id="eduJobGrid">
+  <button class="config-tab" id="eduJobConfigTab" type="button" aria-label="Show API key">API Key</button>
+  <div class="grid-left">
+  <button class="collapse-btn" id="collapseEduJobConfig" type="button">‹ Hide API Key</button>
+  <div id="eduJobApiSlot"></div>
+  </div>
+  <div class="grid-right">
   <div class="edjob-wrap">
-    <p class="help" id="edJobSource"></p>
-    <div class="edjob-tiles" id="edJobSummary"></div>
-    <section class="edjob-panel">
-      <h3>Your time reductions</h3>
-      <div class="edjob-reductions" id="edJobReductions"></div>
-      <p class="help">Set these under <strong>Education Stuff</strong> on the Investments page. They only
-        shorten a course you start after you have them &mdash; one already running keeps its original
-        length.</p>
-    </section>
+    <div class="edjob-modules">
+      <section class="panel edjob-module" id="edJobProgress"></section>
+      <section class="panel edjob-module" id="edJobPerks"></section>
+      <section class="panel edjob-module" id="edJobBoosters">
+        <div class="edjob-module-head"><span>Education Boosters</span><span id="ejBoostTotal"></span></div>
+        <div class="edjob-boosts">
+          <div class="edjob-stat-title">Company special</div>
+          <div class="edjob-boost-row"><select id="ejCompanyJp" data-mirror="companyJp" aria-label="Company special JP per day"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><span class="edjob-boost-unit">JP/day</span><span class="edjob-boost-effect" id="ejCompanyEffect"></span></div>
+          <div class="edjob-stat-title">Education merits</div>
+          <div class="edjob-boost-row"><select id="ejEducationMerits" data-mirror="educationMerits" aria-label="Education merits"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><span class="edjob-boost-unit">of 10</span><span class="edjob-boost-effect" id="ejMeritsEffect"></span></div>
+          <div class="edjob-stat-title">Block &amp; perk</div>
+          <label class="edjob-perk edjob-boost-toggle"><input type="checkbox" id="ejWsuOwned" data-mirror="wsuOwned"><span>WSU Block</span><span class="edjob-perk-rank">-10%</span></label>
+          <label class="edjob-perk edjob-boost-toggle"><input type="checkbox" id="ejEdJobPerk" data-mirror="edJobPerk"><span>Education Job Perk</span><span class="edjob-perk-rank">-10%</span></label>
+        </div>
+      </section>
+    </div>
     <section class="edjob-panel">
       <h3>Courses</h3>
       <div class="edjob-controls">
@@ -625,12 +640,8 @@
       </div>
       <div id="edJobPicker"></div>
     </section>
-    <section class="edjob-panel">
-      <h3>The order to study them in</h3>
-      <p class="help">Everything still to do, prerequisites first and the shortest of whatever is open
-        next, so nothing quick waits behind something long.</p>
-      <div class="edjob-plan" id="edJobPlan"></div>
-    </section>
+  </div>
+  </div>
   </div>
 </div>
 <div class="page" id="pageFeedback" hidden>

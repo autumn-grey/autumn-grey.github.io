@@ -72,6 +72,7 @@ function setPage(page){
   if(api){
     if(planner) $("plannerApiSlot").appendChild(api);
     else if(banking) $("bankingApiSlot").appendChild(api);
+    else if(eduJob) $("eduJobApiSlot").appendChild(api);
     else if(document.body.classList.contains("basic")) $("noDataNotice")?.before(api);
     else $("collapseConfig")?.after(api);
   }

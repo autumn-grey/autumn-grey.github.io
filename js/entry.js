@@ -20,10 +20,9 @@ async function refreshMarketData(){
   applyDefaultBoosters();
   cacheMarket();
 }
-// Both refresh buttons run through here. `withUser` decides whether the
-// personal pulls and the settings they preconfigure are refreshed too.
-async function refresh(withUser){
-  setStatus(withUser?"Checking your key and refreshing everything…":"Refreshing market data…");
+/** Fetches all Torn and tornsy data, and preconfigures the settings from it when `applySettings` is set. */
+async function refresh(applySettings){
+  setStatus(applySettings?"Checking your key and refreshing everything…":"Refreshing data…");
   try{
     // The faction check gates every other request, personal or public.
     const gate=await verifyFaction();
@@ -39,8 +38,14 @@ async function refresh(withUser){
       return;
     }
     await refreshMarketData();
-    if(withUser){
-      const data=await fetchUserData(gate.profile);
+    const data=await fetchUserData(gate.profile);
+    window.userData=data;
+    if(!data.limited) lastUpdated.user=Date.now();
+    if(!applySettings){
+      renderUserStatus([],data.limited
+        ?`Access-only key · no personal data (${data.limitedReason})`
+        :"Data refreshed · settings left as they are","",data);
+    }else{
       if(data.limited){
         renderUserStatus([],`Access-only key · settings left as they are (${data.limitedReason})`,"",data);
       }else{
@@ -48,13 +53,13 @@ async function refresh(withUser){
         await applyRacingStock(
           (label,detail)=>rep.push({ok:true,label,detail}),
           (label,detail)=>rep.push({ok:false,label,detail}));
-        lastUpdated.user=Date.now();
         const good=rep.filter(r=>r.ok).length;
         renderUserStatus(rep,`Preconfigured ${good} of ${rep.length} settings from your account`,"good",data);
       }
     }
     calculate();
     applyPendingOwned();
+    if(!$("pageEduJob")?.hidden&&typeof renderEdJob==="function") renderEdJob();
     window.freshnessLive=true;
     renderFreshness();
   }catch(e){
@@ -114,20 +119,18 @@ function setupTableSorting(){
 // deliberately absent here. They are wired to markPlanStale further down, so
 // that typing in the planner no longer re-runs the simulation on every key.
 INVESTMENT_FIELDS.forEach(k=>$(k)?.addEventListener("input",calculate));
-// Format as you type. The caret is restored by counting digits rather than
-// characters, so inserting a comma does not shunt it around.
+/** Adds the dollar sign and commas as you type, keeping every digit and the caret where they were. */
 function liveFormatMoney(el){
   const before=el.value, caret=el.selectionStart??before.length;
   const digitsBefore=(before.slice(0,caret).match(/\d/g)||[]).length;
-  const n=parseFloat(before.replace(/[^0-9.\-]/g,""));
-  if(before.trim()===""||!isFinite(n)){el.value="";return}
-  el.value="$"+Math.round(n).toLocaleString("en-US");
-  let seen=0,pos=el.value.length;
-  for(let i=0;i<el.value.length;i++){
-    if(/\d/.test(el.value[i])) seen++;
-    if(seen===digitsBefore){pos=i+1;break}
+  // Do not parse to a number here: it strips the leading zeros mid-edit.
+  const digits=before.replace(/\D/g,"");
+  if(!digits){el.value="";return}
+  el.value="$"+digits.replace(/\B(?=(\d{3})+(?!\d))/g,",");
+  let seen=0,pos=1;
+  for(let i=0;i<el.value.length&&seen<digitsBefore;i++){
+    if(/\d/.test(el.value[i])){seen++;pos=i+1}
   }
-  if(digitsBefore===0) pos=el.value.length;
   el.setSelectionRange(pos,pos);
 }
 MONEY_INPUTS.forEach(id=>{
@@ -328,7 +331,7 @@ $("prioAll")?.addEventListener("change",e=>{
 $("incMode")?.addEventListener("change",calculate);
 $("incMax")?.addEventListener("change",calculate);
 $("refresh").onclick=()=>refresh(true);
-$("refreshMarket").onclick=()=>refresh(false);$("save").onclick=saveLocal;$("clear").onclick=clearLocal;$("resetMoney").onclick=resetMoneyTab;$("resetEducation").onclick=resetEducationTab;$("resetMisc").onclick=resetMiscTab;$("resetPrefs").onclick=resetPrefsTab;
+$("refreshData").onclick=()=>refresh(false);$("save").onclick=saveLocal;$("clear").onclick=clearLocal;$("resetMoney").onclick=resetMoneyTab;$("resetEducation").onclick=resetEducationTab;$("resetMisc").onclick=resetMiscTab;$("resetPrefs").onclick=resetPrefsTab;
 // Collapse the configuration column to a vertical tab, giving the table full width.
 function setConfigCollapsed(collapsed){
   $("grid").classList.toggle("config-collapsed",collapsed);
@@ -401,6 +404,7 @@ $("viewAdvanced")?.addEventListener("click",()=>setView(false));
 ["bBankDeposit","bPiRent","bPiIncome"].forEach(id=>{
   const el=$(id);
   if(!el) return;
+  el.addEventListener("input",()=>liveFormatMoney(el));
   el.addEventListener("blur",()=>{formatMoneyInput(el);applyBasicControls(id)});
   el.addEventListener("keydown",e=>{if(e.key==="Enter"){formatMoneyInput(el);applyBasicControls(id)}});
 });
