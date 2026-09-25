@@ -28,9 +28,7 @@
 </header>
 <main>
 <div class="banner banner-proto" id="protoBanner">
-<button type="button" class="banner-toggle" id="protoToggle" aria-expanded="true" aria-controls="protoBody"><span class="banner-arrow" aria-hidden="true"></span><span class="banner-head">Prototype Warning</span><strong class="banner-label">Prototype:</strong></button><span class="banner-body" id="protoBody"> some things might still be broken, currently only open to members of AutumnGrey's faction, or Torn staff. A custom API key is required to verify access, this is only saved on your local browser, and only if you choose. As later updates are made new custom api keys may be required making your old key redundant, this will be communicated clearly. <br>
-  This app doesn't play well with extensions like Dark Reader, so please disable for this site (it's already permanently in dark mode anyway). <br>
-  <s>If you have suggestions, feedback or question, please message me, <a href="https://www.torn.com/profiles.php?XID=4386333" target="_blank" rel="noopener noreferrer">AutumnGrey</a> directly, or via a <a href="#feedback" class="fb-jump" data-fb="fsq">feedback form</a>. If you encounter bugs or other problems please submit an <a href="#feedback" class="fb-jump" data-fb="inc">incident form</a>.</s> <br>
+<button type="button" class="banner-toggle" id="protoToggle" aria-expanded="true" aria-controls="protoBody"><span class="banner-arrow" aria-hidden="true"></span><span class="banner-head">Prototype Warning</span><strong class="banner-label">Prototype:</strong></button><span class="banner-body" id="protoBody"> some things might still be broken, Education &amp; Job is barely started you can ignore that, currently only open to members of AutumnGrey's faction, or Torn staff. A custom API key is required to verify access, this is only saved on your local browser, and only if you choose. As later updates are made new custom api keys may be required making your old key redundant, this will be communicated clearly. <br>
   <span class="banner-ask">When you've had a chance to check out the site and have a play around pretty please complete my <a href="#testing" class="tf-jump">testing feedback form</a>.</span> <br>
   One more thing, if anyone can figure out a way to work out the ROI for any of the investments in the <em>Undefined ROI Stocks</em> table, I will send you a xanax and a kiss on the mouth xox &lt;3</span>
 <div class="banner-note">This tool is a guide only. Values are accurate at the time of request, but are subject to fluctuation. Stock sales profits are not considered for the purpose of this investment planner, as past trade performance is not a reliable indicator of future outcomes.</div>
@@ -334,6 +332,7 @@
     <label class="basic-num">Current PI Rent / Day <input id="bPiRent" class="money-input" type="text" inputmode="numeric" value="$850,000"></label>
     <label class="basic-num">PI Rental Price / Day <input id="bPiIncome" class="money-input" type="text" inputmode="numeric" value="$900,000"></label>
   </div>
+  <p class="sub basic-more">For more settings see <a href="#" id="toAdvanced">Advanced View</a></p>
 </section>
 <section class="panel">
 <details open>
@@ -351,7 +350,14 @@
 </div>
 <div class="table-tools"><button type="button" id="csvInvestments" class="btn btn-icon" title="Download as a spreadsheet file (.tsv)" aria-label="Download as a spreadsheet file"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><polyline points="9 15 12 18 15 15"/></svg></button></div>
 <div id="buyNext"></div>
-<p class="sub basic-only" id="basicAssumptions"></p>
+<div class="colour-key basic-only">
+  <span class="ck-item ck-money">Currency payout</span>
+  <span class="ck-item ck-items">Item payout</span>
+  <span class="ck-item ck-booster">Stat refill</span>
+  <span class="ck-item ck-bank">Bank interest</span>
+  <span class="ck-item ck-situational">Only if you use it</span>
+  <span class="ck-item ck-awful">Bag of shite</span>
+</div>
 <div id="ownedHint">Click a row once to mark as owned, twice to skip it, and thrice to deselect it.<span class="adv-only"> Click the check box to add an investment to the <em>Custom Plan</em> path found in the Path options of the planner.</span></div>
 <div class="tablewrap"><table class="table table-main"><thead><tr>
 <th class="pick">Plan<input type="checkbox" id="pickAllMain" title="Select/deselect all"></th>
@@ -507,7 +513,7 @@
     <summary>Bank Settings</summary>
     <div class="row3">
       <div class="field"><label>City Bank Merits</label><select id="bkMerits"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
-      <div class="field"><label>Oil Mogul: JP per day</label><select id="bkOilJp"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+      <div class="field"><label>Oil Mogul JP/day</label><select id="bkOilJp"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
       <div class="field"><label>City Bank Deposit</label><input id="bkDeposit" class="money-input" type="text" inputmode="numeric" value="$2,000,000,000"></div>
     </div>
     <div class="row2">

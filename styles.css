@@ -49,7 +49,9 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .user-status .us-diag{margin-top:8px;border-top:1px solid var(--line);padding-top:7px}
 .user-status .us-diag summary{cursor:pointer;color:var(--muted)}
 .user-status .us-diag .us-line{color:#8f98a3;word-break:break-word;margin-top:3px}
-.api-key-wrap{display:flex;gap:7px}.api-key-wrap input{flex:1;min-width:0}.api-key-toggle{flex:0 0 auto;padding:8px 10px;border:1px solid #3a4048;background:#252a31;color:var(--text);border-radius:6px;cursor:pointer}.api-key-toggle:hover{background:#30363d}.help{font-size:11px;color:var(--muted);margin-top:5px}.panel-desc{margin:0 0 12px;line-height:1.7}.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-items:start}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;align-items:start}.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;align-items:start}@media(max-width:760px){.row4{grid-template-columns:1fr 1fr}}.check{display:flex;align-items:center;gap:8px;margin:8px 0;color:#d7dbe0}.check input{width:auto}.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #49515a;background:#252a31;color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer}.btn.primary{background:var(--accent);border-color:var(--accent);color:#17120c;font-weight:700}
+.api-key-wrap{display:flex;gap:7px}.api-key-wrap input{flex:1;min-width:0}.api-key-toggle{flex:0 0 auto;padding:8px 10px;border:1px solid #3a4048;background:#252a31;color:var(--text);border-radius:6px;cursor:pointer}.api-key-toggle:hover{background:#30363d}.help{font-size:11px;color:var(--muted);margin-top:5px}.panel-desc{margin:0 0 12px;line-height:1.7}.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-items:start}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;align-items:start}
+#pageBanking .row3{grid-template-rows:auto auto;row-gap:0}
+#pageBanking .row3>.field{display:grid;grid-row:span 2;grid-template-rows:subgrid}.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;align-items:start}@media(max-width:760px){.row4{grid-template-columns:1fr 1fr}}.check{display:flex;align-items:center;gap:8px;margin:8px 0;color:#d7dbe0}.check input{width:auto}.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #49515a;background:#252a31;color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer}.btn.primary{background:var(--accent);border-color:var(--accent);color:#17120c;font-weight:700}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn:disabled:hover{border-color:#49515a}
 /* Every control answers the same way: the outline picks up the accent and the
@@ -143,24 +145,24 @@ body.basic #pageInvestments .row-desc{display:none}
 body.basic #pageInvestments .tag-key{display:none}
 body.basic #pageInvestments #tbodyUndefined .tag{display:none}
 /* Basic view: the row itself carries the colour the tag would have shown. */
-body.basic #pageInvestments #tbody tr.tint-money>td{background:rgba(74,222,128,.24)!important}
-body.basic #pageInvestments #tbody tr.tint-items>td{background:rgba(56,189,248,.24)!important}
-body.basic #pageInvestments #tbody tr.tint-booster>td{background:rgba(255,105,180,.24)!important}
-body.basic #pageInvestments #tbody tr.tint-bank>td{background:rgba(192,110,255,.26)!important}
-body.basic #pageInvestments #tbody tr.tint-situational>td{background:rgba(250,204,86,.24)!important}
-body.basic #pageInvestments #tbody tr.tint-awful>td{background:rgba(248,113,113,.25)!important}
-body.basic #pageInvestments #tbody tr.tint-money{--own:#59c37a}
-body.basic #pageInvestments #tbody tr.tint-items{--own:#4fb6ff}
-body.basic #pageInvestments #tbody tr.tint-booster{--own:#ff6fae}
-body.basic #pageInvestments #tbody tr.tint-bank{--own:#c77dff}
-body.basic #pageInvestments #tbody tr.tint-situational{--own:#d9b15b}
-body.basic #pageInvestments #tbody tr.tint-awful{--own:#e06c75}
-body.basic #pageInvestments #tbody tr.tint-money{--own-fill:rgba(89,195,122,.14)}
-body.basic #pageInvestments #tbody tr.tint-items{--own-fill:rgba(79,182,255,.14)}
-body.basic #pageInvestments #tbody tr.tint-booster{--own-fill:rgba(255,111,174,.14)}
-body.basic #pageInvestments #tbody tr.tint-bank{--own-fill:rgba(199,125,255,.14)}
-body.basic #pageInvestments #tbody tr.tint-situational{--own-fill:rgba(217,177,91,.14)}
-body.basic #pageInvestments #tbody tr.tint-awful{--own-fill:rgba(224,108,117,.14)}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-money>td{background:rgba(74,222,128,.24)!important}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-items>td{background:rgba(56,189,248,.24)!important}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-booster>td{background:rgba(255,105,180,.24)!important}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-bank>td{background:rgba(192,110,255,.26)!important}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-situational>td{background:rgba(250,204,86,.24)!important}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-awful>td{background:rgba(248,113,113,.25)!important}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-money{--own:#59c37a}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-items{--own:#4fb6ff}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-booster{--own:#ff6fae}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-bank{--own:#c77dff}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-situational{--own:#d9b15b}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-awful{--own:#e06c75}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-money{--own-fill:rgba(89,195,122,.14)}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-items{--own-fill:rgba(79,182,255,.14)}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-booster{--own-fill:rgba(255,111,174,.14)}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-bank{--own-fill:rgba(199,125,255,.14)}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-situational{--own-fill:rgba(217,177,91,.14)}
+body.basic #pageInvestments :is(#tbody,#tbodyUndefined) tr.tint-awful{--own-fill:rgba(224,108,117,.14)}
 body.basic #pageInvestments #tbody td:nth-child(2){cursor:help}
 .plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px 18px}
 .plan-cards{display:flex;gap:11px;flex-wrap:wrap;margin:0 0 12px}
@@ -650,7 +652,19 @@ body.basic #pageInvestments #tbody tr.skipped>td:nth-child(8){border-radius:0 8p
 #buyNext .bn-target{font-size:11px;color:var(--muted);margin-top:5px}
 #buyNext .bn-bank{font-size:11px;color:#b98ade;margin-top:6px}
 #ownedHint{font-size:11px;color:var(--text);font-weight:700;margin-bottom:9px}
-body.basic #pageInvestments .basic-col{display:table-cell}
+body.basic #ownedHint{font-size:14px;text-align:center}
+body.basic #pageInvestments #tbodyUndefined tr.stock-first:not([class*="tint-"])>td{background:transparent!important}
+body.basic #pageInvestments #tbodyUndefined tr.owned.stock-first:not([class*="tint-"]){--own:#9fb3c8;--own-fill:rgba(159,179,200,.13)}
+.basic-more{margin:10px 0 0}
+body.basic #pageInvestments .colour-key.basic-only{display:flex}
+.colour-key{flex-wrap:wrap;justify-content:center;gap:6px;align-items:center;margin-bottom:10px;font-size:14px;color:var(--text)}
+.ck-item{padding:3px 10px;border-radius:8px;border:2px solid var(--ck);background:var(--ck-tint)}
+.ck-money{--ck:#59c37a;--ck-tint:rgba(74,222,128,.24)}
+.ck-items{--ck:#4fb6ff;--ck-tint:rgba(56,189,248,.24)}
+.ck-booster{--ck:#ff6fae;--ck-tint:rgba(255,105,180,.24)}
+.ck-bank{--ck:#c77dff;--ck-tint:rgba(192,110,255,.26)}
+.ck-situational{--ck:#d9b15b;--ck-tint:rgba(250,204,86,.24)}
+.ck-awful{--ck:#e06c75;--ck-tint:rgba(248,113,113,.25)}
 body.basic #pageInvestments .table{min-width:0}
 body.basic #pageInvestments .tag.situational,body.basic #pageInvestments .tag.awful,body.basic #pageInvestments .tag.booster{display:none}
 #buyNext{border:1px solid var(--accent);border-radius:8px;padding:11px 13px;margin-bottom:11px;background:#12161b}

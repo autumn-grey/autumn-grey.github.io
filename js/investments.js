@@ -748,15 +748,6 @@ ${isTarget?"":`<div class="bn-target">Hold it while you save for ${nm(target)} �
 ${(()=>{const a=bankAdviceText(list);return a?`<div class="bn-bank">${esc(a)}</div>`:""})()}`;
 }
 
-// Basic view hides the settings, so state the assumptions driving the numbers.
-function renderAssumptions(){
-  const el=$("basicAssumptions");
-  if(!el) return;
-  const pis=+($("piPerYear")?.value||0), ads=+($("adsPerMonth")?.value||0);
-  const bd=+($("bannerDays")?.value||0);
-  el.textContent=`Assumes: ${pis} fully upgraded private island${pis===1?"":"s"} per year, ${ads} classified ad${ads===1?"":"s"} per month, and ${bd} banner ad days per year. Switch to Advanced to change these.`;
-}
-
 // Basic view's quick settings write straight through to the advanced inputs,
 // so both views always agree on the underlying values.
 // Each quick setting writes only the Advanced field it mirrors. Writing all
@@ -882,7 +873,6 @@ function render(){
   if(basic){
     // Simplified view: first three blocks only, and TCI's passive strategy only.
     mainRows=mainRows.filter(r=>(r.block==null||r.block<=3) && !/ - Active$/.test(r.name||""));
-    renderAssumptions();
   }
   renderBuyNext(mainRows);
   $("tbody").innerHTML=mainRows.map(r=>`<tr data-key="${rowKey(r)}" class="${window.ownedRows.has(rowKey(r))?"owned ":""}${window.skippedRows.has(rowKey(r))?"skipped ":""}${r.depri?"depri ":""}${basic?rowTint(r)+" ":""}${r.kind==="stock" && r.block===1 ? "stock-first" : ""} ${["cayman","bankbonus","pi","bank","property"].includes(r.kind) || /city bank|^pi$|private island/i.test(String(r.name||"")) ? "special-purple" : ""}">
@@ -891,7 +881,7 @@ function render(){
 <td class="benefit-cell">${r.benefit&&r.benefit[0]?r.benefit[0]:"—"}${r.benefit&&r.benefit[1]?`<div class="sub">${r.benefit[1]}</div>`:""}</td>
 <td>${basic?moneyShort(r.cost):money(r.cost)}</td><td>${r.days?`${r.days}d`:"—"}</td><td>${basic?moneyShort(returnValue(r)):money(returnValue(r))}</td><td class="${r.roi!=null?(r.roi>=0?'good':'bad'):''}">${pct(r.roi)}</td><td class="basic-col">${breakEvenText(r)}</td><td class="${r.compare!=null?(r.compare>=0?'good':'bad'):''}">${money(r.compare)}</td>
 </tr>`).join("");
-  $("tbodyUndefined").innerHTML=undefinedRows.map(r=>`<tr data-key="${rowKey(r)}" class="${window.ownedRows.has(rowKey(r))?"owned ":""}${window.skippedRows.has(rowKey(r))?"skipped ":""}${r.block===1?"stock-first":""}">
+  $("tbodyUndefined").innerHTML=undefinedRows.map(r=>`<tr data-key="${rowKey(r)}" class="${window.ownedRows.has(rowKey(r))?"owned ":""}${window.skippedRows.has(rowKey(r))?"skipped ":""}${basic&&r.awful?"tint-awful ":basic&&r.situational?"tint-situational ":""}${r.block===1?"stock-first":""}">
 <td class="pick"><input type="checkbox" class="row-pick" data-key="${rowKey(r)}"${window.selectedRows.has(rowKey(r))?" checked":""}></td>
 <td><span class="ticker">${r.ticker}</span> <strong>${r.name}</strong>${r.block?`<span class="tag">${r.singleBlock?"Single":"B"+r.block}</span>`:""}${window.skippedRows.has(rowKey(r))?`<span class="tag skipped">Skipped</span>`:""}${r.situational?`<span class="tag situational">Situational</span>`:""}${r.awful?`<span class="tag awful">Awful</span>`:""}${r.payout==="money"?`<span class="tag money">$$$</span>`:""}${r.payout==="items"?`<span class="tag items">Items</span>`:""}${r.bank?`<span class="tag bank">Bank</span>`:""}${r.booster?`<span class="tag booster">Booster</span>`:""}</td>
 <td class="benefit-cell">${r.benefit&&r.benefit[0]?r.benefit[0]:"—"}${r.benefit&&r.benefit[1]?`<div class="sub">${r.benefit[1]}</div>`:""}</td>

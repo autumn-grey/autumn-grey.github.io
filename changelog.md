@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.15.0 · Updated: 2026-09-26_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.15.1 · Updated: 2026-09-26_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,23 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.15.1 — 2026-09-26
+
+- **Basic view** has a colour key above the investments table: each colour is
+  shown as a small owned row, so you can see what green, blue, pink, purple,
+  yellow and red rows mean at a glance. The key and the "click a row" line are
+  centred, and the line is the same size as the investment names.
+- In Basic view the **Undefined ROI Stocks** are coloured yellow or red when
+  they are situational or a bag of shite, and the rest have no colour, instead
+  of all being green.
+- The "Assumes: 1 fully upgraded private island per year…" line is gone.
+  Quick Settings ends with a link to Advanced View, where those settings live.
+- On **Basic Banking**, Bank Settings keeps its three boxes in line: the Oil
+  Mogul label is shorter, and a label that wraps no longer pushes its box
+  down.
+- The prototype warning no longer asks you to turn off Dark Reader, and says
+  that Education & Job has barely started so it can be ignored for now.
 
 ### v0.15.0 — 2026-09-26
 

@@ -398,6 +398,7 @@ catch(e){ logProblem("Configuration panel state could not be read",e) }
 
 $("viewBasic")?.addEventListener("click",()=>setView(true));
 $("viewAdvanced")?.addEventListener("click",()=>setView(false));
+$("toAdvanced")?.addEventListener("click",e=>{e.preventDefault();setView(false)});
 ["bMerits","bOilRig","bBankDeposit","bPiRent","bPiIncome"].forEach(id=>{
   $(id)?.addEventListener("change",()=>applyBasicControls(id));
 });
