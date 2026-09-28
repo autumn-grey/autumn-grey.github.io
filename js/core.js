@@ -337,6 +337,10 @@ function saveLocal(){
     localStorage.setItem("tornInvPrio",JSON.stringify([...prioritisedTickers()]));
     localStorage.setItem("tornInvPlanDone",JSON.stringify([...window.planDone]));
     if(window.edJobPerkPrefs) localStorage.setItem("tornInvPerkPrefs",JSON.stringify(window.edJobPerkPrefs));
+    if(window.edJobCourseOrder) localStorage.setItem("tornInvCourseOrder",JSON.stringify(window.edJobCourseOrder));
+    if(window.edJobPlan) localStorage.setItem("tornInvCoursePlan",JSON.stringify(window.edJobPlan));
+    if(window.edJobCurrent) localStorage.setItem("tornInvCurrentCourse",JSON.stringify({id:window.edJobCurrent,until:window.edJobCurrentUntil||0}));
+    else localStorage.removeItem("tornInvCurrentCourse");
     if($("apiKey").value)localStorage.setItem("tornInvApiKey",$("apiKey").value);
   }catch(e){
     logProblem("Settings could not be saved. Storage may be full, or private mode is on",e);
@@ -347,7 +351,7 @@ function saveLocal(){
 }
 // Wipes everything this page has stored, on screen and in localStorage.
 function clearLocal(){
-  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched","tornInvScriptsDraft","tornInvGhToken","tornInvPerkPrefs",MARKET_CACHE_KEY]
+  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched","tornInvScriptsDraft","tornInvGhToken","tornInvPerkPrefs","tornInvCourseOrder","tornInvCoursePlan","tornInvCurrentCourse",MARKET_CACHE_KEY]
     .forEach(k=>localStorage.removeItem(k));
   window.ownedRows.clear();
   window.skippedRows.clear();
@@ -360,7 +364,11 @@ function clearLocal(){
   window.dudPinned=false;
   if(typeof syncPinnedButtons==="function") syncPinnedButtons();
   if(window.edJobPerkPrefs) window.edJobPerkPrefs.length=0;
-  if(typeof renderEdJobPerks==="function") renderEdJobPerks();
+  if(window.edJobCourseOrder) window.edJobCourseOrder.length=0;
+  if(window.edJobPlan) window.edJobPlan.length=0;
+  window.edJobCurrent=null;
+  window.edJobCurrentUntil=0;
+  if(typeof renderEdJob==="function"&&!$("pageEduJob")?.hidden) renderEdJob();
   $("apiKey").value="";
   window.savedBoosters=null;
   render();
@@ -467,7 +475,8 @@ async function fetchPropertyPrices(){
   window.propertyPricesError=null;
 }
 async function fetchEducationIndex(){
-  const j=await tornTry("https://api.torn.com/torn/?selections=education");
+  const [j,v2]=await Promise.all([tornTry("https://api.torn.com/torn/?selections=education"),
+    tornTry("https://api.torn.com/v2/torn/education","Course codes unavailable. Courses are shown without them")]);
   if(j.__error){ window.educationIndexError=j.__error; return }
   const raw=j.education||j.data?.education||{};
   window.educationIndex=Object.fromEntries(Object.entries(raw).map(([id,x])=>[String(id),x.name]));
@@ -490,12 +499,22 @@ async function fetchEducationIndex(){
     // Anything the API lists that this app has no checkbox for is dropped from
     // the prerequisites rather than left as a number nothing can satisfy.
     info[id]={
+      perk:(Array.isArray(r.perk)?r.perk:[]).map(s=>String(s).trim()).filter(Boolean).join(", "),
       needs:(Array.isArray(x.prerequisites)?x.prerequisites:[])
         .map(n=>appIdOf[String(n)]).filter(Boolean),
       gains:["manual_labor","intelligence","endurance","perk"]
         .flatMap(k=>Array.isArray(r[k])?r[k]:[])
         .map(s=>String(s).trim()).filter(Boolean)
     };
+  });
+  const faculties=Array.isArray(v2.education)?v2.education:[];
+  faculties.flatMap(f=>Array.isArray(f.courses)?f.courses:[]).forEach(c=>{
+    const id=appIdOf[String(c.id)]||educationIdFor(c.name);
+    if(!id||!info[id]) return;
+    if(c.code) info[id].code=String(c.code).trim();
+    if(c.rewards?.effect) info[id].perk=String(c.rewards.effect).trim();
+    const ws=c.rewards?.working_stats||{};
+    info[id].stats={man:+ws.manual_labor||0,int:+ws.intelligence||0,end:+ws.endurance||0};
   });
   const unit=calibrateCourseDuration(samples);
   if(unit) samples.forEach(x=>{ days[x.id]=x.duration/unit.per });

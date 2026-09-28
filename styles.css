@@ -382,8 +382,7 @@ a:hover,.site-footer a:hover{text-decoration:underline;filter:brightness(1.15)}
 .tf-cta:hover:not(:disabled){background:#3fb950;border-color:#56d364}
 /* EDUCATION & JOB */
 .edjob-wrap{display:flex;flex-direction:column;gap:18px}
-.edjob-panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
-.edjob-panel h3{margin:0 0 12px;font-size:16px;color:var(--accent)}
+body.edujob #apiPanel>details>summary::before{content:"◂"}
 .edjob-modules{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
 .edjob-module{width:fit-content;max-width:100%}
 .edjob-module-head{display:flex;justify-content:space-between;gap:24px;margin-bottom:10px;
@@ -424,30 +423,80 @@ a:hover,.site-footer a:hover{text-decoration:underline;filter:brightness(1.15)}
 .edjob-stat-saved small{display:block;font-size:12px;font-weight:400}
 .edjob-stat-saved>span:last-child{text-align:right}
 .edjob-stat-label{color:var(--muted);font-size:12px}
-.edjob-controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:12px}
-.edjob-find{display:flex;flex-direction:column;gap:4px}
-.edjob-find span{color:var(--muted);font-size:12px}
-.edjob-find input{background:var(--panel2);color:var(--text);border:1px solid var(--line);
-  border-radius:8px;padding:7px 10px;font:inherit;min-width:220px}
-.edjob-find input:focus{outline:none;border-color:var(--accent)}
-.edjob-faculty{border:1px solid var(--line);border-radius:8px;margin-bottom:8px;background:var(--panel2)}
-.edjob-faculty>summary{cursor:pointer;padding:9px 12px;font-weight:700;
-  display:flex;justify-content:space-between;gap:10px}
-.edjob-faculty-count{color:var(--muted);font-weight:400;font-size:12px}
-.edjob-course-list{padding:4px 12px 12px;display:flex;flex-direction:column;gap:2px}
-.edjob-course{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;
-  align-items:baseline;padding:6px 8px;border-radius:6px}
-.edjob-course:hover{background:var(--panel)}
-.edjob-course-name{min-width:0}
-.edjob-course-meta{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
-.edjob-course-notes{grid-column:2/-1;color:var(--muted);font-size:12px}
-.edjob-course.done .edjob-course-name{color:var(--muted)}
-.edjob-course.locked .edjob-course-name{color:var(--muted)}
-.edjob-course.locked .edjob-course-notes{color:var(--warn)}
-.edjob-course.wanted{background:color-mix(in srgb,var(--accent) 16%,transparent);box-shadow:inset 3px 0 0 var(--accent)}
-.edjob-course.wanted-pre{background:color-mix(in srgb,var(--accent) 7%,transparent);box-shadow:inset 3px 0 0 color-mix(in srgb,var(--accent) 50%,transparent)}
-.edjob-course-tag{margin-left:8px;color:var(--accent);font-size:11px;font-weight:700}
-.edjob-course.wanted-pre .edjob-course-tag{color:color-mix(in srgb,var(--accent) 55%,var(--muted));font-weight:400}
+.edjob-courses{min-width:min(100%,420px)}
+.edjob-foldable{display:flex;align-items:flex-start;max-width:100%}
+.edjob-courses-area{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;user-select:none}
+.edjob-catalogue,.edjob-plan-col{display:grid;grid-template-columns:minmax(0,max-content);gap:18px;align-content:start}
+.edjob-courses-area .edjob-module{width:auto;flex:1}
+.edjob-catalogue,.edjob-plan-col{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px}
+@media(max-width:950px){.edjob-catalogue,.edjob-plan-col{position:static;max-height:none;overflow:visible;padding-right:0}}
+.edjob-col-head{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:-8px}
+.edjob-catalogue-tab{display:none}
+.edjob-courses-area.catalogue-folded>.edjob-catalogue-tab{display:block}
+.edjob-courses-area.catalogue-folded>.edjob-catalogue{display:none}
+.edjob-faculty-head::after{content:"▾";order:-1;color:var(--accent);font-size:17px;line-height:1}
+.edjob-faculty.folded .edjob-faculty-head::after{content:"▸"}
+.edjob-faculty.folded .edjob-module-head{margin-bottom:0}
+.edjob-faculty.folded .edjob-course-list{display:none}
+.edjob-faculty-head:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.edjob-faculty-head{cursor:pointer;justify-content:flex-start;margin:-6px -8px 4px;padding:6px 8px;border-radius:6px}
+.edjob-faculty-head:hover{background:var(--panel2)}
+.edjob-faculty.folded .edjob-faculty-head{margin-bottom:-6px}
+.edjob-faculty-name{flex:1}
+.edjob-course.planned{opacity:.35;cursor:default}
+.edjob-catalogue .edjob-course.done,.edjob-catalogue .edjob-course.current{cursor:default}
+#edJobTodo:empty::before{content:"Drag courses, or a whole faculty by its heading, here to plan them";display:block;padding:14px 10px;border:1px dashed var(--line);border-radius:6px;color:var(--muted);font-size:12px;text-align:center}
+.edjob-module.dropping{border-color:var(--accent)}
+.edjob-year{list-style:none;margin-top:6px;padding:2px 2px 3px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.05em}
+.edjob-year:first-child{margin-top:0}
+.edjob-gap{list-style:none}
+.edjob-ghost,.edjob-course.edjob-ghost{position:fixed;left:0;top:0;z-index:100;margin:0;pointer-events:none;cursor:grabbing;box-shadow:0 4px 12px rgba(0,0,0,.5);list-style:none}
+.edjob-course.picked,.edjob-faculty.picked{opacity:.35}
+.edjob-course.auto{cursor:default}
+.edjob-course.auto .edjob-course-grip{visibility:hidden}
+#edJobTodo .edjob-course{grid-template-columns:auto auto 62px 1fr auto}
+.edjob-plan-pair{display:flex;gap:10px;align-items:flex-start;min-width:0}
+.edjob-plan-pair>.edjob-courses{flex:1}
+.edjob-plan-pair>.edjob-timeline{flex:none}
+.edjob-foldable.no-plan .edjob-timeline{display:none}
+.edjob-tl-head,.edjob-tl-row{display:grid;grid-template-columns:84px 44px 44px 44px;gap:0 8px;align-items:center;text-align:right}
+.edjob-tl-head{color:var(--muted);font-size:11px;font-weight:400;letter-spacing:.04em;align-items:end}
+.edjob-tl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.edjob-tl-row{box-sizing:border-box;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;border-bottom:1px solid var(--line)}
+.edjob-tl-labels{border-bottom:0;color:var(--muted);font-size:11px;letter-spacing:.04em;align-items:end}
+.edjob-tl-end{color:var(--accent)}
+
+.edjob-course-remove{grid-column:5;grid-row:1/span 2;background:none;border:0;padding:0 0 0 8px;color:var(--muted);font-size:18px;line-height:1;cursor:pointer}
+.edjob-course-remove:hover{color:var(--bad)}
+.edjob-foldable>.config-tab{display:none}
+.edjob-foldable.collapsed>.config-tab{display:block}
+.edjob-foldable.collapsed>:not(.config-tab){display:none}
+#eduJobGrid{grid-template-columns:auto 1fr}
+@media(max-width:950px){#eduJobGrid{grid-template-columns:1fr}}
+#eduJobGrid>.grid-left .edjob-module,#eduJobApiSlot{width:auto;flex:1;min-width:0}
+body.edujob #apiPanel{width:340px;max-width:100%}
+.edjob-fold{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.edjob-fold::before{content:"◂";font-size:17px;line-height:1}
+.edjob-fold:hover{color:var(--accent-hi)}
+.edjob-course-list{position:relative;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.edjob-course{position:relative;display:grid;grid-template-columns:auto auto 62px 1fr;align-items:center;gap:2px 8px;padding:5px 10px;border:1px solid var(--line);
+  border-radius:6px;background:var(--panel2);cursor:grab;user-select:none}
+.edjob-course:hover{border-color:var(--muted)}
+.edjob-course-grip{color:var(--muted);font-size:12px;touch-action:none}
+.edjob-course-check{margin:0;accent-color:var(--accent);cursor:pointer}
+.edjob-course>.edjob-course-grip,.edjob-course>.edjob-course-check{grid-row:span 2}
+.edjob-course-name{flex:1;min-width:0}
+.edjob-course-code{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.edjob-course-time{grid-column:3;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.edjob-course-perk{grid-column:4;min-width:0;contain:inline-size;color:var(--muted);font-size:12px;line-height:1.3;text-align:right}
+.edjob-course.wanted{background:color-mix(in srgb,var(--accent) 16%,var(--panel2));border-color:var(--accent)}
+.edjob-course.wanted-pre{background:color-mix(in srgb,var(--accent) 7%,var(--panel2));border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
+.edjob-course.blocked{background:color-mix(in srgb,var(--bad) 18%,var(--panel2));border-color:var(--bad)}
+.edjob-course.current{background:color-mix(in srgb,var(--orange) 16%,var(--panel2));border-color:var(--orange);cursor:default}
+.edjob-course.current .edjob-course-grip{visibility:hidden}
+.edjob-course.done{background:color-mix(in srgb,var(--good) 16%,var(--panel2));border-color:var(--good)}
+.edjob-course.done .edjob-course-check{accent-color:var(--good)}
+.edjob-course.dragging{z-index:1;cursor:grabbing;box-shadow:0 4px 12px rgba(0,0,0,.5)}
 
 
 /* SCRIPTS PAGE

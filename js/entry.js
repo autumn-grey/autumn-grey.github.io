@@ -40,6 +40,7 @@ async function refresh(applySettings){
     await refreshMarketData();
     const data=await fetchUserData(gate.profile);
     window.userData=data;
+    if(typeof edJobSetCurrent==="function") edJobSetCurrent(data);
     if(!data.limited) lastUpdated.user=Date.now();
     if(!applySettings){
       renderUserStatus([],data.limited
@@ -344,13 +345,21 @@ function setConfigCollapsed(collapsed){
 addEventListener("keydown",e=>{
   if(!(e.ctrlKey||e.metaKey)||e.altKey) return;
   const t=e.target;
-  if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+  if(t&&(t.isContentEditable||/^(TEXTAREA|SELECT)$/.test(t.tagName)
+    ||(t.tagName==="INPUT"&&!/^(checkbox|radio)$/.test(t.type)))) return;
   const k=e.key.toLowerCase();
+  const edJob=document.body.classList.contains("edujob")&&typeof undoEdJob==="function";
   let done=false;
-  if(k==="z"&&!e.shiftKey) done=undoRows();
-  else if((k==="z"&&e.shiftKey)||k==="y") done=redoRows();
+  if(k==="z"&&!e.shiftKey) done=edJob?undoEdJob():undoRows();
+  else if((k==="z"&&e.shiftKey)||k==="y") done=edJob?redoEdJob():redoRows();
   else return;
   if(done) e.preventDefault();
+});
+/** Saves the key and settings on Ctrl+S instead of saving the web page. */
+addEventListener("keydown",e=>{
+  if(!(e.ctrlKey||e.metaKey)||e.altKey||e.shiftKey||e.key.toLowerCase()!=="s") return;
+  e.preventDefault();
+  saveLocal();
 });
 $("planStaleDismiss")?.addEventListener("click",dismissStaleNote);
 $("collapseConfig")?.addEventListener("click",()=>setConfigCollapsed(true));

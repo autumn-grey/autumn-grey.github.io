@@ -217,3 +217,23 @@ $("toTop")?.addEventListener("click",()=>{
 });
 addEventListener("scroll",syncToTop,{passive:true});
 addEventListener("resize",syncToTop);
+/** Keeps each sticky column no taller than the space between its top and the bottom of the window. */
+function fitLeftColumns(){
+  document.querySelectorAll(".page:not([hidden]) .grid-left,.page:not([hidden]) .edjob-plan-col,.page:not([hidden]) .edjob-catalogue").forEach(el=>{
+    if(getComputedStyle(el).position!=="sticky"){ el.style.maxHeight=""; return }
+    const top=Math.max(20,el.getBoundingClientRect().top);
+    el.style.maxHeight=Math.max(160,window.innerHeight-top-20)+"px";
+  });
+}
+let fitLeftQueued=false;
+/** Refits the left columns once per frame while scrolling or resizing. */
+function queueFitLeft(){
+  if(fitLeftQueued) return;
+  fitLeftQueued=true;
+  requestAnimationFrame(()=>{ fitLeftQueued=false; fitLeftColumns() });
+}
+addEventListener("scroll",queueFitLeft,{passive:true});
+addEventListener("resize",queueFitLeft);
+addEventListener("hashchange",queueFitLeft);
+addEventListener("click",queueFitLeft);
+queueFitLeft();

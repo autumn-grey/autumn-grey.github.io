@@ -65,12 +65,52 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="changelog">Changelog</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.15.1 · Updated: 2026-09-26</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.16.0 · Updated: 2026-09-28</em></p>
 <p>Newest first. Version numbers follow <a href="https://semver.org">semantic versioning</a>:
 <code>MAJOR.MINOR.PATCH</code>. Still on <code>0.x</code> because the app isn't deployment-ready
 until it has a real access layer.</p>
 <hr />
 <h2 id="released">Released</h2>
+<h3 id="v0160-2026-09-28">v0.16.0 — 2026-09-28</h3>
+<ul>
+<li><strong>Education &amp; Job is now a course planner.</strong> The page is laid out in
+  columns, and every panel can be folded into a tab at the side.</li>
+<li><strong>Left:</strong> your API key, <strong>Snapshot</strong>, <strong>Perk preferences</strong> and
+    <strong>Education Boosters</strong>, one under another, all the same width.</li>
+<li><strong>Subject List:</strong> a panel for every subject (Biology, Business Management
+    and so on) listing its courses with their code, how long they take with
+    your boosters, and the perk they give. Completed courses are green, the
+    one you are studying is orange, and anything already in your plan is
+    greyed out. Click a subject's heading to fold it, or fold the whole list.</li>
+<li><strong>Upcoming Courses:</strong> starts empty. Drag a course from the Subject List
+    into it, or drag a whole subject by its heading to add all of its courses
+    in order. Drag courses up and down to reorder them, drag one back out or
+    press its × to take it off. The rest slide out of the way as you drag.</li>
+<li>Upcoming is split into half years: January 2027, June 2027 and so on,
+    counted from when your current course finishes.</li>
+<li>Beside it, a table shows when each planned course would finish and your
+    manual labour, intelligence and endurance from courses so far.</li>
+<li>A course placed before something it needs turns red and says
+    <strong>Prerequisite not met</strong>.</li>
+<li><strong>Completed Courses:</strong> everything you have finished, in whatever order you
+    drag it into, with the course you are studying now at the bottom in
+    orange.</li>
+<li>Choosing a perk preference puts its courses at the top of Upcoming, along
+  with anything they need first, in your perk order. They move when you
+  reorder your perks and go when you unchoose one.</li>
+<li>Ticking a course moves it to Completed Courses; unticking it puts it back at
+  the top of your plan. <strong>Ctrl+Z</strong> and <strong>Ctrl+Shift+Z</strong> undo and redo ticks and
+  plan changes on this page.</li>
+<li><strong>Ctrl+S</strong> saves your key and settings from anywhere.</li>
+<li><strong>Save Key/Settings</strong> now keeps your plan, your completed order, your perk
+  preferences and your current course, so the orange course is there as soon
+  as you come back. Press <strong>Refresh data only</strong> once after this update to load
+  course codes, perks and work stats from Torn.</li>
+<li>Earliest completion dates were a day early east of Greenwich. They are right
+  now.</li>
+<li>The left-hand columns on every page can be scrolled all the way to the
+  bottom without scrolling the page first.</li>
+</ul>
 <h3 id="v0151-2026-09-26">v0.15.1 — 2026-09-26</h3>
 <ul>
 <li><strong>Basic view</strong> has a colour key above the investments table: each colour is

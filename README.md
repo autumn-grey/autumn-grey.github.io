@@ -1,6 +1,6 @@
 # Autumn's Stonking Awesome Torn App
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.15.1 · Updated: 2026-09-26_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.0 · Updated: 2026-09-28_
 
 A passive-investment planner for [Torn](https://www.torn.com). The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.
 
@@ -67,7 +67,7 @@ Every setting stays editable afterwards. Preconfiguring is a starting point, not
 
 ### Saved market data
 
-Share prices, item values, bank rates and the reference tables are kept in your browser after each refresh and restored when you come back, so a reload is instant and costs no API calls. The status line says how old the saved figures are. Personal data is never cached.
+Share prices, item values, bank rates and the reference tables are kept in your browser after each refresh and restored when you come back, so a reload is instant and costs no API calls. The status line says how old the saved figures are. Personal data is not cached on refresh. The one exception is the course you are currently studying and when it finishes, which **Save Key/Settings** keeps along with your other settings so the Education & Job page can show it straight away.
 
 ---
 
@@ -171,12 +171,13 @@ Basic view drops the tags and tints the whole row instead, one category per row.
 
 ## Keyboard
 
-- `Ctrl/Cmd+Z`: undo a row or step mark, 50 levels deep
+- `Ctrl/Cmd+Z`: undo a row or step mark, 50 levels deep. On Education & Job it undoes course ticks and plan changes instead
 - `Ctrl/Cmd+Shift+Z` or `Ctrl/Cmd+Y`: redo
+- `Ctrl/Cmd+S`: save the key and settings, the same as **Save Key/Settings**
 - `Enter` in the API key field: refresh everything
 - `Enter` or `Space` on a sortable column header: sort by it
 
-Undo and redo are ignored while the focus is in a text field, so they never steal a field's own undo.
+Undo and redo are ignored while the focus is in a text field or a dropdown, so they never steal a field's own undo.
 
 ---
 

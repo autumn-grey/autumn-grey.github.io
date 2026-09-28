@@ -65,7 +65,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="autumns-stonking-awesome-torn-app">Autumn's Stonking Awesome Torn App</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.15.1 · Updated: 2026-09-26</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.16.0 · Updated: 2026-09-28</em></p>
 <p>A passive-investment planner for <a href="https://www.torn.com">Torn</a>. The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.</p>
 <p>Currently restricted to members of <strong>The ZOO - Night Shift</strong>.</p>
 <p>The version number and last-updated date sit in the footer, and the version is stamped into every export, so a bug report can be tied to an exact build.</p>
@@ -130,7 +130,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
 <p>Anything it can't read stays on its default, and the results panel lists every setting line by line so you can see what worked. Open <strong>Diagnostics</strong> inside it if something looks wrong. It shows exactly what your key returned, including the raw bank rates and the City Bank fields.</p>
 <p>Every setting stays editable afterwards. Preconfiguring is a starting point, not a lock.</p>
 <h3 id="saved-market-data">Saved market data</h3>
-<p>Share prices, item values, bank rates and the reference tables are kept in your browser after each refresh and restored when you come back, so a reload is instant and costs no API calls. The status line says how old the saved figures are. Personal data is never cached.</p>
+<p>Share prices, item values, bank rates and the reference tables are kept in your browser after each refresh and restored when you come back, so a reload is instant and costs no API calls. The status line says how old the saved figures are. Personal data is not cached on refresh. The one exception is the course you are currently studying and when it finishes, which <strong>Save Key/Settings</strong> keeps along with your other settings so the Education &amp; Job page can show it straight away.</p>
 <hr />
 <h2 id="the-pages">The pages</h2>
 <p>Switching between pages is done from the header, and the Docs and Terms of Service pages from the footer. The title at the top left is also a button: from Docs or the Terms of Service it takes you back to whichever page you were on, in the view you were in. On a working page it does nothing, because you are already there.</p>
@@ -274,12 +274,13 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
 <hr />
 <h2 id="keyboard">Keyboard</h2>
 <ul>
-<li><code>Ctrl/Cmd+Z</code>: undo a row or step mark, 50 levels deep</li>
+<li><code>Ctrl/Cmd+Z</code>: undo a row or step mark, 50 levels deep. On Education &amp; Job it undoes course ticks and plan changes instead</li>
 <li><code>Ctrl/Cmd+Shift+Z</code> or <code>Ctrl/Cmd+Y</code>: redo</li>
+<li><code>Ctrl/Cmd+S</code>: save the key and settings, the same as <strong>Save Key/Settings</strong></li>
 <li><code>Enter</code> in the API key field: refresh everything</li>
 <li><code>Enter</code> or <code>Space</code> on a sortable column header: sort by it</li>
 </ul>
-<p>Undo and redo are ignored while the focus is in a text field, so they never steal a field's own undo.</p>
+<p>Undo and redo are ignored while the focus is in a text field or a dropdown, so they never steal a field's own undo.</p>
 <hr />
 <h2 id="exporting">Exporting</h2>
 <p>The download icon above either table saves a <strong>.tsv</strong> file. Tab-separated, plain ASCII, integers only, so it opens cleanly in Excel and Google Sheets anywhere in the world: no comma-versus-semicolon problem, no mangled characters, no dates invented out of decimals. The investments export puts both tables in one file with a totals row; the planner export covers the whole plan, not just the page on screen, along with the settings that produced it.</p>

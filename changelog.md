@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.15.1 · Updated: 2026-09-26_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.0 · Updated: 2026-09-28_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,46 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.16.0 — 2026-09-28
+
+- **Education & Job is now a course planner.** The page is laid out in
+  columns, and every panel can be folded into a tab at the side.
+  - **Left:** your API key, **Snapshot**, **Perk preferences** and
+    **Education Boosters**, one under another, all the same width.
+  - **Subject List:** a panel for every subject (Biology, Business Management
+    and so on) listing its courses with their code, how long they take with
+    your boosters, and the perk they give. Completed courses are green, the
+    one you are studying is orange, and anything already in your plan is
+    greyed out. Click a subject's heading to fold it, or fold the whole list.
+  - **Upcoming Courses:** starts empty. Drag a course from the Subject List
+    into it, or drag a whole subject by its heading to add all of its courses
+    in order. Drag courses up and down to reorder them, drag one back out or
+    press its × to take it off. The rest slide out of the way as you drag.
+  - Upcoming is split into half years: January 2027, June 2027 and so on,
+    counted from when your current course finishes.
+  - Beside it, a table shows when each planned course would finish and your
+    manual labour, intelligence and endurance from courses so far.
+  - A course placed before something it needs turns red and says
+    **Prerequisite not met**.
+  - **Completed Courses:** everything you have finished, in whatever order you
+    drag it into, with the course you are studying now at the bottom in
+    orange.
+- Choosing a perk preference puts its courses at the top of Upcoming, along
+  with anything they need first, in your perk order. They move when you
+  reorder your perks and go when you unchoose one.
+- Ticking a course moves it to Completed Courses; unticking it puts it back at
+  the top of your plan. **Ctrl+Z** and **Ctrl+Shift+Z** undo and redo ticks and
+  plan changes on this page.
+- **Ctrl+S** saves your key and settings from anywhere.
+- **Save Key/Settings** now keeps your plan, your completed order, your perk
+  preferences and your current course, so the orange course is there as soon
+  as you come back. Press **Refresh data only** once after this update to load
+  course codes, perks and work stats from Torn.
+- Earliest completion dates were a day early east of Greenwich. They are right
+  now.
+- The left-hand columns on every page can be scrolled all the way to the
+  bottom without scrolling the page first.
 
 ### v0.15.1 — 2026-09-26
 

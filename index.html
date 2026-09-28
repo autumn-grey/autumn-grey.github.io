@@ -614,38 +614,63 @@
 </div>
 <div class="page" id="pageEduJob" hidden>
   <div class="grid" id="eduJobGrid">
-  <button class="config-tab" id="eduJobConfigTab" type="button" aria-label="Show API key">API Key</button>
   <div class="grid-left">
-  <button class="collapse-btn" id="collapseEduJobConfig" type="button">‹ Hide API Key</button>
-  <div id="eduJobApiSlot"></div>
+  <div class="edjob-foldable" id="edJobApiWrap">
+    <button type="button" class="config-tab" aria-label="Show API key">API Key</button>
+    <div id="eduJobApiSlot"></div>
+  </div>
+  <div class="edjob-foldable" id="edJobProgressWrap">
+    <button type="button" class="config-tab" aria-label="Show snapshot">Snapshot</button>
+    <section class="panel edjob-module" id="edJobProgress"></section>
+  </div>
+  <div class="edjob-foldable" id="edJobPerksWrap">
+    <button type="button" class="config-tab" aria-label="Show perk preferences">Perk preferences</button>
+    <section class="panel edjob-module" id="edJobPerks"></section>
+  </div>
+  <div class="edjob-foldable" id="edJobBoostersWrap">
+    <button type="button" class="config-tab" aria-label="Show education boosters">Education Boosters</button>
+    <section class="panel edjob-module" id="edJobBoosters">
+      <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide education boosters">Education Boosters</button><span id="ejBoostTotal"></span></div>
+      <div class="edjob-boosts">
+        <div class="edjob-stat-title">Company special</div>
+        <div class="edjob-boost-row"><select id="ejCompanyJp" data-mirror="companyJp" aria-label="Company special JP per day"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><span class="edjob-boost-unit">JP/day</span><span class="edjob-boost-effect" id="ejCompanyEffect"></span></div>
+        <div class="edjob-stat-title">Education merits</div>
+        <div class="edjob-boost-row"><select id="ejEducationMerits" data-mirror="educationMerits" aria-label="Education merits"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><span class="edjob-boost-unit">of 10</span><span class="edjob-boost-effect" id="ejMeritsEffect"></span></div>
+        <div class="edjob-stat-title">Block &amp; perk</div>
+        <label class="edjob-perk edjob-boost-toggle"><input type="checkbox" id="ejWsuOwned" data-mirror="wsuOwned"><span>WSU Block</span><span class="edjob-perk-rank">-10%</span></label>
+        <label class="edjob-perk edjob-boost-toggle"><input type="checkbox" id="ejEdJobPerk" data-mirror="edJobPerk"><span>Education Job Perk</span><span class="edjob-perk-rank">-10%</span></label>
+      </div>
+    </section>
+  </div>
   </div>
   <div class="grid-right">
   <div class="edjob-wrap">
-    <div class="edjob-modules">
-      <section class="panel edjob-module" id="edJobProgress"></section>
-      <section class="panel edjob-module" id="edJobPerks"></section>
-      <section class="panel edjob-module" id="edJobBoosters">
-        <div class="edjob-module-head"><span>Education Boosters</span><span id="ejBoostTotal"></span></div>
-        <div class="edjob-boosts">
-          <div class="edjob-stat-title">Company special</div>
-          <div class="edjob-boost-row"><select id="ejCompanyJp" data-mirror="companyJp" aria-label="Company special JP per day"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><span class="edjob-boost-unit">JP/day</span><span class="edjob-boost-effect" id="ejCompanyEffect"></span></div>
-          <div class="edjob-stat-title">Education merits</div>
-          <div class="edjob-boost-row"><select id="ejEducationMerits" data-mirror="educationMerits" aria-label="Education merits"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><span class="edjob-boost-unit">of 10</span><span class="edjob-boost-effect" id="ejMeritsEffect"></span></div>
-          <div class="edjob-stat-title">Block &amp; perk</div>
-          <label class="edjob-perk edjob-boost-toggle"><input type="checkbox" id="ejWsuOwned" data-mirror="wsuOwned"><span>WSU Block</span><span class="edjob-perk-rank">-10%</span></label>
-          <label class="edjob-perk edjob-boost-toggle"><input type="checkbox" id="ejEdJobPerk" data-mirror="edJobPerk"><span>Education Job Perk</span><span class="edjob-perk-rank">-10%</span></label>
+    <div class="edjob-courses-area" id="edJobCourses">
+      <button type="button" class="config-tab edjob-catalogue-tab" id="edJobCatalogueTab" aria-label="Show subject list">Subject List</button>
+      <div class="edjob-catalogue" id="edJobCatalogue"></div>
+      <div class="edjob-plan-col" id="edJobPlanCol">
+        <div class="edjob-foldable" id="edJobTodoWrap">
+          <button type="button" class="config-tab" aria-label="Show upcoming courses">Upcoming Courses</button>
+          <div class="edjob-plan-pair">
+            <section class="panel edjob-module edjob-courses">
+              <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide upcoming courses">Upcoming Courses</button><span id="edJobTodoCount"></span></div>
+              <ul class="edjob-course-list" id="edJobTodo"></ul>
+            </section>
+            <section class="panel edjob-module edjob-timeline">
+              <div class="edjob-module-head edjob-tl-head"><span>Completes</span><span>MAN</span><span>INT</span><span>END</span></div>
+              <ul class="edjob-tl-list" id="edJobTimeline"></ul>
+            </section>
+          </div>
         </div>
-      </section>
-    </div>
-    <section class="edjob-panel">
-      <h3>Courses</h3>
-      <div class="edjob-controls">
-        <label class="edjob-find"><span>Find a course</span>
-          <input type="search" id="edJobFind" placeholder="Anatomy, Overclocking&hellip;"></label>
-        <label><input type="checkbox" id="edJobHideDone"> Hide the ones I have done</label>
+        <div class="edjob-foldable" id="edJobDoneWrap">
+          <button type="button" class="config-tab" aria-label="Show completed courses">Completed Courses</button>
+          <section class="panel edjob-module edjob-courses">
+            <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide completed courses">Completed Courses</button><span id="edJobDoneCount"></span></div>
+            <ul class="edjob-course-list" id="edJobDone"></ul>
+          </section>
+        </div>
       </div>
-      <div id="edJobPicker"></div>
-    </section>
+    </div>
   </div>
   </div>
   </div>
