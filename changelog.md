@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.0 · Updated: 2026-09-28_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.1 · Updated: 2026-10-05_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,29 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.16.1 — 2026-10-05
+
+- **Perk preferences** now cover Attacking, Company Ownership, Crime, Gym
+  Gains, Jail, Medical, Passive DEF, Passive DEX, Passive SPD, Passive STR,
+  Profit, Viruses and Weapons, each with its own list of courses in the order
+  to study them. Passive Stats is gone. The lists go by course code, so press
+  **Refresh data only** once if your codes have not loaded yet.
+- **Events in the plan.** Awareness Week, Museum Day, World Blood Donor Day,
+  World Population Day and World Tiger Day show in the table beside Upcoming,
+  above the first course that finishes after them, with their date. Each is
+  green if the course that boosts it is finished before the day, and red if it
+  is not. Hover or tap one to see what it gives.
+- **Clear All** empties Upcoming, after asking first, and unchooses your perk
+  preferences so their courses do not come straight back. **Ctrl+Z** puts it
+  all back.
+- Every course is tinted in its subject's colour, so you can tell Biology from
+  Law at a glance. The outlines still show whether a course is completed,
+  current, blocked or wanted for a perk.
+- Columns on the Education & Job page can be dragged wider or narrower by the
+  bars between them, and Upcoming can be widened on its own without moving the
+  table beside it. Double-click a bar to reset it. The columns stay side by
+  side however narrow the window gets, and the page scrolls sideways instead.
 
 ### v0.16.0 — 2026-09-28
 

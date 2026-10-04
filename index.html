@@ -643,19 +643,22 @@
     </section>
   </div>
   </div>
+  <div class="edjob-resizer" data-for="left" role="separator" aria-orientation="vertical" aria-label="Resize the left column"></div>
   <div class="grid-right">
   <div class="edjob-wrap">
     <div class="edjob-courses-area" id="edJobCourses">
       <button type="button" class="config-tab edjob-catalogue-tab" id="edJobCatalogueTab" aria-label="Show subject list">Subject List</button>
       <div class="edjob-catalogue" id="edJobCatalogue"></div>
+      <div class="edjob-resizer" data-for="catalogue" role="separator" aria-orientation="vertical" aria-label="Resize the subject list"></div>
       <div class="edjob-plan-col" id="edJobPlanCol">
         <div class="edjob-foldable" id="edJobTodoWrap">
           <button type="button" class="config-tab" aria-label="Show upcoming courses">Upcoming Courses</button>
           <div class="edjob-plan-pair">
             <section class="panel edjob-module edjob-courses">
-              <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide upcoming courses">Upcoming Courses</button><span id="edJobTodoCount"></span></div>
+              <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide upcoming courses">Upcoming Courses</button><button type="button" class="collapse-btn" id="edJobClearPlan">Clear All</button><span id="edJobTodoCount"></span></div>
               <ul class="edjob-course-list" id="edJobTodo"></ul>
             </section>
+            <div class="edjob-resizer" data-for="upcoming" role="separator" aria-orientation="vertical" aria-label="Resize upcoming courses"></div>
             <section class="panel edjob-module edjob-timeline">
               <div class="edjob-module-head edjob-tl-head"><span>Completes</span><span>MAN</span><span>INT</span><span>END</span></div>
               <ul class="edjob-tl-list" id="edJobTimeline"></ul>
@@ -673,6 +676,15 @@
     </div>
   </div>
   </div>
+  </div>
+</div>
+<div class="scripts-modal" id="edJobConfirm" hidden role="dialog" aria-modal="true" aria-labelledby="edJobConfirmText">
+  <div class="scripts-modal-box">
+    <p id="edJobConfirmText">Are you sure you want to clear all upcoming courses?</p>
+    <div class="buttons">
+      <button type="button" id="edJobConfirmYes" class="btn danger">Confirm</button>
+      <button type="button" id="edJobConfirmNo" class="btn">Cancel</button>
+    </div>
   </div>
 </div>
 <div class="page" id="pageFeedback" hidden>

@@ -142,29 +142,39 @@ function edJobFinishDate(days){
 // ----------------------------------------------------------------------
 // Perk preferences
 // ----------------------------------------------------------------------
-/** Course names that give each perk category. */
+/** Course codes that give each perk category, in the order to study them. */
 const PERK_COURSES={
-  "Company Ownership":[],
-  "Crime":[],
-  "Gym Gains":[],
-  "Jail":[],
-  "Medical":["Advanced Biochemistry","Intermediate Biochemistry","Intravenous Therapy"],
-  "Passive Stats":[],
-  "Profit":[],
-  "Viruses":[]
+  "Attacking":["DEF1700","DEF2720","DEF2740","DEF2750","DEF2760","DEF2710","DEF2730","DEF3770","BIO1340","BIO2380","BIO2400","BIO2410","HAF1103","HAF2107","HAF2106","HAF2105","HAF2104","HAF2108","HAF2109","HAF2110","HAF3111"],
+  "Company Ownership":["BUS1100","BUS2300","BUS2200","BUS2500","BUS2800","BUS2400","BUS2900","BUS2110","BUS2100","BUS2120","BUS2600","BUS2700","BUS3130","LAW1880","LAW2100","MTH1220","MTH2280"],
+  "Crime":["PSY1630","PSY2132","PSY2640","PSY2660","PSY2650","PSY2670","PSY2680","PSY3690","CMT1520","CMT2230","CMT2530","CMT2130","CMT2131","CMT2570","CMT2128","CMT2129"],
+  "Gym Gains":["SPT1430","SPT2440","SPT2450","SPT2460","SPT2470","SPT2126","SPT2490","SPT2500","SPT2480","SPT3510"],
+  "Jail":["LAW1880","LAW2890","LAW2920","LAW2930","LAW2900","LAW2970","LAW2980","LAW2990","LAW2910","LAW2940","LAW2950","LAW2960","LAW2101","LAW2100","LAW3102"],
+  "Medical":["BIO1340","BIO2127","BIO2360","BIO2370","BIO2350","BIO2390","BIO2380","BIO2410","BIO2400","BIO3420","SPT1430","SPT2480"],
+  "Passive DEF":["SPT1430","SPT2500","DEF1700","DEF2740","DEF2710","DEF2730","MTH1220","MTH2320","MTH2260"],
+  "Passive DEX":["SPT1430","SPT2500","PSY1630","PSY2640","PSY2660","PSY2650","PSY2670","HAF1103","HAF2104","HAF2108"],
+  "Passive SPD":["SPT1430","SPT2490","DEF1700","DEF2750","DEF2760","HAF1103","HAF2105","HAF2109","MTH1220","MTH2240","MTH2250","CBT1780","CBT2790"],
+  "Passive STR":["SPT1430","SPT2490","HAF1103","HAF2107","HAF2106"],
+  "Profit":["HIS1140","HIS2180","HIS2190","HIS2200","HIS2150","HIS2160","HIS2170","HIS3210","SPT1430","SPT2126","PSY1630","PSY2680","CMT1520","CMT2530","CMT2560","CMT2580","CMT2600","LAW1880","LAW2910","GEN1112","GEN2120"],
+  "Viruses":["CMT1520","CMT2530","CMT2560","CMT2580","CMT2600"],
+  "Weapons":["CBT1780","CBT2790","CBT2830","CBT2850","CBT2125","CBT2840","CBT2820","CBT2860","CBT2800","CBT2810","CBT3870","BIO1340","BIO2350","HIS1140","HIS2170","HIS2160","MTH1220","MTH2310","MTH2240","MTH2260","MTH2250","MTH2320","MTH2270","MTH2280","MTH2290","MTH2300","MTH3330","GEN1112","GEN2116","GEN2119"]
 };
-const PERK_CATEGORIES=["Company Ownership","Crime","Gym Gains","Jail","Medical",
-  "Passive Stats","Profit","Viruses"];
+const PERK_CATEGORIES=Object.keys(PERK_COURSES);
 try{ window.edJobPerkPrefs=JSON.parse(localStorage.getItem("tornInvPerkPrefs")||"[]")
   .filter(p=>PERK_CATEGORIES.includes(p)) }
 catch(e){ window.edJobPerkPrefs=[]; logProblem("Perk preferences could not be read",e) }
+/** Returns a lookup from a course code or name to the course. */
+function edJobFinder(list){
+  const byCode=Object.fromEntries(list.filter(c=>c.code).map(c=>[c.code.toUpperCase(),c]));
+  const byName=Object.fromEntries(list.map(c=>[c.name.toLowerCase(),c]));
+  return n=>byCode[String(n).toUpperCase()]||byName[String(n).toLowerCase()];
+}
 /** Returns the courses the chosen perk categories point to, and the prerequisites they need. */
 function edJobWanted(list){
-  const byName=Object.fromEntries(list.map(c=>[c.name.toLowerCase(),c]));
+  const find=edJobFinder(list);
   const byId=Object.fromEntries(list.map(c=>[c.id,c]));
   const out=new Map(), direct=[];
   (window.edJobPerkPrefs||[]).forEach(perk=>(PERK_COURSES[perk]||[]).forEach(n=>{
-    const c=byName[String(n).toLowerCase()];
+    const c=find(n);
     if(c&&!out.has(c.id)){ out.set(c.id,{perk,direct:true}); direct.push(c) }
   }));
   const walk=(c,perk)=>c.needs.forEach(id=>{
@@ -252,7 +262,7 @@ function edJobCurrentLeft(){
 /** Returns the ids of the courses the chosen perks call for, each after the prerequisites it still needs, in perk priority order. */
 function edJobAuto(list){
   const byId=Object.fromEntries(list.map(c=>[c.id,c]));
-  const byName=Object.fromEntries(list.map(c=>[c.name.toLowerCase(),c]));
+  const find=edJobFinder(list);
   const skip=new Set(list.filter(c=>c.done).map(c=>c.id));
   if(window.edJobCurrent) skip.add(window.edJobCurrent);
   const out=[], seen=new Set();
@@ -262,7 +272,7 @@ function edJobAuto(list){
     c.needs.forEach(n=>add(byId[n]));
     out.push(c.id);
   };
-  (window.edJobPerkPrefs||[]).forEach(perk=>(PERK_COURSES[perk]||[]).forEach(n=>add(byName[String(n).toLowerCase()])));
+  (window.edJobPerkPrefs||[]).forEach(perk=>(PERK_COURSES[perk]||[]).forEach(n=>add(find(n))));
   return out;
 }
 /** Returns the plan: the perk courses first, then the hand-placed ones, dropping any finished, being studied or unknown. */
@@ -292,7 +302,8 @@ function edJobBlocked(plan,list){
 }
 /** Returns one course row. */
 function edJobRow(c,cls,removable){
-  return `<li class="edjob-course${cls}" data-id="${esc(c.id)}">`
+  const fac="fac-"+c.faculty.toLowerCase().replace(/[^a-z]+/g,"-");
+  return `<li class="edjob-course ${fac}${cls}" data-id="${esc(c.id)}">`
     +`<span class="edjob-course-grip" aria-hidden="true">⠿</span>`
     +`<input type="checkbox" class="edjob-course-check" aria-label="${esc(c.name)} completed"${c.done?" checked":""}>`
     +`<span class="edjob-course-code">${esc(c.code)}</span>`
@@ -314,6 +325,43 @@ function toggleEdJobFaculty(head){
   if(folded) window.edJobFacultyFolds.push(f);
   try{ localStorage.setItem("tornEdJobFacultyFolds",JSON.stringify(window.edJobFacultyFolds)) }
   catch(e){ logProblem("Folded subjects could not be saved",e) }
+}
+/** Torn events that reward having a particular course finished first. */
+const EDJOB_EVENTS=[
+  {name:"Awareness Week",on:y=>{ const d=new Date(y,0,1); d.setDate(1+(8-d.getDay())%7+14); return d },
+    course:"Bachelor of Psychological Sciences",
+    text:"Increased awareness for one week, complete Bachelor of Psychological Sciences to maximise benefits"},
+  {name:"Museum Day",on:y=>new Date(y,4,18),course:"Bachelor of History",
+    text:"10% bonus to museum point rewards, complete Bachelor of History to maximise benefits"},
+  {name:"World Blood Donor Day",on:y=>new Date(y,5,14),course:"Intravenous Therapy",
+    text:"Life and cooldown penalties for drawing blood are halved, complete Biology - Intravenous Therapy to maximise benefits"},
+  {name:"World Population Day",on:y=>new Date(y,6,11),course:"Bachelor of Military Arts and Science",
+    text:"Level and weapon EXP gained while attacking is doubled, complete Bachelor of Military Arts and Science to maximise benefits"},
+  {name:"World Tiger Day",on:y=>new Date(y,6,29),course:"Survival Skills",
+    text:"500% hunting experience bonus, complete General Studies - Survival Skills to maximise benefits"}
+];
+/** Returns the events that fall within the plan, each against the planned course it comes before and whether its course is done in time. */
+function edJobEvents(list,rows,start,currentEnd){
+  if(!rows.length) return [];
+  const byName=Object.fromEntries(list.map(c=>[c.name,c]));
+  const finishOf=Object.fromEntries(rows.map(r=>[r.id,r.finish]));
+  const ready=(name,when)=>{
+    const c=byName[name];
+    if(!c) return false;
+    if(c.done) return true;
+    if(c.id===window.edJobCurrent) return !!currentEnd&&currentEnd<when;
+    return !!finishOf[c.id]&&finishOf[c.id]<when;
+  };
+  const out=[], last=rows[rows.length-1].finish;
+  for(let y=start.getFullYear();y<=last.getFullYear();y++){
+    EDJOB_EVENTS.forEach(ev=>{
+      const when=ev.on(y);
+      if(when<start) return;
+      const row=rows.find(r=>r.finish>=when);
+      if(row) out.push({row:row.at,ev,when,met:ready(ev.course,when)});
+    });
+  }
+  return out;
 }
 /** Returns the half year a date falls in, as a key and a heading such as "June 2027". */
 function edJobHalf(d){
@@ -353,7 +401,8 @@ function renderEdJobCourses(list){
   list.filter(c=>c.done).forEach(addStats);
   if(current) addStats(current);
   const n=v=>v.toLocaleString("en-US");
-  const timeline=[];
+  const timeline=[], rows=[];
+  const currentEnd=current?new Date(start.getTime()+Math.round(days)*86400000):null;
   todo.innerHTML=plan.map(c=>{
     const d=new Date(start);
     d.setDate(d.getDate()+Math.round(days));
@@ -364,11 +413,23 @@ function renderEdJobCourses(list){
     addStats(c);
     const pinned=auto.includes(c);
     if(head) timeline.push(`<li class="edjob-tl-row edjob-tl-labels"><span>Completes</span><span>MAN</span><span>INT</span><span>END</span></li>`);
+    const finish=new Date(start);
+    finish.setDate(finish.getDate()+Math.round(days));
+    rows.push({id:c.id,finish,at:timeline.length});
     timeline.push(`<li class="edjob-tl-row"><span class="edjob-tl-end">${esc(edJobFinishDate(days))}</span>`
       +`<span>${n(stats.man)}</span><span>${n(stats.int)}</span><span>${n(stats.end)}</span></li>`);
     return (head?`<li class="edjob-year">${h.label}</li>`:"")
       +edJobRow(c,(pinned?" auto":"")+(blocked.has(c.id)?" blocked":aqua(c)),!pinned);
   }).join("");
+  const marks={};
+  edJobEvents(list,rows,start,currentEnd).forEach(m=>{
+    (marks[m.row]=marks[m.row]||[]).push(`<span class="edjob-tl-event ${m.met?"met":"unmet"}" tabindex="0" role="button"`
+      +` data-event="${esc(m.ev.name)}" title="${esc(m.ev.name+":\n"+m.ev.text)}">${esc(m.ev.name)}`
+      +` <span class="edjob-tl-event-date">${esc(edJobFinishDate((m.when-start)/86400000))}</span></span>`);
+  });
+  Object.entries(marks).forEach(([i,spans])=>{
+    timeline[i]=timeline[i].replace("</li>",`<span class="edjob-tl-events">${spans.join("")}</span></li>`);
+  });
   const tl=$("edJobTimeline");
   if(tl) tl.innerHTML=timeline.join("");
   $("edJobTodoWrap")?.classList.toggle("no-plan",!plan.length);
@@ -409,7 +470,7 @@ window.edJobUndo=[];
 window.edJobRedo=[];
 /** Returns the course ticks, plan and completed order as they stand. */
 function edJobSnapshot(){
-  return {order:[...window.edJobCourseOrder],plan:[...window.edJobPlan],
+  return {order:[...window.edJobCourseOrder],plan:[...window.edJobPlan],perks:[...window.edJobPerkPrefs],
     done:[...document.querySelectorAll(".education-course-check")].filter(cb=>cb.checked).map(cb=>cb.id)};
 }
 /** Records the course state before a change so it can be undone. */
@@ -424,9 +485,37 @@ function restoreEdJob(snap){
   document.querySelectorAll(".education-course-check").forEach(cb=>{ cb.checked=done.has(cb.id) });
   window.edJobCourseOrder=[...snap.order];
   window.edJobPlan=[...(snap.plan||[])];
+  if(snap.perks) window.edJobPerkPrefs=[...snap.perks];
   if(typeof calculate==="function") calculate();
   renderEdJob();
 }
+/** Floats an event's explanation over its label. */
+function edJobShowEvent(el){
+  const ev=EDJOB_EVENTS.find(x=>x.name===el.dataset.event);
+  if(ev&&typeof floatOverElement==="function") floatOverElement(el,`${ev.name}: ${ev.text}`);
+}
+/** Asks before emptying the course planner, then empties it and unchooses the perk preferences that fill it. */
+function askEdJobClear(){
+  const box=$("edJobConfirm");
+  if(!box) return;
+  box.hidden=false;
+  $("edJobConfirmNo")?.focus();
+}
+/** Closes the clear-planner question, clearing the planner when confirmed. */
+function closeEdJobClear(confirmed){
+  const box=$("edJobConfirm");
+  if(!box||box.hidden) return;
+  box.hidden=true;
+  if(!confirmed) return;
+  pushEdJobUndo();
+  window.edJobPlan=[];
+  window.edJobPerkPrefs=[];
+  renderEdJob();
+}
+$("edJobConfirmYes")?.addEventListener("click",()=>closeEdJobClear(true));
+$("edJobConfirmNo")?.addEventListener("click",()=>closeEdJobClear(false));
+$("edJobConfirm")?.addEventListener("click",e=>{ if(e.target===$("edJobConfirm")) closeEdJobClear(false) });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeEdJobClear(false) });
 /** Undoes the last course change. */
 function undoEdJob(){
   if(!window.edJobUndo.length) return false;
@@ -630,6 +719,9 @@ $("edJobCourses")?.addEventListener("click",e=>{
     return;
   }
   if(e.target.closest("#edJobCatalogueFold")){ setEdJobCatalogueFolded(true); return }
+  if(e.target.closest("#edJobClearPlan")){ askEdJobClear(); return }
+  const event=e.target.closest(".edjob-tl-event");
+  if(event){ edJobShowEvent(event); return }
   if(e.target.closest("#edJobCatalogueTab")){ setEdJobCatalogueFolded(false); return }
   if(e.target.closest("input")) return;
   const head=e.target.closest(".edjob-faculty-head");
@@ -637,8 +729,10 @@ $("edJobCourses")?.addEventListener("click",e=>{
   const li=e.target.closest("#edJobTodo .edjob-course.blocked");
   if(li) edJobWarn(li.dataset.id);
 });
-/** Folds or opens a subject from the keyboard. */
+/** Folds or opens a subject, or explains an event, from the keyboard. */
 $("edJobCourses")?.addEventListener("keydown",e=>{
+  const event=e.target.closest(".edjob-tl-event");
+  if(event&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); edJobShowEvent(event); return }
   const head=e.target.closest(".edjob-faculty-head");
   if(!head||(e.key!=="Enter"&&e.key!==" ")) return;
   e.preventDefault();
@@ -695,6 +789,60 @@ edJobSortable($("edJobPerks"),{
     renderEdJobPerks();
     renderEdJobCourses(edJobCourses());
   }
+});
+const EDJOB_COLUMNS={left:{sel:"#eduJobGrid>.grid-left",min:220},catalogue:{sel:"#edJobCatalogue",min:280},upcoming:{sel:"#edJobTodoWrap .edjob-courses",min:300}};
+try{ window.edJobWidths=JSON.parse(localStorage.getItem("tornEdJobWidths")||"{}")||{} }
+catch(e){ window.edJobWidths={}; logProblem("Column widths could not be read",e) }
+/** Gives a column the width it was dragged to, or its natural width when none is set. */
+function applyEdJobWidth(key){
+  const el=document.querySelector(EDJOB_COLUMNS[key].sel);
+  if(!el) return;
+  const w=window.edJobWidths[key];
+  el.style.width=w?w+"px":"";
+  el.classList.toggle("sized",!!w);
+}
+/** Remembers the dragged column widths. */
+function saveEdJobWidths(){
+  try{ localStorage.setItem("tornEdJobWidths",JSON.stringify(window.edJobWidths)) }
+  catch(e){ logProblem("Column widths could not be saved",e) }
+}
+/** Lets each column be made wider or narrower by dragging the bar beside it, and reset by double-clicking it. */
+document.querySelectorAll("#pageEduJob .edjob-resizer").forEach(bar=>{
+  const key=bar.dataset.for;
+  let d=null;
+  bar.addEventListener("pointerdown",e=>{
+    if(e.button!==0) return;
+    const el=document.querySelector(EDJOB_COLUMNS[key].sel);
+    if(!el) return;
+    e.preventDefault();
+    d={x:e.clientX,w:el.getBoundingClientRect().width};
+    bar.setPointerCapture(e.pointerId);
+    bar.classList.add("dragging");
+    document.body.classList.add("edjob-resizing");
+  });
+  bar.addEventListener("pointermove",e=>{
+    if(!d) return;
+    window.edJobWidths[key]=Math.round(Math.max(EDJOB_COLUMNS[key].min,Math.min(1200,d.w+e.clientX-d.x)));
+    applyEdJobWidth(key);
+    edJobSyncTimeline();
+  });
+  const end=()=>{
+    if(!d) return;
+    d=null;
+    bar.classList.remove("dragging");
+    document.body.classList.remove("edjob-resizing");
+    saveEdJobWidths();
+    edJobSyncTimeline();
+  };
+  bar.addEventListener("pointerup",end);
+  bar.addEventListener("pointercancel",end);
+  bar.addEventListener("dblclick",()=>{
+    delete window.edJobWidths[key];
+    applyEdJobWidth(key);
+    saveEdJobWidths();
+    edJobSyncTimeline();
+  });
+  applyEdJobWidth(key);
 });
 /** Folds the subject list into its vertical tab, or opens it again. */
 function setEdJobCatalogueFolded(folded){
