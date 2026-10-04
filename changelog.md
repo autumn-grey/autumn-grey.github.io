@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.1 · Updated: 2026-10-05_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.2 · Updated: 2026-10-05_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,14 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.16.2 — 2026-10-05
+
+- Each subject in the Subject List sits on a panel in a vivid version of its
+  colour, with a matching outline.
+- Courses already in your plan are darkened in the Subject List rather than
+  faded, so they stand out from the coloured panel instead of disappearing
+  into it.
 
 ### v0.16.1 — 2026-10-05
 

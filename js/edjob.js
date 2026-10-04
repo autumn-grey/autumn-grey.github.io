@@ -386,7 +386,7 @@ function renderEdJobCourses(list){
     const rows=items.map(c=>edJobRow(c,c.done?" done":c===current?" current"
       :planned.has(c.id)?" planned":aqua(c))).join("");
     const folded=window.edJobFacultyFolds.includes(f);
-    return `<section class="panel edjob-module edjob-courses edjob-faculty${folded?" folded":""}" data-faculty="${esc(f)}">`
+    return `<section class="panel edjob-module edjob-courses edjob-faculty fac-${f.toLowerCase().replace(/[^a-z]+/g,"-")}${folded?" folded":""}" data-faculty="${esc(f)}">`
       +`<div class="edjob-module-head edjob-faculty-head" role="button" tabindex="0" aria-expanded="${!folded}">`
       +`<span class="edjob-course-grip" aria-hidden="true">⠿</span>`
       +`<span class="edjob-faculty-name">${esc(f)}</span><span>${items.filter(c=>c.done).length}/${items.length}</span></div>`
