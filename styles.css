@@ -443,6 +443,8 @@ body.edujob #apiPanel>details>summary::before{content:"◂"}
 .edjob-faculty-head:hover{background:rgba(255,255,255,.07)}
 .edjob-faculty.folded .edjob-faculty-head{margin-bottom:-6px}
 .edjob-faculty-name{flex:1}
+.edjob-fac-tick{margin-right:6px;font-size:16px;font-weight:900;-webkit-text-stroke:.7px currentColor;color:oklch(from var(--fac) calc(l * .32) c h)}
+.edjob-fac-tick.done{color:var(--fac)}
 .edjob-faculty{background:color-mix(in srgb,var(--fac) 30%,var(--panel));background:oklch(from var(--fac) calc(l * .56) c h);border-color:var(--fac)}
 .edjob-course.planned{background:rgba(8,10,13,.6);border-color:transparent;color:var(--muted);cursor:default}
 .edjob-course.planned .edjob-course-check,.edjob-course.planned .edjob-course-grip{opacity:.4}

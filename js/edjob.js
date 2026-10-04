@@ -368,6 +368,12 @@ function edJobHalf(d){
   const late=d.getMonth()>=5;
   return {key:d.getFullYear()*2+(late?1:0),label:`${late?"June":"January"} ${d.getFullYear()}`};
 }
+/** Returns a tick for a subject whose courses are all planned, brighter once they are all completed. */
+function edJobFacultyTick(items,planned,current){
+  if(items.every(c=>c.done)) return `<span class="edjob-fac-tick done" title="Every course completed">✓</span>`;
+  if(items.every(c=>c.done||c===current||planned.has(c.id))) return `<span class="edjob-fac-tick" title="Every course planned">✓</span>`;
+  return "";
+}
 /** Draws the course catalogue, the plan with its half-year headings, and the completed courses. */
 function renderEdJobCourses(list){
   const cat=$("edJobCatalogue"), todo=$("edJobTodo"), doneBox=$("edJobDone");
@@ -389,7 +395,8 @@ function renderEdJobCourses(list){
     return `<section class="panel edjob-module edjob-courses edjob-faculty fac-${f.toLowerCase().replace(/[^a-z]+/g,"-")}${folded?" folded":""}" data-faculty="${esc(f)}">`
       +`<div class="edjob-module-head edjob-faculty-head" role="button" tabindex="0" aria-expanded="${!folded}">`
       +`<span class="edjob-course-grip" aria-hidden="true">⠿</span>`
-      +`<span class="edjob-faculty-name">${esc(f)}</span><span>${items.filter(c=>c.done).length}/${items.length}</span></div>`
+      +`<span class="edjob-faculty-name">${esc(f)}</span>`
+      +`<span>${edJobFacultyTick(items,planned,current)}${items.filter(c=>c.done).length}/${items.length}</span></div>`
       +`<ul class="edjob-course-list">${rows}</ul></section>`;
   }).join("");
   const start=new Date();

@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.2 · Updated: 2026-10-05_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.3 · Updated: 2026-10-05_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,13 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.16.3 — 2026-10-05
+
+- A subject in the Subject List gets a tick beside its count once every course
+  in it is planned, completed or being studied. The tick is dark while some
+  are only planned, and turns the subject's own colour once every course is
+  completed.
 
 ### v0.16.2 — 2026-10-05
 
