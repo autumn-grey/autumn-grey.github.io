@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.3 · Updated: 2026-10-05_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.4 · Updated: 2026-10-06_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,26 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.16.4 — 2026-10-06
+
+- **Please make a new custom key.** The app now asks for two more things,
+  your work stats and the list of company types, so use one of the links on
+  the API Key panel to generate a fresh key.
+- **Job Settings** joins the left column on the Education & Job page. Choose
+  your employer, either a city job or any company type, and your position, and
+  enter your Manual Labour, Intelligence and Endurance to see their total.
+  **Refresh all API data** fills all of it in from your account.
+- **Perk preferences** is now called **Course preferences**.
+- Folded panels lie flat as slim bars while anything else in their column is
+  still open, and only stand upright as tabs once the whole column is folded.
+- Your company's job point specials (Oil Mogul, Healthy Mind, Cutting Corners,
+  Interior Connections) are picked up from your account again. The company
+  type was being read from the wrong field, so they never were.
+- **For science:** a link in the prototype warning on the Education & Job page
+  opens a page that collects your company work stat history into one anonymous
+  file, to help work out how daily work stat gains are calculated. You can
+  download it or send it straight to AutumnGrey.
 
 ### v0.16.3 — 2026-10-05
 

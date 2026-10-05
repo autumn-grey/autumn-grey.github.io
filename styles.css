@@ -26,6 +26,7 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .api-blurb a:hover{color:var(--accent-hi)}
 .api-blurb .api-privacy{color:#9fd8b4}
 .api-blurb .api-note{color:#8f98a3;font-style:italic}
+.api-update{color:var(--warn);font-weight:700}
 .sub-collapse{border-top:1px solid var(--line);margin-top:15px;padding-top:12px}
 .sub-collapse>summary{cursor:pointer;user-select:none;list-style:none;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text);width:max-content;max-width:100%}
 .sub-collapse>summary::-webkit-details-marker{display:none}
@@ -406,6 +407,14 @@ body.edujob #apiPanel>details>summary::before{content:"◂"}
 .edjob-boosts .edjob-stat-title{margin-top:6px}
 .edjob-boosts .edjob-stat-title:first-child{margin-top:0}
 .edjob-boost-row{display:flex;align-items:center;gap:8px}
+.edjob-job-select{width:100%;background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:6px 8px;font:inherit}
+.edjob-job-select:disabled{opacity:.5}
+.edjob-job-note{margin:6px 0 0}
+.edjob-ws{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.edjob-ws label{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--muted);min-width:0}
+.edjob-ws-input{width:100%;min-width:0;box-sizing:border-box;background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:6px 7px;font:inherit;font-variant-numeric:tabular-nums;text-align:right}
+.edjob-ws-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;font-size:12px;color:var(--muted)}
+.edjob-ws-total strong{font-size:14px;color:var(--accent);font-variant-numeric:tabular-nums}
 .edjob-boost-row select{background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:4px 6px;font:inherit}
 .edjob-boost-unit{color:var(--muted);font-size:12px}
 .edjob-boost-effect{margin-left:auto;padding-left:14px;color:var(--accent);font-weight:700;white-space:nowrap}
@@ -481,6 +490,9 @@ body.edujob #apiPanel>details>summary::before{content:"◂"}
 .edjob-course-remove:hover{color:var(--bad)}
 .edjob-foldable>.config-tab{display:none}
 .edjob-foldable.collapsed>.config-tab{display:block}
+#pageEduJob :not(.all-folded)>.edjob-foldable.collapsed{width:100%}
+#pageEduJob :not(.all-folded)>.edjob-foldable.collapsed>.config-tab{writing-mode:horizontal-tb;position:static;width:100%;padding:7px 12px;text-align:left;font-size:13px}
+#pageEduJob :not(.all-folded)>.edjob-foldable.collapsed>.config-tab::before{content:"▸ ";color:var(--accent)}
 .edjob-foldable.collapsed>:not(.config-tab){display:none}
 #eduJobGrid{grid-template-columns:auto 8px 1fr;column-gap:5px}
 #eduJobGrid>.grid-right{grid-column:3}
@@ -777,6 +789,10 @@ body.basic #pageInvestments .tag.situational,body.basic #pageInvestments .tag.aw
 .banner .banner-ask{color:var(--good)}
 .banner .banner-ask a{color:var(--good);font-weight:700;text-decoration:underline}
 .banner .banner-ask a:hover{color:#7fe09b}
+.banner .banner-science{display:none}
+body.edujob .banner .banner-science{display:block;margin-top:9px;padding-top:9px;border-top:1px solid #7a3b3f}
+.banner .banner-science a{color:var(--good);font-weight:700;text-decoration:underline}
+.banner .banner-science a:hover{color:#7fe09b}
 /* ---- Build-the-plan button ----
    The planner no longer rebuilds itself on every keystroke, so this is what
    actually runs it. Big, green, and hard to miss between the settings and

@@ -339,6 +339,7 @@ function saveLocal(){
     if(window.edJobPerkPrefs) localStorage.setItem("tornInvPerkPrefs",JSON.stringify(window.edJobPerkPrefs));
     if(window.edJobCourseOrder) localStorage.setItem("tornInvCourseOrder",JSON.stringify(window.edJobCourseOrder));
     if(window.edJobPlan) localStorage.setItem("tornInvCoursePlan",JSON.stringify(window.edJobPlan));
+    if(window.edJobJob) localStorage.setItem("tornInvJob",JSON.stringify(window.edJobJob));
     if(window.edJobCurrent) localStorage.setItem("tornInvCurrentCourse",JSON.stringify({id:window.edJobCurrent,until:window.edJobCurrentUntil||0}));
     else localStorage.removeItem("tornInvCurrentCourse");
     if($("apiKey").value)localStorage.setItem("tornInvApiKey",$("apiKey").value);
@@ -351,7 +352,7 @@ function saveLocal(){
 }
 // Wipes everything this page has stored, on screen and in localStorage.
 function clearLocal(){
-  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched","tornInvScriptsDraft","tornInvGhToken","tornInvPerkPrefs","tornInvCourseOrder","tornInvCoursePlan","tornInvCurrentCourse",MARKET_CACHE_KEY]
+  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched","tornInvScriptsDraft","tornInvGhToken","tornInvPerkPrefs","tornInvCourseOrder","tornInvCoursePlan","tornInvCurrentCourse","tornInvJob",MARKET_CACHE_KEY]
     .forEach(k=>localStorage.removeItem(k));
   window.ownedRows.clear();
   window.skippedRows.clear();
@@ -368,6 +369,7 @@ function clearLocal(){
   if(window.edJobPlan) window.edJobPlan.length=0;
   window.edJobCurrent=null;
   window.edJobCurrentUntil=0;
+  window.edJobJob=null;
   if(typeof renderEdJob==="function"&&!$("pageEduJob")?.hidden) renderEdJob();
   $("apiKey").value="";
   window.savedBoosters=null;
@@ -473,6 +475,17 @@ async function fetchPropertyPrices(){
   });
   window.live.propertyPrices=Object.keys(out).length?out:null;
   window.propertyPricesError=null;
+}
+/** Fetches every company type with its positions, for the Job Settings panel. */
+async function fetchCompanyTypes(){
+  const j=await tornTry("https://api.torn.com/v2/torn/companies",
+    "Company list unavailable. Your key may need the torn > companies permission");
+  if(j.__error){ window.companyTypesError=j.__error; return }
+  const list=(Array.isArray(j.companies)?j.companies:[]).map(c=>({id:+c.id,name:String(c.name||"").trim(),
+    positions:(Array.isArray(c.positions)?c.positions:[]).map(p=>String(p.name||"").trim()).filter(Boolean)}))
+    .filter(c=>c.id&&c.name).sort((a,b)=>a.name.localeCompare(b.name));
+  window.live.companyTypes=list.length?list:null;
+  window.companyTypesError=null;
 }
 async function fetchEducationIndex(){
   const [j,v2]=await Promise.all([tornTry("https://api.torn.com/torn/?selections=education"),
@@ -698,12 +711,24 @@ async function fetchUserData(profile){
       const job={
         company_id:company.id??company.ID??company.company_id??src.company_id,
         company_name:company.name??src.company_name,
-        company_type:company.company_type??company.type??src.company_type,
+        // Do not read company.type for the type: in v2 it is the string "company" or "job".
+        company_type:company.type_id??company.company_type??src.company_type,
         company_rating:company.rating??company.stars??src.company_rating,
-        position:src.position??src.job_position??company.position
+        position:src.position??src.job_position??company.position,
+        kind:src.type==="job"?"job":"company",
+        job_name:src.type==="job"?src.name:null
       };
       data.job=job;
       data.parts.job=job;
+    }
+  }
+  {
+    const j=await tornTry("https://api.torn.com/v2/user/workstats");
+    if(j.__error) data.errors.workstats=j.__error;
+    else {
+      const w=j.workstats||j.data?.workstats||j;
+      data.workstats={man:+w.manual_labor||0,int:+w.intelligence||0,end:+w.endurance||0};
+      data.parts.workstats=data.workstats;
     }
   }
   // API v2 carries the same money payload under a different shape. Probed only
@@ -981,6 +1006,15 @@ function applyUserData(d){
   } else miss("Faction Cayman bonus","needs User → perks on the key");
   applyCompanyStocks(d,ok,miss);
   applyJobSpecials(d,ok,miss);
+  if(d.job&&typeof edJobSetJob==="function"){
+    const label=edJobSetJob(d.job);
+    (label?ok:miss)("Job",label||"not recognised");
+  } else miss("Job",failed("job")?`needs User → job (${failed("job")})`:"not reported");
+  if(d.workstats&&typeof edJobSetWorkStats==="function"){
+    edJobSetWorkStats(d.workstats);
+    const w=d.workstats;
+    ok("Work stats",`${(w.man+w.int+w.end).toLocaleString("en-US")} total`);
+  } else miss("Work stats",failed("workstats")?`needs User → workstats (${failed("workstats")})`:"not reported");
 
   // --- private islands ---
   const pi=privateIslandsFrom(d.properties);

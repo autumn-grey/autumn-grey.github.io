@@ -2,11 +2,6 @@
 // FEEDBACK & REPORTING  ·  A form that posts to a Discord channel, with the
 // logs for whatever the user says went wrong attached to it.
 // ======================================================================
-// A webhook is not a token: it can only post into the one channel it was made
-// for, cannot read anything, and dies the moment it is deleted. It is in the
-// page source because the page has no backend, so treat it as public and
-// regenerate it if the channel ever gets spammed.
-const FEEDBACK_WEBHOOK="https://discord.com/api/webhooks/1545275151774515200/_bnIUWt7SU7yAqDuITkTKoA6eTxfg_l__ejZ5IwMJPy8SiTMFTHBlcxOGOYKGV2f2RRh";
 const AUTUMN_XID=4386333;
 // Torn's compose page takes a recipient and nothing else, so the subject and
 // body cannot be prefilled and the copy button stays.

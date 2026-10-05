@@ -30,7 +30,7 @@
 <div class="banner banner-proto" id="protoBanner">
 <button type="button" class="banner-toggle" id="protoToggle" aria-expanded="true" aria-controls="protoBody"><span class="banner-arrow" aria-hidden="true"></span><span class="banner-head">Prototype Warning</span><strong class="banner-label">Prototype:</strong></button><span class="banner-body" id="protoBody"> some things might still be broken, Education &amp; Job is barely started you can ignore that, currently only open to members of AutumnGrey's faction, or Torn staff. A custom API key is required to verify access, this is only saved on your local browser, and only if you choose. As later updates are made new custom api keys may be required making your old key redundant, this will be communicated clearly. <br>
   <span class="banner-ask">When you've had a chance to check out the site and have a play around pretty please complete my <a href="#testing" class="tf-jump">testing feedback form</a>.</span> <br>
-  One more thing, if anyone can figure out a way to work out the ROI for any of the investments in the <em>Undefined ROI Stocks</em> table, I will send you a xanax and a kiss on the mouth xox &lt;3</span>
+  One more thing, if anyone can figure out a way to work out the ROI for any of the investments in the <em>Undefined ROI Stocks</em> table, I will send you a xanax and a kiss on the mouth xox &lt;3<span class="banner-science"><a href="work-stat-export.html" target="_blank" rel="noopener">For science please click this link to generate a log for job history calculations. A full access API is required, which is used once in your browser and never saved.</a></span></span>
 <div class="banner-note">This tool is a guide only. Values are accurate at the time of request, but are subject to fluctuation. Stock sales profits are not considered for the purpose of this investment planner, as past trade performance is not a reliable indicator of future outcomes.</div>
 </div>
 <div class="page" id="pageInvestments">
@@ -42,8 +42,9 @@
   <details open>
   <summary>API Key</summary>
   <div class="api-blurb">
-    <p>Use <a href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPIAccessOnly&amp;user=profile&amp;torn=bank,items,stocks,education,properties&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPIAccessOnly</strong></a> to use the app with only public investment data. The app is set with default settings and can be manually configured and updated by the user.</p>
-    <p>Use <a href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPICustomised&amp;user=profile,stocks,education,merits,money,properties,job,perks,races&amp;company=profile&amp;torn=bank,items,stocks,education,properties&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPICustomised</strong></a> to preconfigure settings with your personal statistics including, stocks owned, available funds, job perks, merits, and education courses studied.</p>
+    <p>Use <a href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPIAccessOnly&amp;user=profile&amp;torn=bank,items,stocks,education,properties,companies&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPIAccessOnly</strong></a> to use the app with only public investment data. The app is set with default settings and can be manually configured and updated by the user.</p>
+    <p>Use <a href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPICustomised&amp;user=profile,stocks,education,merits,money,properties,job,perks,races,workstats&amp;company=profile&amp;torn=bank,items,stocks,education,properties,companies&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPICustomised</strong></a> to preconfigure settings with your personal statistics including, stocks owned, available funds, job perks, merits, and education courses studied.</p>
+    <p class="api-update">API requirements have been updated with v0.16.4, please generate a new custom key.</p>
     <p class="api-note">Click your preferred access level to generate a new custom key, then paste it below</p>
     <p class="api-privacy">All keys and saved data are stored locally on your device, this app sends no data, and saves no sensitive information.</p>
   </div>
@@ -624,7 +625,7 @@
     <section class="panel edjob-module" id="edJobProgress"></section>
   </div>
   <div class="edjob-foldable" id="edJobPerksWrap">
-    <button type="button" class="config-tab" aria-label="Show perk preferences">Perk preferences</button>
+    <button type="button" class="config-tab" aria-label="Show course preferences">Course preferences</button>
     <section class="panel edjob-module" id="edJobPerks"></section>
   </div>
   <div class="edjob-foldable" id="edJobBoostersWrap">
@@ -639,6 +640,26 @@
         <div class="edjob-stat-title">Block &amp; perk</div>
         <label class="edjob-perk edjob-boost-toggle"><input type="checkbox" id="ejWsuOwned" data-mirror="wsuOwned"><span>WSU Block</span><span class="edjob-perk-rank">-10%</span></label>
         <label class="edjob-perk edjob-boost-toggle"><input type="checkbox" id="ejEdJobPerk" data-mirror="edJobPerk"><span>Education Job Perk</span><span class="edjob-perk-rank">-10%</span></label>
+      </div>
+    </section>
+  </div>
+  <div class="edjob-foldable" id="edJobJobWrap">
+    <button type="button" class="config-tab" aria-label="Show job settings">Job Settings</button>
+    <section class="panel edjob-module" id="edJobJob">
+      <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide job settings">Job Settings</button></div>
+      <div class="edjob-boosts">
+        <div class="edjob-stat-title">Employer</div>
+        <select id="ejEmployer" class="edjob-job-select" aria-label="Employer"></select>
+        <div class="edjob-stat-title">Position</div>
+        <select id="ejPosition" class="edjob-job-select" aria-label="Position"></select>
+        <div class="edjob-stat-title">Work stats</div>
+        <div class="edjob-ws">
+          <label><span>Manual Labour</span><input type="text" inputmode="numeric" id="ejWsMan" class="edjob-ws-input" data-stat="man"></label>
+          <label><span>Intelligence</span><input type="text" inputmode="numeric" id="ejWsInt" class="edjob-ws-input" data-stat="int"></label>
+          <label><span>Endurance</span><input type="text" inputmode="numeric" id="ejWsEnd" class="edjob-ws-input" data-stat="end"></label>
+        </div>
+        <div class="edjob-ws-total"><span>Total work stats</span><strong id="ejWsTotal">0</strong></div>
+        <p class="help edjob-job-note" id="ejJobNote" hidden></p>
       </div>
     </section>
   </div>
@@ -827,6 +848,7 @@
 </footer>
 </main>
 <script src="js/version.js"></script>
+<script src="js/webhook.js"></script>
 <script src="js/data.js"></script>
 <script src="js/core.js"></script>
 <script src="js/investments.js"></script>

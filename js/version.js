@@ -6,7 +6,7 @@
 //
 // Bumped on every publish. Written in one place, shown in the footer and
 // stamped into every export, so a bug report can be tied to a build.
-const APP_VERSION="v0.16.3";
+const APP_VERSION="v0.16.4";
 // ISO date of that publish, shown in the footer exactly as written. ISO reads
 // the same everywhere, so no locale formatting is applied to it.
-const APP_UPDATED="2026-10-05";
+const APP_UPDATED="2026-10-06";

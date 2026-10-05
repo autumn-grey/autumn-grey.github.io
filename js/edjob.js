@@ -140,7 +140,7 @@ function edJobFinishDate(days){
 }
 
 // ----------------------------------------------------------------------
-// Perk preferences
+// Course preferences
 // ----------------------------------------------------------------------
 /** Course codes that give each perk category, in the order to study them. */
 const PERK_COURSES={
@@ -197,7 +197,7 @@ function renderEdJobPerks(){
       +`<span class="edjob-perk-rank">${i+1}</span></li>`
     : `<li class="edjob-perk" tabindex="0" role="button" aria-pressed="false" data-perk="${esc(p)}">`
       +`<span class="edjob-perk-grip" aria-hidden="true"></span><span>${esc(p)}</span></li>`;
-  box.innerHTML=`<div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide perk preferences">Perk preferences</button></div>`
+  box.innerHTML=`<div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide course preferences">Course preferences</button></div>`
     +`<ul class="edjob-perk-list">${on.map((p,i)=>row(p,i)).join("")}${rest.map(p=>row(p,-1)).join("")}</ul>`;
 }
 /** Chooses or unchooses a perk category. */
@@ -212,6 +212,95 @@ function toggleEdJobPerk(name){
 function focusEdJobPerk(name){
   [...document.querySelectorAll("#edJobPerks .edjob-perk")].find(li=>li.dataset.perk===name)?.focus();
 }
+
+// ----------------------------------------------------------------------
+// Job Settings
+// ----------------------------------------------------------------------
+/** The city jobs and their ranks, lowest first. */
+const CITY_JOBS={
+  Army:["Private","Corporal","Sergeant","Master Sergeant","Warrant Officer","Lieutenant","Major","Colonel","Brigadier","General"],
+  Casino:["Gaming Consultant","Marketing Manager","Revenue Manager","Casino Manager","Casino President"],
+  Education:["Recess Supervisor","Substitute Teacher","Elementary Teacher","Secondary Teacher","Professor","Vice-Principal","Principal"],
+  Grocer:["Bagboy","Price Labeler","Cashier","Food Delivery","Manager"],
+  Law:["Law Student","Paralegal","Probate Lawyer","Trial Lawyer","Circuit Court Judge","Federal Judge"],
+  Medical:["Medical Student","Houseman","Senior Houseman","GP","Consultant","Surgeon","Brain Surgeon"]
+};
+try{ window.edJobJob=JSON.parse(localStorage.getItem("tornInvJob")||"null") }
+catch(e){ window.edJobJob=null; logProblem("Job settings could not be read",e) }
+/** Returns the positions open at an employer, from the city job list or the fetched company types. */
+function edJobPositions(employer){
+  const [kind,key]=String(employer||"").split(":");
+  if(kind==="job") return CITY_JOBS[key]||[];
+  if(kind==="company") return (window.live?.companyTypes||[]).find(c=>String(c.id)===key)?.positions||[];
+  return [];
+}
+/** Sets the job from what Torn reports, and returns a label for it. */
+function edJobSetJob(job){
+  if(!job) return "";
+  if(job.kind==="job"&&CITY_JOBS[job.job_name]){
+    window.edJobJob={...(window.edJobJob||{}),employer:"job:"+job.job_name,position:job.position||""};
+    return `${job.job_name} · ${job.position||"no rank"}`;
+  }
+  const type=+job.company_type;
+  if(type){
+    window.edJobJob={...(window.edJobJob||{}),employer:"company:"+type,position:job.position||""};
+    const name=(window.live?.companyTypes||[]).find(c=>c.id===type)?.name||job.company_name||"company";
+    return `${name} · ${job.position||"no position"}`;
+  }
+  return "";
+}
+/** Sets the three work stats from what Torn reports. */
+function edJobSetWorkStats(ws){
+  window.edJobJob={...(window.edJobJob||{}),man:+ws.man||0,int:+ws.int||0,end:+ws.end||0};
+}
+/** Shows the three work stats and their total. */
+function renderEdJobWorkStats(){
+  const job=window.edJobJob||{};
+  document.querySelectorAll("#edJobJob .edjob-ws-input").forEach(el=>{
+    if(document.activeElement!==el) el.value=(+job[el.dataset.stat]||0).toLocaleString("en-US");
+  });
+  const total=$("ejWsTotal");
+  if(total) total.textContent=((+job.man||0)+(+job.int||0)+(+job.end||0)).toLocaleString("en-US");
+}
+/** Fills the employer and position dropdowns from the saved job. */
+function renderEdJobJob(){
+  const emp=$("ejEmployer"), pos=$("ejPosition"), note=$("ejJobNote");
+  if(!emp||!pos) return;
+  const job=window.edJobJob||{};
+  const types=window.live?.companyTypes||[];
+  const opt=(v,t)=>`<option value="${esc(v)}"${v===job.employer?" selected":""}>${esc(t)}</option>`;
+  emp.innerHTML=`<option value="">Choose an employer</option>`
+    +`<optgroup label="City jobs">${Object.keys(CITY_JOBS).map(k=>opt("job:"+k,k)).join("")}</optgroup>`
+    +(types.length?`<optgroup label="Companies">${types.map(c=>opt("company:"+c.id,c.name)).join("")}</optgroup>`:"");
+  if(job.employer&&emp.value!==job.employer) emp.value="";
+  const list=edJobPositions(emp.value);
+  pos.innerHTML=list.length?list.map(p=>`<option${p===job.position?" selected":""}>${esc(p)}</option>`).join("")
+    :`<option value="">${emp.value?"Positions not loaded":"Choose an employer first"}</option>`;
+  pos.disabled=!list.length;
+  if(note){
+    note.hidden=!!types.length;
+    note.textContent=window.companyTypesError
+      ?"Companies could not be loaded. Make a new key from one of the links above, then refresh."
+      :"Refresh to load the companies.";
+  }
+}
+$("ejEmployer")?.addEventListener("change",e=>{
+  window.edJobJob={...(window.edJobJob||{}),employer:e.target.value,position:edJobPositions(e.target.value)[0]||""};
+  renderEdJobJob();
+});
+$("ejPosition")?.addEventListener("change",e=>{
+  window.edJobJob={...(window.edJobJob||{}),position:e.target.value};
+});
+/** Keeps a typed work stat as a number with commas, and updates the total. */
+document.querySelectorAll("#edJobJob .edjob-ws-input").forEach(el=>{
+  el.addEventListener("input",()=>{
+    const digits=el.value.replace(/\D/g,"");
+    el.value=digits?(+digits).toLocaleString("en-US"):"";
+    window.edJobJob={...(window.edJobJob||{}),[el.dataset.stat]:+digits||0};
+    renderEdJobWorkStats();
+  });
+  el.addEventListener("blur",renderEdJobWorkStats);
+});
 
 // ----------------------------------------------------------------------
 // Education Boosters
@@ -501,7 +590,7 @@ function edJobShowEvent(el){
   const ev=EDJOB_EVENTS.find(x=>x.name===el.dataset.event);
   if(ev&&typeof floatOverElement==="function") floatOverElement(el,`${ev.name}: ${ev.text}`);
 }
-/** Asks before emptying the course planner, then empties it and unchooses the perk preferences that fill it. */
+/** Asks before emptying the course planner, then empties it and unchooses the course preferences that fill it. */
 function askEdJobClear(){
   const box=$("edJobConfirm");
   if(!box) return;
@@ -691,6 +780,8 @@ function renderEdJob(){
   const api=$("apiPanel")?.querySelector("details");
   if(api) api.open=true;
   syncEdJobSettings();
+  renderEdJobJob();
+  renderEdJobWorkStats();
   renderEdJobSummary(list);
   renderEdJobPerks();
   renderEdJobCourses(list);
@@ -861,9 +952,16 @@ function setEdJobCatalogueFolded(folded){
 /** Folds a panel into its vertical tab, or opens it again. */
 function setEdJobFolded(wrap,folded){
   wrap.classList.toggle("collapsed",folded);
+  syncEdJobColumnFolds(wrap.parentElement);
   if(!folded) edJobSyncTimeline();
   try{localStorage.setItem("tornEdJobFold_"+wrap.id,folded?"1":"0")}
   catch(e){ logProblem("Panel state could not be saved",e) }
+}
+/** Marks a column whose panels are all folded, so its tabs stand upright instead of lying flat. */
+function syncEdJobColumnFolds(col){
+  if(!col) return;
+  const wraps=[...col.children].filter(el=>el.classList.contains("edjob-foldable"));
+  col.classList.toggle("all-folded",wraps.length>0&&wraps.every(w=>w.classList.contains("collapsed")));
 }
 /** Folds a panel from its heading, or opens it from its tab. */
 $("pageEduJob")?.addEventListener("click",e=>{

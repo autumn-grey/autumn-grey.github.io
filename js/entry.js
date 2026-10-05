@@ -11,7 +11,7 @@ async function refreshMarketData(){
     nerve:$("nerveItem")?.value||saved.nerveItem||""
   };
   await Promise.all([fetchStocks(),fetchRates(),fetchItems(),fetchPoints(),
-                     fetchStockMeta(),fetchEducationIndex(),fetchPropertyPrices()]);
+                     fetchStockMeta(),fetchEducationIndex(),fetchPropertyPrices(),fetchCompanyTypes()]);
   ["happy","energy","nerve"].forEach(stat=>{
     const el=$(`${stat}Item`);
     const saved=savedRefillables[stat];

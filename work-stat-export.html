@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="darkreader-lock">
+<title>Work Stat Export · Autumn's Stonking Awesome Torn App</title>
+<style>
+  :root{--bg:#111315;--panel:#191c20;--panel2:#20242a;--line:#30363d;--text:#e8eaed;--muted:#9aa3ad;--aqua:#46c8d0;--good:#59c37a;--bad:#e06c75}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  main{max-width:680px;margin:0 auto;padding:24px 16px 40px}
+  h1{font-size:20px;margin:0 0 4px;color:var(--aqua)}
+  h2{font-size:15px;margin:0 0 8px;color:var(--aqua)}
+  a{color:var(--aqua)}
+  .lead{color:var(--muted);margin:0 0 16px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 16px}
+  ul{margin:0;padding-left:20px}
+  li{margin:2px 0}
+  .note{margin:10px 0 0;color:var(--muted)}
+  label{display:block;margin:0 0 4px;color:var(--muted);font-size:12px}
+  input[type=text],textarea{width:100%;background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:8px;font:inherit}
+  textarea{min-height:70px;resize:vertical}
+  .check{display:flex;gap:8px;align-items:flex-start;margin:12px 0}
+  .check input{margin-top:3px}
+  .check label{margin:0;color:var(--text);font-size:14px}
+  .buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  button{background:var(--aqua);color:#0d1114;border:0;border-radius:6px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer}
+  button.plain{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+  button:disabled{opacity:.5;cursor:default}
+  #progress{white-space:pre-wrap;font:12px/1.5 ui-monospace,Consolas,monospace;color:var(--muted);max-height:260px;overflow:auto}
+  .ok{color:var(--good)}.bad{color:var(--bad)}
+  .back{display:inline-block;margin:0 0 16px;font-size:13px}
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="index.html#edujob">‹ Back to Autumn's Stonking Awesome Torn App</a>
+  <h1>Work Stat Export</h1>
+  <p class="lead">This collects your company work stat history into one anonymous file, to help work out exactly how Torn calculates the work stats you gain each day.</p>
+
+  <section class="panel">
+    <h2>What is pulled from your logs</h2>
+    <ul>
+      <li>Your daily company pay, which records the work stats and job points you gained</li>
+      <li>Your position changes, and when you joined, quit or were fired from each company</li>
+      <li>Every other work stat gain: director trains, finished courses, city job pay, the Working 9 Til 5 book and job or company specials</li>
+      <li>Your merit assignments, for the Employee Effectiveness merit</li>
+      <li>Your drug use, overdoses, rehab and addiction removal, because addiction lowers effectiveness</li>
+    </ul>
+    <h2 style="margin-top:14px">And from your account</h2>
+    <ul>
+      <li>Your current work stats, and the type and star rating of your current company</li>
+      <li>Your position, days in the company and effectiveness breakdown</li>
+      <li>The type of each company you worked for, and the requirements and listed gains of the positions you held</li>
+    </ul>
+    <h2 style="margin-top:14px">Kept anonymous</h2>
+    <p style="margin:0">Your name and player ID are not included. Company IDs are replaced with Company 1, Company 2 and so on, and the IDs of other players and your faction are removed from every log entry.</p>
+    <p class="note">Nothing else is read. Your key is used once, in your browser, to ask Torn for the above, and is never saved or sent anywhere else.</p>
+  </section>
+
+  <section class="panel">
+    <label for="key">Your Full Access API key</label>
+    <input id="key" type="text" autocomplete="off" spellcheck="false" placeholder="Paste your key here">
+    <p class="note" style="margin-top:6px"><a href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=WorkStatExport" target="_blank" rel="noopener" style="text-decoration:underline">Click here</a> to generate an API key, then set its access level to <strong>Full Access</strong> before creating it. You can delete it once you are done here.</p>
+    <div class="buttons"><button id="go" type="button">Collect my data</button></div>
+  </section>
+
+  <section class="panel" id="progressPanel" hidden>
+    <h2>Progress</h2>
+    <div id="progress"></div>
+  </section>
+
+  <section class="panel" id="resultPanel" hidden>
+    <h2>Your file is ready</h2>
+    <p id="summary" style="margin:0"></p>
+    <div class="buttons"><button id="download" type="button" class="plain">Download the file</button></div>
+  </section>
+
+  <section class="panel" id="sendPanel" hidden>
+    <h2>Send it to AutumnGrey</h2>
+    <p style="margin:0 0 10px">This posts the file straight to AutumnGrey's Discord, so there is nothing else to do.</p>
+    <label for="note">Anything to add? (optional)</label>
+    <textarea id="note" maxlength="1500" placeholder="For example, when you changed positions or anything unusual about your history"></textarea>
+    <div class="buttons"><button id="send" type="button">Send to AutumnGrey</button></div>
+    <p id="sendStatus" class="note" hidden></p>
+  </section>
+</main>
+<script src="js/webhook.js"></script>
+<script>
+(() => {
+  const CORE = { 6221: 'Company employee pay', 6268: 'Company rank change receive', 6243: 'Company application accept receive',
+    6260: 'Company quit', 6262: 'Company fire receive', 5100: 'Merit assign', 6264: 'Company train receive',
+    5963: 'Education complete', 6220: 'Job pay', 2056: 'Item finish book working stats increase',
+    6410: 'Job special gain working stats', 6523: 'Company special gain working stats', 6508: 'Company special gain endurance' };
+  const DRUGS = [2200, 2201, 2210, 2211, 2220, 2221, 2230, 2231, 2240, 2241, 2250, 2251, 2260, 2261, 2270, 2271,
+    2280, 2281, 2290, 2291, 2295, 6005, 2059, 6504];
+  const $ = id => document.getElementById(id);
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  let key = '', result = null;
+
+  /** Writes a line to the progress panel. */
+  function say(text, cls) {
+    const line = document.createElement('div');
+    line.textContent = text;
+    if (cls) line.className = cls;
+    $('progress').appendChild(line);
+    $('progress').scrollTop = $('progress').scrollHeight;
+  }
+
+  /** Fetches a Torn API v2 address, pausing between calls to stay inside the rate limit. */
+  async function torn(path) {
+    const url = new URL(path.startsWith('http') ? path : 'https://api.torn.com/v2' + path);
+    url.searchParams.set('key', key);
+    url.searchParams.set('comment', 'WorkStatExport');
+    const r = await fetch(url);
+    const j = await r.json();
+    await sleep(700);
+    if (j.error) throw new Error(`Torn API error ${j.error.code}: ${j.error.error}`);
+    return j;
+  }
+
+  /** Fetches every entry of one log type. */
+  async function logType(id) {
+    const out = [], seen = new Set();
+    let path = `/user/log?log=${id}&limit=100`;
+    while (path) {
+      const page = await torn(path);
+      const fresh = (page.log || []).filter(e => e && !seen.has(e.id));
+      if (!fresh.length) break;
+      fresh.forEach(e => { seen.add(e.id); out.push(e); });
+      path = page._metadata?.links?.prev || null;
+    }
+    return out;
+  }
+
+  /** Returns a log entry with company IDs replaced by labels and other people's and factions' IDs removed. */
+  function anonymise(e, alias) {
+    const data = {};
+    for (const [k, v] of Object.entries(e.data || {})) {
+      if (['sender', 'director', 'faction', 'user', 'target', 'player', 'receiver'].includes(k)) continue;
+      data[k] = k === 'company' ? alias.get(v) || 'Company ?' : v;
+    }
+    return { timestamp: e.timestamp, type: e.details?.id, title: e.details?.title, data };
+  }
+
+  /** Collects everything into one anonymous file. */
+  async function collect() {
+    key = $('key').value.trim();
+    if (!/^[A-Za-z0-9]{16}$/.test(key)) { alert('That does not look like a Torn API key. It should be 16 letters and numbers.'); return; }
+    $('go').disabled = true;
+    $('progressPanel').hidden = false;
+    $('resultPanel').hidden = true;
+    $('sendPanel').hidden = true;
+    $('progress').textContent = '';
+    result = null;
+    try {
+      const myId = (await torn('/user/basic')).profile.id;
+      say('Collecting your history');
+      const workstats = (await torn('/user/workstats')).workstats;
+      const job = (await torn('/user/job')).job;
+      let row = null;
+      try {
+        row = ((await torn('/company/employees')).employees || []).find(e => e.id === myId) || null;
+      } catch (e) { say('Effectiveness not available: ' + e.message); }
+
+      const ids = Object.keys(CORE).map(Number).concat(DRUGS);
+      const logs = [];
+      for (const id of ids) {
+        try {
+          const entries = await logType(id);
+          logs.push(...entries);
+          say(`${(entries[0]?.details?.title || CORE[id] || 'Log ' + id).padEnd(44)} ${entries.length}`);
+        } catch (e) {
+          say(`Log ${id}: ${e.message}`, 'bad');
+          if (/error (2|16):/.test(e.message)) throw e;
+        }
+      }
+      logs.sort((a, b) => a.timestamp - b.timestamp);
+
+      const companyIds = [...new Set(logs.map(e => e.data?.company).filter(Boolean))];
+      const alias = new Map(companyIds.map((id, i) => [id, `Company ${i + 1}`]));
+      const companies = [];
+      for (const id of companyIds) {
+        try {
+          const p = (await torn(`/company/${id}/profile`)).profile;
+          companies.push({ company: alias.get(id), type_id: p.type?.id, type_name: p.type?.name, rating: p.rating });
+        } catch (e) { companies.push({ company: alias.get(id), error: 'company no longer exists' }); }
+      }
+      if (job?.id && !alias.has(job.id)) alias.set(job.id, `Company ${alias.size + 1}`);
+
+      const positionIds = new Set(logs.filter(e => e.details?.id === 6268).map(e => e.data?.new_rank));
+      if (row?.position?.id) positionIds.add(row.position.id);
+      const positions = [];
+      for (const c of (await torn('/torn/companies')).companies || []) {
+        for (const p of c.positions || []) {
+          if (positionIds.has(p.id)) positions.push({ id: p.id, company_type: c.name, company_type_id: c.id, name: p.name, working_stats: p.working_stats });
+        }
+      }
+
+      const data = { format: 'work-stat-export', version: 2, generated: new Date().toISOString(),
+        workstats,
+        job: job ? { type: job.type, name: job.type === 'job' ? job.name : undefined, company: alias.get(job.id),
+          type_id: job.type_id, rating: job.rating, position: job.position, days_in_company: job.days_in_company } : null,
+        current: row ? { position: row.position, days_in_company: row.days_in_company, stats: row.stats,
+          effectiveness: row.effectiveness } : null,
+        companies, positions, logs: logs.map(e => anonymise(e, alias)) };
+      const tag = Math.random().toString(36).slice(2, 8);
+      result = { data, name: `work-stats-${new Date().toISOString().slice(0, 10)}-${tag}.json`, text: JSON.stringify(data, null, 1) };
+      say('Finished', 'ok');
+      $('summary').textContent = `${logs.length} log entries, ${companies.length} companies and ${positions.length} positions. `
+        + 'Your name, player ID and company IDs are not in it.';
+      $('resultPanel').hidden = false;
+      $('sendPanel').hidden = false;
+      $('sendStatus').hidden = true;
+      $('send').disabled = false;
+    } catch (e) {
+      say(e.message, 'bad');
+      if (/error (2|16):/.test(e.message)) say('This needs a Full Access key. Make one in Torn under Settings, API Keys.', 'bad');
+    } finally {
+      key = '';
+      $('key').value = '';
+      $('go').disabled = false;
+    }
+  }
+
+  /** Saves the file to the user's device. */
+  function download() {
+    if (!result) return;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([result.text], { type: 'application/json' }));
+    a.download = result.name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  /** Posts the file to the Discord channel. */
+  async function send() {
+    if (!result) return;
+    $('send').disabled = true;
+    const status = $('sendStatus');
+    status.hidden = false;
+    status.className = 'note';
+    status.textContent = 'Sending…';
+    const note = $('note').value.trim();
+    const content = `**Anonymous work stat export**\n`
+      + `${result.data.logs.length} log entries, ${result.data.positions.length} positions`
+      + (note ? `\n> ${note.replace(/\n/g, '\n> ')}` : '');
+    const fd = new FormData();
+    fd.append('payload_json', JSON.stringify({ content, allowed_mentions: { parse: [] } }));
+    fd.append('files[0]', new Blob([result.text], { type: 'application/json' }), result.name);
+    try {
+      const r = await fetch(FEEDBACK_WEBHOOK + '?wait=true', { method: 'POST', body: fd });
+      if (!r.ok) throw new Error(`Discord replied ${r.status}`);
+      status.className = 'note ok';
+      status.textContent = 'Sent. Thank you!';
+    } catch (e) {
+      status.className = 'note bad';
+      status.textContent = `Could not send (${e.message}). Download the file and send it to AutumnGrey instead.`;
+      $('send').disabled = false;
+    }
+  }
+
+  $('go').addEventListener('click', collect);
+  $('download').addEventListener('click', download);
+  $('send').addEventListener('click', send);
+})();
+</script>
+</body>
+</html>
