@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.4 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.5 · Updated: 2026-10-06_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,11 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.16.5 — 2026-10-06
+
+- The **Click here** link on the work stat export page opens Torn's new key
+  form ready for a Full Access key, instead of showing "Wrong access type".
 
 ### v0.16.4 — 2026-10-06
 
