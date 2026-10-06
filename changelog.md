@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.17.3 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.18.0 · Updated: 2026-10-06_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,26 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.18.0 — 2026-10-06
+
+- **On This Day** joins the Job Planner column. Pick a date and see where your
+  plan leaves you then: your work stats, your job and role with every perk
+  that job offers (a company's specials up to 10 stars, or a city job's
+  specials by rank), the courses you will have completed grouped by subject,
+  with finished subjects ticked in green, and every perk from them and from
+  city jobs you have maxed. Like
+  perks are added together, so two passive Dexterity perks read as one total,
+  a perk covering two stats is split between them, the all gym gains perk is
+  split across the four battle stats, and accuracy perks share one line.
+- **Preferred company after completion** joins Job Preferences for City Jobs
+  and Certain Work Stats. Choose any company or city job and the plan moves
+  you there once your target is reached, in the position that pays you most
+  or, for a city job, at your old rank and climbing.
+- The planner now carries on past your target, so On This Day can look up to
+  ten years ahead.
+- Click **Refresh all API data** once to load each company's specials for On
+  This Day.
 
 ### v0.17.3 — 2026-10-06
 

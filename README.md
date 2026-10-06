@@ -1,6 +1,6 @@
 # Autumn's Stonking Awesome Torn App
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.17.3 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.18.0 · Updated: 2026-10-06_
 
 A passive-investment planner for [Torn](https://www.torn.com). The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.
 

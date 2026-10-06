@@ -12,7 +12,10 @@
 const CITY_JOB_REQS={
   Education:[[0,500,0],[300,750,500],[600,1000,700],[1000,1300,1000],[1500,2000,1500],[1500,3000,1500],[1500,5000,1500]],
   Law:[[0,0,1500],[1750,2500,5000],[2500,5000,7500],[3500,6500,7750],[4000,7250,10000],[6000,9000,15000]],
-  Medical:[[0,300,0],[100,600,150],[175,1000,275],[300,1500,500],[600,2500,1000],[1300,5000,2000],[2600,10000,4000]]
+  Medical:[[0,300,0],[100,600,150],[175,1000,275],[300,1500,500],[600,2500,1000],[1300,5000,2000],[2600,10000,4000]],
+  Army:[[2,2,2],[50,15,20],[120,35,50],[325,60,115],[700,160,300],[1300,360,595],[2550,490,900],[4150,600,1100],[7500,1350,2530],[10000,2000,4000]],
+  Casino:[[2,2,2],[35,50,120],[60,115,325],[360,595,1300],[490,900,2550],[755,1100,4150]],
+  Grocer:[[2,2,2],[30,15,50],[50,35,120],[120,60,225],[250,200,500]]
 };
 /** The city jobs a player can target, and the name each is shown under. */
 const CITY_TARGETS={Education:"Education",Law:"Law",Medical:"Medicine"};
@@ -25,6 +28,34 @@ const JOB_PLAN_RECRUIT_DAYS=3;
 /** The points a player starts a city job with the first time they join it. */
 const JOB_PLAN_FIRST_POINTS=5;
 const JP_STATS=["man","int","end"];
+/** A goal no stat ever reaches, so a company stay picks whichever position pays the most overall. */
+const JP_NO_LIMIT={man:Infinity,int:Infinity,end:Infinity};
+/** The passive perk each city job's top rank keeps after leaving, in the same wording as course perks. */
+const CITY_TOP_PERKS={
+  Education:"Gain a 10% passive decrease in completion time for all future education courses",
+  Law:"Gain a 5% increase to crime exp & skill progression",
+  Medical:"Gain the ability to revive someone for 75 energy"
+};
+
+/** Each city job's specials (wiki Job page), with the rank that unlocks each. */
+const CITY_JOB_SPECIALS={
+  Army:[["Private","Strength boost for army points"],["Sergeant","Steal a weapon for 10 army points"],
+    ["Lieutenant","Defence boost for army points"],["General","Spy on a player's battle stats for 10 army points and $5,000"]],
+  Casino:[["Dealer","Collect tips: money for 1 Casino point"],["Gaming Consultant","Pocket tokens: 25 Casino Tokens for 1 Casino point"],
+    ["Revenue Manager","Steal cash: money for 1 Casino point"],["Casino President","Count cards: money for 10 Casino points and $100,000"]],
+  Education:[["Recess Supervisor","100 Manual Labour per 10 Education points"],["Elementary Teacher","100 Endurance per 10 Education points"],
+    ["Professor","100 Intelligence per 10 Education points"],["Principal","10% passive decrease in completion time for all future education courses"]],
+  Grocer:[["Bagboy","Steal cash for 1 Grocer point"],["Price Labeler","Steal a bag of candy for 2 Grocer points"],
+    ["Cashier","Steal a bottle of alcohol for 5 Grocer points"],["Manager","Steal an energy drink for 25 Grocer points"]],
+  Law:[["Law Student","3 nerve for 5 Law points"],["Paralegal","Money for 100 Law points"],
+    ["Trial Lawyer","Get someone out of jail for 15 Law points"],["Federal Judge","5% crime exp & skill gain (passive)"]],
+  Medical:[["Houseman","Steal a small first aid kit for 2 Medical points"],["Senior Houseman","Steal a first aid kit for 4 Medical points"],
+    ["GP","Steal morphine for 7 Medical points"],["Brain Surgeon","Revive someone for 75 energy (passive)"]]
+};
+/** Returns the name a city job is shown under. */
+function jpJobName(job){
+  return CITY_TARGETS[job]||job;
+}
 
 /** Returns a city job's ranks with their gains and requirements. */
 function jpRanks(job){
@@ -43,7 +74,7 @@ function jpGap(ctx,s,k){
 }
 /** Returns a copy of a planner state. */
 function jpClone(s){
-  return {...s,stats:{...s.stats},rank:{...s.rank},points:{...s.points}};
+  return {...s,stats:{...s.stats},rank:{...s.rank},points:{...s.points},tops:{...s.tops}};
 }
 /** Adds the work stats from courses that complete on the state's day, once however many steps share that day. */
 function jpCourses(ctx,s){
@@ -59,7 +90,8 @@ function jpEvent(s,log,text){
 }
 /** Closes a day after payday, recording where the player stands. */
 function jpEndDay(s,log,label){
-  if(log) log.days.push({day:s.day,stats:{...s.stats},label});
+  if(log) log.days.push({day:s.day,stats:{...s.stats},label,company:s.company,pos:s.pos,inJob:s.inJob,
+    rank:s.inJob?s.rank[s.inJob]:null});
   s.day++;
 }
 /** Returns "a" or "an" with a name. */
@@ -168,7 +200,7 @@ function jpTopDay(ctx,s,log,job){
       if(log) log.buys.push({day:s.day,stat:k,stats:{...s.stats},seq:log.seq=(log.seq||0)+1});
     }
   }
-  jpEndDay(s,log,`${ranks[top].name} (${CITY_TARGETS[job]})`);
+  jpEndDay(s,log,`${ranks[top].name} (${jpJobName(job)})`);
 }
 /** Moves the player into a city job, at their old rank if they have worked it, or returns false when they lack its first rank's stats. */
 function jpJoin(ctx,s,job,log,from){
@@ -180,7 +212,7 @@ function jpJoin(ctx,s,job,log,from){
   s.inJob=job;
   s.company=null;
   s.settled=0;
-  jpEvent(s,log,`${from?`Quit ${from} and ${returning?"rejoin":"join"}`:returning?"Rejoin":"Join"} ${CITY_TARGETS[job]} as ${ranks[s.rank[job]].name}`);
+  jpEvent(s,log,`${from?`Quit ${from} and ${returning?"rejoin":"join"}`:returning?"Rejoin":"Join"} ${jpJobName(job)} as ${ranks[s.rank[job]].name}`);
   return true;
 }
 /** Works one day climbing a city job, and returns true once its top rank is reached. */
@@ -193,7 +225,7 @@ function jpClimbDay(ctx,s,job,log){
       s.points[job]-=5*(r+1);
       r++;
       s.rank[job]=r;
-      jpEvent(s,log,`Spend ${5*r} ${CITY_TARGETS[job]} points to become ${ranks[r].name}`);
+      jpEvent(s,log,`Spend ${5*r} ${jpJobName(job)} points to become ${ranks[r].name}`);
     }
     // Points beyond the next promotion's cost buy the stat holding it back, using the specials this rank has
     // unlocked. Later promotions are paid from what each rank earns, so only the next one needs keeping.
@@ -208,11 +240,12 @@ function jpClimbDay(ctx,s,job,log){
   }
   if(r===top){
     if(job==="Education"&&s.principal==null) s.principal=s.day;
+    if(s.tops[job]==null) s.tops[job]=s.day;
     return true;
   }
   JP_STATS.forEach(k=>{ s.stats[k]+=ranks[r].gain[k] });
   s.points[job]+=r+1;
-  jpEndDay(s,log,`${ranks[r].name} (${CITY_TARGETS[job]})`);
+  jpEndDay(s,log,`${ranks[r].name} (${jpJobName(job)})`);
   return false;
 }
 /** Climbs a city job from a state, returning the day its top rank is reached or null past the limit. */
@@ -408,18 +441,74 @@ function jpPlanGoal(ctx,start,startKind,goal){
 }
 
 // ----------------------------------------------------------------------
+// After the target
+// ----------------------------------------------------------------------
+/** Works one day after the target is reached: climbing a city job, earning in a company, or carrying on as before. */
+function jpAfterDay(ctx,s,kind,log){
+  if(kind.startsWith("climb:")){
+    const job=kind.slice(6);
+    ctx.need=null;
+    if(s.rank[job]<ctx.ranks[job].length-1&&!jpClimbDay(ctx,s,job,log)) return;
+    jpTopDay(ctx,s,log,job);
+    return;
+  }
+  ctx.need=kind==="company"?JP_NO_LIMIT:null;
+  jpStayDay(ctx,s,kind,log);
+}
+/** Returns what the player is leaving at the end of a plan, for the action text. */
+function jpLeaving(ctx,s){
+  if(s.inJob) return jpJobName(s.inJob);
+  return s.company?"your company":null;
+}
+/**
+ * Simulates on from the end of the plan until a given day, moving to the preferred employer first.
+ * Kept on the plan so On This Day can look as far ahead as it likes without redoing the work.
+ */
+function jpContinueTo(plan,day){
+  if(!plan.ctx||!plan.end) return null;
+  const ctx=plan.ctx;
+  if(!plan.cont){
+    const s=jpClone(plan.end);
+    const c=plan.cont={s,days:[],events:[],buys:[],kind:plan.afterKind};
+    const [kind,key]=String(plan.prefer||"").split(":");
+    if(kind==="company"&&ctx.companies[key]){
+      if(s.company!==key||s.inJob) jpJoinCompany(ctx,s,key,c,jpLeaving(ctx,s));
+      c.kind="company";
+    }else if(kind==="job"&&ctx.ranks[key]){
+      if(jpJoin(ctx,s,key,c,s.inJob===key?null:jpLeaving(ctx,s))) c.kind="climb:"+key;
+    }
+  }
+  const c=plan.cont;
+  while(c.s.day<=Math.min(day,JOB_PLAN_HORIZON)) jpAfterDay(ctx,c.s,c.kind,c);
+  return c;
+}
+/** Returns where the player stands at the end of a given day: stats, job, and the city job tops reached. */
+function jpStandingOn(plan,day){
+  const last=plan.log.days.at(-1);
+  let days=plan.log.days;
+  if(!last||day>last.day){
+    const c=jpContinueTo(plan,day);
+    if(c) days=days.concat(c.days);
+  }
+  let found=null;
+  for(const d of days){ if(d.day<=day) found=d; else break }
+  const tops=(plan.cont?.s||plan.end).tops||{};
+  return {entry:found||days[0]||null,tops:Object.fromEntries(Object.entries(tops).filter(([,d])=>d<=day))};
+}
+
+// ----------------------------------------------------------------------
 // The plan
 // ----------------------------------------------------------------------
 /** Returns what the job preferences ask the planner for, or null when there is nothing to plan. */
 function jpGoal(prefs){
   if(prefs.target==="city"){
     const jobs=prefs.cityJob==="All"?Object.keys(CITY_TARGETS):CITY_TARGETS[prefs.cityJob]?[prefs.cityJob]:["Education"];
-    return {kind:"city",jobs,stay:!!prefs.stayRole};
+    return {kind:"city",jobs,stay:!!prefs.stayRole,prefer:prefs.prefer||null};
   }
   if(prefs.target==="stats"){
     const need={man:+prefs.stats?.man||0,int:+prefs.stats?.int||0,end:+prefs.stats?.end||0};
     if(!JP_STATS.some(k=>need[k]>0)) return null;
-    return {kind:"stats",need,stay:!!prefs.stayRole};
+    return {kind:"stats",need,stay:!!prefs.stayRole,prefer:prefs.prefer||null};
   }
   if(!prefs.target) return {kind:"weeks"};
   if(prefs.target==="job"){
@@ -435,7 +524,7 @@ function jobPlan(list){
   const prefs=window.edJobPrefs||{}, job=window.edJobJob||{};
   const goal=typeof edJobCourseFinishes==="function"?jpGoal(prefs):null;
   if(!goal){ window.jobPlanPrincipal=null; return null }
-  const key=JSON.stringify({job,prefs,goal,t:window.live?.positionStats?1:0,perk:!!$("edJobPerk")?.checked,
+  const key=JSON.stringify({job,prefs:{...prefs,onDay:null},goal,t:window.live?.positionStats?1:0,perk:!!$("edJobPerk")?.checked,
     c:edJobCourseFinishes(list,null).map(e=>[e.course.id,e.end,e.stats]),r:[educationTimeReduction(),educationJpFactor()]});
   if(window.jobPlanCache?.key===key){
     window.jobPlanPrincipal=window.jobPlanCache.principal;
@@ -467,13 +556,15 @@ function jpPlanWith(list,job,goal,principalDay){
   const companies={};
   if(kind==="company") companies[type]=jpCompany(type);
   if(goal.company) companies[goal.company]=jpCompany(goal.company);
-  const ranks=Object.fromEntries(Object.keys(CITY_TARGETS).map(j=>[j,jpRanks(j)]));
+  const [preferKind,preferKey]=String(goal.prefer||"").split(":");
+  if(preferKind==="company"&&!companies[preferKey]) companies[preferKey]=jpCompany(preferKey);
+  const ranks=Object.fromEntries(Object.keys(CITY_JOBS).map(j=>[j,jpRanks(j)]));
   const ctx={job,courses,companies,home:kind==="company"?type:null,trains:edJobWeeklyTrains(job),
     bought:Math.min(MAX_TRAINS_BOUGHT_PER_WEEK,Math.max(0,+job.trainsBought||0)),ranks,
     homeKind:startKind==="company"||startKind==="director"?startKind:null,need:goal.need||null};
   const start={day:0,stats:{man:+job.man||0,int:+job.int||0,end:+job.end||0},settled:Math.min(10,+job.days||0),
-    tenure:+job.days||0,company:kind==="company"?type:null,pos:job.position,rank:{},points:{},inJob:null,principal:null};
-  Object.keys(CITY_TARGETS).forEach(j=>{
+    tenure:+job.days||0,company:kind==="company"?type:null,pos:job.position,rank:{},points:{},inJob:null,principal:null,tops:{}};
+  Object.keys(CITY_JOBS).forEach(j=>{
     const r=job.cityRanks?.[j];
     if(r!=null){ start.rank[j]=Object.keys(CITY_JOBS[j]).indexOf(r); start.points[j]=+job.cityPoints?.[j]||0 }
   });
@@ -482,20 +573,29 @@ function jpPlanWith(list,job,goal,principalDay){
     start.rank.Education=ranks.Education.length-1;
     start.points.Education=+job.cityPoints?.Education||0;
   }
-  if(kind==="job"&&CITY_TARGETS[type]){
+  if(kind==="job"&&CITY_JOBS[type]?.[job.position]){
     start.rank[type]=Object.keys(CITY_JOBS[type]).indexOf(job.position);
     start.points[type]=+job.cityPoints?.[type]||0;
-    start.inJob=type;
+    if(CITY_TARGETS[type]) start.inJob=type;
   }
+  Object.keys(start.rank).forEach(j=>{ if(start.rank[j]===ranks[j].length-1) start.tops[j]=0 });
   if(Object.values(companies).some(c=>!c.positions.length)) return {kind:goal.kind,unloaded:true};
+  const steady=startKind==="company"?"fixed":startKind;
   if(goal.kind==="weeks"){
     const log={days:[],events:[],buys:[]};
     const s=jpClone(start);
-    const kind=startKind==="company"?"fixed":startKind;
-    while(s.day<365) jpStayDay(ctx,s,kind,log);
-    return {kind:"weeks",log,end:s};
+    while(s.day<365) jpStayDay(ctx,s,steady,log);
+    return {kind:"weeks",log,end:s,ctx,afterKind:steady};
   }
-  return goal.kind==="city"?jpPlanCity(ctx,start,startKind,goal.jobs,goal.stay):jpPlanGoal(ctx,start,startKind,goal);
+  const plan=goal.kind==="city"?jpPlanCity(ctx,start,startKind,goal.jobs,goal.stay):jpPlanGoal(ctx,start,startKind,goal);
+  if(plan.end){
+    // Without a preferred employer the player carries on where the plan left them.
+    const s=plan.end;
+    plan.afterKind=s.inJob?"climb:"+s.inJob:s.company?(s.company===ctx.home&&startKind==="director"?"director":"fixed"):"none";
+    plan.ctx=ctx;
+    plan.prefer=goal.prefer||null;
+  }
+  return plan;
 }
 
 // ----------------------------------------------------------------------
@@ -572,7 +672,137 @@ function renderJobPlanner(list){
   });
   rows.push({day:plan.finish,order:2,html:`<tr class="edjob-jp-final"><td>${esc(edJobFinishDate(plan.finish))}</td>`
     +`<td>${esc(plan.title)} reached. Wowsers!</td>${cells(plan.end.stats)}</tr>`});
+  (jpContinueTo(plan,plan.finish)?.events||[]).filter(e=>e.day===plan.finish).forEach(e=>
+    rows.push({day:e.day,order:3,seq:e.seq,html:`<tr class="edjob-jp-event"><td>${esc(edJobFinishDate(e.day))}</td><td>${esc(e.text)}</td>${cells(e.stats)}</tr>`}));
   rows.sort((a,b)=>a.day-b.day||a.order-b.order||(a.seq||0)-(b.seq||0));
   box.innerHTML=`<table class="edjob-jp-table"><thead><tr><th>Date</th><th>What to do</th><th>MAN</th><th>INT</th><th>END</th></tr></thead>`
     +`<tbody>${rows.map(r=>r.html).join("")}</tbody></table>`;
+}
+
+// ----------------------------------------------------------------------
+// On This Day
+// ----------------------------------------------------------------------
+/** The four battle stats, in the order perks list them. */
+const JP_BATTLE_STATS=["Strength","Speed","Defence","Dexterity"];
+/** Returns a perk value without needless decimals. */
+function jpPerkNumber(v){
+  return Number.isInteger(v)?String(v):String(+v.toFixed(2));
+}
+/** Returns a list joined with commas and a final ampersand. */
+function jpAndList(list){
+  return list.length>1?`${list.slice(0,-1).join(", ")} & ${list.at(-1)}`:list[0]||"";
+}
+/**
+ * Returns perk lines with like perks summed: passive and gym bonuses per battle stat, accuracy bonuses
+ * grouped by size, and any other "Gain N% something" added up when the something matches.
+ * Anything without a number to add is listed once as written.
+ */
+function jpPerkSummary(texts){
+  const sums=new Map(), accuracy=new Map(), plain=[];
+  const add=(key,label,value,unit,order)=>{
+    const e=sums.get(key)||{label,value:0,unit,order};
+    e.value+=value;
+    sums.set(key,e);
+  };
+  const statName=w=>({strength:"Strength",speed:"Speed",defense:"Defence",defence:"Defence",dexterity:"Dexterity"})[w.trim()];
+  texts.forEach(raw=>{
+    const t=String(raw||"").trim();
+    if(!t) return;
+    const l=t.toLowerCase();
+    let m;
+    if((m=l.match(/([\d.]+)% passive bonus to (.+)$/))){
+      m[2].split(/,| and /).map(statName).filter(Boolean).forEach(n=>
+        add("passive|"+n,`Passive ${n}`,+m[1],"%",JP_BATTLE_STATS.indexOf(n)));
+      return;
+    }
+    if((m=l.match(/([\d.]+)% (?:bonus|boost) (?:to|in) all gym gains/))){
+      JP_BATTLE_STATS.forEach((n,i)=>add("gym|"+n,`${n} Gym Gains`,+m[1],"%",10+i));
+      return;
+    }
+    if((m=l.match(/([\d.]+)% bonus to (strength|speed|defen[cs]e|dexterity) gains in the gym/))){
+      const n=statName(m[2]);
+      add("gym|"+n,`${n} Gym Gains`,+m[1],"%",10+JP_BATTLE_STATS.indexOf(n));
+      return;
+    }
+    if((m=t.match(/\+?([\d.]+) accuracy increase with (.+)$/i))){
+      const v=(+m[1]).toFixed(2);
+      if(!accuracy.has(v)) accuracy.set(v,new Set());
+      accuracy.get(v).add(m[2].trim());
+      return;
+    }
+    // Two bonuses in one line cannot be split reliably, so they are listed as written.
+    if((l.match(/%/g)||[]).length<2&&(
+       (m=t.match(/^gain (?:an? )?(?:further )?\+?([\d.]+)(%?) (.+)$/i))||(m=t.match(/^gain an? bonus of ([\d.]+)(%) (.+)$/i)))){
+      const subject=m[3].replace(/^(?:bonus|boost|increase) (?:to|in|of) /i,"").replace(/^(?:bonus|to) /i,"").trim();
+      const key=`${m[2]}|${subject.toLowerCase()}`;
+      add(key,subject.charAt(0).toUpperCase()+subject.slice(1),+m[1],m[2],100);
+      return;
+    }
+    if(!plain.includes(t)) plain.push(t);
+  });
+  const line=e=>`+${jpPerkNumber(e.value)}${e.unit} ${e.label}`;
+  const ordered=[...sums.values()].sort((a,b)=>a.order-b.order);
+  const accuracyLines=[...accuracy.entries()].map(([v,set])=>`+${v} Accuracy for ${jpAndList([...set].sort((a,b)=>a.localeCompare(b)))}`);
+  return ordered.filter(e=>e.order<100).map(line).concat(accuracyLines,ordered.filter(e=>e.order>=100).map(line),plain);
+}
+/** Returns the day count from today to a yyyy-mm-dd date, or null for anything unreadable. */
+function jpDaysUntil(iso){
+  const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso||""));
+  if(!m) return null;
+  const today=new Date();
+  today.setHours(0,0,0,0);
+  return Math.round((new Date(+m[1],m[2]-1,+m[3])-today)/86400000);
+}
+/** Draws the On This Day panel: where the plan leaves the player on the chosen date. */
+function renderOnThisDay(list){
+  const box=$("edJobOnDay"), input=$("ejOnDay");
+  if(!box||!input) return;
+  const prefs=window.edJobPrefs||{};
+  if(document.activeElement!==input) input.value=prefs.onDay||edJobFinishDate(0);
+  const say=t=>{ box.innerHTML=`<p class="edjob-jp-msg">${esc(t)}</p>` };
+  const day=jpDaysUntil(input.value);
+  if(day==null) return say("Choose a date.");
+  if(day<0) return say("Choose today or a date ahead.");
+  if(day>JOB_PLAN_HORIZON) return say("Choose a date within the next 10 years.");
+  const plan=jobPlan(list);
+  if(!plan?.log) return say(plan?.unloaded?"Refresh to load the company positions.":"There is no plan to look ahead with yet.");
+  const {entry,tops}=jpStandingOn(plan,day);
+  if(!entry) return say("There is no plan to look ahead with yet.");
+  const n=v=>Math.floor(v).toLocaleString("en-US");
+  const section=(title,body)=>`<div class="edjob-stat-title">${esc(title)}</div>${body}`;
+  // Job and company
+  let job="No job", specials=[], specialsNote="";
+  if(entry.inJob){
+    job=`${jpRanks(entry.inJob)[entry.rank]?.name||""} · ${jpJobName(entry.inJob)}`;
+    specials=(CITY_JOB_SPECIALS[entry.inJob]||[]).map(([rank,effect])=>({name:rank,effect,unlock:rank}));
+  }
+  else if(entry.company){
+    const type=(window.live?.companyTypes||[]).find(c=>String(c.id)===String(entry.company));
+    job=`${entry.pos||"Position not known"} · ${type?.name||"Company"}`;
+    specials=(type?.specials||[]).map(x=>({name:x.name,effect:x.effect,unlock:`${x.rating}★`}));
+    // A company list saved before specials were kept has none to show until the next refresh.
+    if(type&&!Array.isArray(type.specials)) specialsNote="Refresh all API data to load this company's perks.";
+  }
+  // Courses completed by the date, grouped by subject
+  const finished=new Set(list.filter(c=>c.done).map(c=>c.id));
+  edJobCourseFinishes(list).forEach(e=>{ if(e.day<=day) finished.add(e.course.id) });
+  const done=list.filter(c=>finished.has(c.id));
+  const faculties=[...new Set(list.map(c=>c.faculty))].map(f=>{
+    const all=list.filter(c=>c.faculty===f), got=done.filter(c=>c.faculty===f);
+    const full=got.length===all.length;
+    return got.length?`<div class="ejod-fac"><span class="ejod-fac-name${full?" full":""}">${esc(f)}${full?" ✓":""}</span> <span class="ejod-count">${got.length}/${all.length}</span>`
+      +`<div class="ejod-list">${esc(got.map(c=>c.name).join(", "))}</div></div>`:"";
+  }).join("");
+  // Perks from those courses and from city job tops kept after leaving
+  const perks=jpPerkSummary(done.map(c=>c.perk).concat(Object.keys(tops).map(j=>CITY_TOP_PERKS[j]).filter(Boolean)));
+  box.innerHTML=section("Work stats",`<div class="ejod-stats"><span>MAN <strong>${n(entry.stats.man)}</strong></span>`
+      +`<span>INT <strong>${n(entry.stats.int)}</strong></span><span>END <strong>${n(entry.stats.end)}</strong></span></div>`)
+    +section("Job",`<div class="ejod-job">${esc(job)}</div>`
+      +(specials.length?`<ul class="ejod-specials">${specials.map(x=>x.name===x.unlock
+        ?`<li><span class="ejod-count">${esc(x.unlock)}:</span> ${esc(x.effect)}</li>`
+        :`<li><strong>${esc(x.name)}</strong> <span class="ejod-count">${esc(x.unlock)}</span>: ${esc(x.effect)}</li>`).join("")}</ul>`
+        :specialsNote?`<p class="edjob-jp-msg">${esc(specialsNote)}</p>`:""))
+    +section("Education",done.length?`<div class="ejod-count">${done.length} of ${list.length} courses</div>${faculties}`:`<div class="edjob-jp-msg">No courses completed</div>`)
+    +section("Perks",perks.length?`<div class="ejod-perks">${perks.map(p=>`<span>${esc(p)}</span>`).join(`<span class="ejod-sep"> | </span>`)}</div>`
+      :`<div class="edjob-jp-msg">No perks yet</div>`);
 }

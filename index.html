@@ -704,6 +704,10 @@
           <select id="ejTargetPosition" class="edjob-job-select" aria-label="Target position"></select>
         </div>
         <div class="edjob-boosts" id="ejTargetExtra" hidden>
+          <div class="edjob-boosts" id="ejPreferRow">
+            <div class="edjob-stat-title">Preferred company after completion</div>
+            <select id="ejPrefer" class="edjob-job-select" aria-label="Preferred company after completion"></select>
+          </div>
           <label class="edjob-check" id="ejEdMaxedRow"><input type="checkbox" id="ejEdMaxed" data-mirror="edJobPerk"><span>Education job maxed</span></label>
           <label class="edjob-check" id="ejStayRow"><input type="checkbox" id="ejStayRole"><span>Stay in current role</span></label>
           <p class="edjob-jp-impossible" id="ejStayWarn" hidden>Target stats cannot be achieved in this role</p>
@@ -748,6 +752,14 @@
           <section class="panel edjob-module edjob-jobplan">
             <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide job planner">Job Planner</button></div>
             <div id="edJobPlanner"></div>
+          </section>
+        </div>
+        <div class="edjob-foldable" id="edJobOnDayWrap">
+          <button type="button" class="config-tab" aria-label="Show on this day">On This Day</button>
+          <section class="panel edjob-module edjob-jobplan">
+            <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide on this day">On This Day</button></div>
+            <label class="edjob-trains"><span>Date</span><input type="date" id="ejOnDay" class="edjob-date-input"></label>
+            <div id="edJobOnDay"></div>
           </section>
         </div>
       </div>

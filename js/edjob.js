@@ -588,6 +588,12 @@ function renderEdJobPrefs(){
   $("ejEdMaxedRow").hidden=p.target==="city";
   $("ejStayRow").hidden=p.target!=="stats"&&p.target!=="city";
   $("ejStayRole").checked=!!p.stayRole;
+  $("ejPreferRow").hidden=p.target!=="city"&&p.target!=="stats";
+  const types=window.live?.companyTypes||[];
+  const opt=(v,t)=>`<option value="${esc(v)}"${v===(p.prefer||"")?" selected":""}>${esc(t)}</option>`;
+  $("ejPrefer").innerHTML=opt("","Stay where the plan ends")
+    +`<optgroup label="City jobs">${Object.keys(CITY_JOBS).map(k=>opt("job:"+k,k==="Medical"?"Medicine":k)).join("")}</optgroup>`
+    +(types.length?`<optgroup label="Companies">${types.map(c=>opt("company:"+c.id,c.name)).join("")}</optgroup>`:"");
   $("ejTargetCityJob").value=p.cityJob||"Education";
   document.querySelectorAll("#edJobPrefs .ej-target-stat").forEach(el=>{
     const v=p.stats?.[el.dataset.stat];
@@ -639,6 +645,7 @@ function edJobRefreshPlan(){
   renderEdJobSummary(list);
   renderEdJobCourses(list);
   if(typeof renderJobPlanner==="function") renderJobPlanner(list);
+  if(typeof renderOnThisDay==="function") renderOnThisDay(list);
 }
 $("ejTarget")?.addEventListener("change",e=>setEdJobPref({target:e.target.value}));
 $("ejTargetCityJob")?.addEventListener("change",e=>setEdJobPref({cityJob:e.target.value}));
@@ -646,6 +653,12 @@ $("ejTargetEmployer")?.addEventListener("change",e=>setEdJobPref({employer:e.tar
   position:edJobTargetPositions(e.target.value)[0]||""}));
 $("ejTargetPosition")?.addEventListener("change",e=>setEdJobPref({position:e.target.value}));
 $("ejStayRole")?.addEventListener("change",e=>setEdJobPref({stayRole:e.target.checked}));
+$("ejPrefer")?.addEventListener("change",e=>setEdJobPref({prefer:e.target.value}));
+/** Shows the chosen day without rebuilding the plan, which the date does not affect. */
+$("ejOnDay")?.addEventListener("change",e=>{
+  window.edJobPrefs={...(window.edJobPrefs||{}),onDay:e.target.value};
+  if(typeof renderOnThisDay==="function") renderOnThisDay(edJobCourses());
+});
 /** Keeps a target work stat blank or a number with commas. */
 document.querySelectorAll("#edJobPrefs .ej-target-stat").forEach(el=>{
   el.addEventListener("input",()=>{
@@ -1144,6 +1157,7 @@ function renderEdJob(){
   renderEdJobPerks();
   renderEdJobCourses(list);
   if(typeof renderJobPlanner==="function") renderJobPlanner(list);
+  if(typeof renderOnThisDay==="function") renderOnThisDay(list);
   if(typeof queueFitLeft==="function") queueFitLeft();
 }
 

@@ -488,7 +488,9 @@ async function fetchCompanyTypes(){
   const list=(Array.isArray(j.companies)?j.companies:[]).map(c=>{
     const positions=(Array.isArray(c.positions)?c.positions:[]).filter(p=>String(p.name||"").trim());
     positions.forEach(p=>{ stats[`${+c.id}|${String(p.name).trim()}`]={req:three(p.working_stats?.required),gains:three(p.working_stats?.daily_gains)} });
-    return {id:+c.id,name:String(c.name||"").trim(),positions:positions.map(p=>String(p.name).trim())};
+    const specials=(Array.isArray(c.specials)?c.specials:[]).map(x=>({name:String(x.name||"").trim(),
+      effect:String(x.effect||"").trim(),rating:+x.rating||0})).filter(x=>x.name).sort((a,b)=>a.rating-b.rating);
+    return {id:+c.id,name:String(c.name||"").trim(),positions:positions.map(p=>String(p.name).trim()),specials};
   }).filter(c=>c.id&&c.name).sort((a,b)=>a.name.localeCompare(b.name));
   window.live.companyTypes=list.length?list:null;
   window.live.positionStats=list.length?stats:null;
