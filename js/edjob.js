@@ -584,8 +584,9 @@ function renderEdJobPrefs(){
   if(!target) return;
   target.value=p.target||"";
   [["ejTargetCity","city"],["ejTargetStats","stats"],["ejTargetJob","job"]].forEach(([id,t])=>{ $(id).hidden=p.target!==t });
-  $("ejTargetExtra").hidden=p.target!=="stats"&&p.target!=="job";
-  $("ejStayRow").hidden=p.target!=="stats";
+  $("ejTargetExtra").hidden=!["stats","job","city"].includes(p.target);
+  $("ejEdMaxedRow").hidden=p.target==="city";
+  $("ejStayRow").hidden=p.target!=="stats"&&p.target!=="city";
   $("ejStayRole").checked=!!p.stayRole;
   $("ejTargetCityJob").value=p.cityJob||"Education";
   document.querySelectorAll("#edJobPrefs .ej-target-stat").forEach(el=>{

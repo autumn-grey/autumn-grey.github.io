@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.17.2 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.17.3 · Updated: 2026-10-06_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,20 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.17.3 — 2026-10-06
+
+- **Stay in current role** now works for City Jobs too. Ticked, you stay in
+  your current position until you move into your first city job; if the
+  plan sends you back to a company afterwards, you can still return in
+  whichever position suits you best.
+- Joining a company and the position you take there now read as one step,
+  such as "Rejoin an Adult Novelties company as Store Manager".
+- A Particular Job plan no longer ends by asking your director to move you
+  to the position you already hold.
+- Going back to a company between city jobs is now only planned for stays
+  of 10 days or more (up from 5), the time the settled-in bonus takes to
+  build up again.
 
 ### v0.17.2 — 2026-10-06
 

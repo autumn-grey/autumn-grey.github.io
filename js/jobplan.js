@@ -18,8 +18,8 @@ const CITY_JOB_REQS={
 const CITY_TARGETS={Education:"Education",Law:"Law",Medical:"Medicine"};
 /** The furthest ahead the planner looks, in days. */
 const JOB_PLAN_HORIZON=3650;
-/** The fewest days worth going back to a company for. */
-const JOB_PLAN_MIN_COMPANY_STAY=5;
+/** The fewest days worth going back to a company for: the 10 days the settled-in bonus takes to build up. */
+const JOB_PLAN_MIN_COMPANY_STAY=10;
 /** The days a new recruit waits before receiving trains. */
 const JOB_PLAN_RECRUIT_DAYS=3;
 /** The points a player starts a city job with the first time they join it. */
@@ -114,9 +114,12 @@ function jpCompanyDay(ctx,s,log,fixed){
   if(!fixed&&ctx.need&&(!pos||jpGap(ctx,s,pos.keys[0])<=0)){
     const best=jpBestPosition(ctx,s,co.positions);
     if(best&&best!==pos&&(!pos||jpUseful(ctx,best,s)>jpUseful(ctx,pos,s))){
+      // Joining a company and taking a position happen together, so they read as one action.
+      const joined=!pos&&log?.events.at(-1);
+      if(joined&&joined.day===s.day&&/join/i.test(joined.text)&&/company$/.test(joined.text)) joined.text+=` as ${best.name}`;
+      else jpEvent(s,log,`Ask your director to move you to ${best.name}`);
       pos=best;
       s.pos=best.name;
-      jpEvent(s,log,`Ask your director to move you to ${best.name}`);
     }
   }
   if(pos){
@@ -323,7 +326,10 @@ function jpOrders(list){
   return list.flatMap((x,i)=>jpOrders(list.filter((_,j)=>j!==i)).map(rest=>[x,...rest]));
 }
 /** Returns the fastest plan through the chosen city jobs, with its log. */
-function jpPlanCity(ctx,start,startKind,jobs){
+// With the role fixed, the player stays in their current position until the first city job; going back to a
+// company later still picks whichever position suits them best.
+function jpPlanCity(ctx,start,startKind,jobs,stay){
+  if(stay&&startKind==="company") startKind="fixed";
   let best=null;
   jpOrders(jobs).forEach(order=>{
     const r=jpCityRoute(ctx,start,order,startKind);
@@ -394,7 +400,7 @@ function jpPlanGoal(ctx,start,startKind,goal){
   }else jpStayUntilMet(ctx,s,best.kind,JOB_PLAN_HORIZON,log);
   if(goal.kind==="job"){
     const name=ctx.companies[goal.company].name;
-    if(s.company===goal.company) jpEvent(s,log,`Ask your director to move you to ${goal.position}`);
+    if(s.company===goal.company){ if(s.pos!==goal.position) jpEvent(s,log,`Ask your director to move you to ${goal.position}`) }
     else jpEvent(s,log,`${s.inJob?`Quit ${CITY_TARGETS[s.inJob]} and ${goal.company===ctx.home?"rejoin":"join"}`:"Join"} ${jpA(name)} company as ${goal.position}`);
   }
   return {kind:goal.kind,finish:s.day,log,end:s,
@@ -408,7 +414,7 @@ function jpPlanGoal(ctx,start,startKind,goal){
 function jpGoal(prefs){
   if(prefs.target==="city"){
     const jobs=prefs.cityJob==="All"?Object.keys(CITY_TARGETS):CITY_TARGETS[prefs.cityJob]?[prefs.cityJob]:["Education"];
-    return {kind:"city",jobs};
+    return {kind:"city",jobs,stay:!!prefs.stayRole};
   }
   if(prefs.target==="stats"){
     const need={man:+prefs.stats?.man||0,int:+prefs.stats?.int||0,end:+prefs.stats?.end||0};
@@ -489,7 +495,7 @@ function jpPlanWith(list,job,goal,principalDay){
     while(s.day<365) jpStayDay(ctx,s,kind,log);
     return {kind:"weeks",log,end:s};
   }
-  return goal.kind==="city"?jpPlanCity(ctx,start,startKind,goal.jobs):jpPlanGoal(ctx,start,startKind,goal);
+  return goal.kind==="city"?jpPlanCity(ctx,start,startKind,goal.jobs,goal.stay):jpPlanGoal(ctx,start,startKind,goal);
 }
 
 // ----------------------------------------------------------------------
