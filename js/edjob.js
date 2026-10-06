@@ -128,7 +128,7 @@ function renderEdJobSummary(list){
     +`<span class="edjob-stat-time">${esc(edJobYmd(raw(left)-cut(left)))}<small>Saved on remaining</small></span>`
     +`</div>`
     +`<div class="edjob-stat-title">Earliest completion</div>`
-    +`<div class="edjob-stat-date">${esc(left.length?edJobFinishDate(cut(left)):"-")}</div>`
+    +`<div class="edjob-stat-date">${esc(left.length?edJobFinishDate(cut(left)):"—")}</div>`
     +edJobGainsHtml(list)
     +(typeof jobPlanSnapshotHtml==="function"?jobPlanSnapshotHtml(list):"")
     +edJobBoughtTrainsHtml(list)
@@ -166,9 +166,9 @@ function edJobBoughtTrainsHtml(list){
   const toTarget=targeted&&plan.end&&!plan.impossible?(plan.end.boughtTrains||0)*cost:null;
   const row=(label,value)=>`<span class="edjob-gain-label">${esc(label)}</span><span class="edjob-gain-num">${esc(value)}</span>`;
   return `<div class="edjob-stat-title">Buying trains</div>`
-    +row("Trains bought",targeted?(toTarget==null?"-":`${Math.round(plan.end.boughtTrains||0).toLocaleString("en-US")} in total`):`${bought} per week`)
+    +row("Trains bought",targeted?(toTarget==null?"—":`${Math.round(plan.end.boughtTrains||0).toLocaleString("en-US")} in total`):`${bought} per week`)
     +row("Cost per week",money(bought*cost))
-    +(targeted?row("Cost to reach target",toTarget==null?"-":money(Math.round(toTarget))):"");
+    +(targeted?row("Cost to reach target",toTarget==null?"—":money(Math.round(toTarget))):"");
 }
 /** Returns the date a number of days from today. */
 function edJobFinishDate(days){
@@ -1242,9 +1242,9 @@ edJobSortable($("edJobPerks"),{
   movable:li=>li.classList.contains("on"),
   together:(a,b)=>b.classList.contains("on"),
   drop:()=>{
+    pushEdJobUndo();
     window.edJobPerkPrefs=[...document.querySelectorAll("#edJobPerks .edjob-perk.on")].map(li=>li.dataset.perk);
-    renderEdJobPerks();
-    renderEdJobCourses(edJobCourses());
+    renderEdJob();
   }
 });
 const EDJOB_COLUMNS={left:{sel:"#eduJobGrid>.grid-left",min:220},catalogue:{sel:"#edJobCatalogue",min:280},upcoming:{sel:"#edJobTodoWrap .edjob-courses",min:300}};

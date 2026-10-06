@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Turn the markdown docs into standalone HTML pages for GitHub Pages.
 
-Re-run after editing either .md file:
+Re-run after editing any of the four .md files:
 
-    python3 build-docs.py
+    py build-docs.py
 
 Mermaid blocks are rendered by mermaid.js when online, and fall back to the
 readable source text when not, so the file still works opened locally.

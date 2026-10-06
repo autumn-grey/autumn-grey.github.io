@@ -88,7 +88,6 @@ main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-temp
 .debug-log-time{color:var(--muted);margin-right:6px}
 .debug-log-actions{display:flex;gap:7px;margin-top:8px}
 .debug-log-actions .btn{padding:4px 9px;font-size:11px}
-.toolbar .toolbar label{white-space:nowrap}.toolbar label:nth-of-type(1){grid-column:1}.toolbar label:nth-of-type(2){grid-column:4}.toolbar label:nth-of-type(3){grid-column:6}.toolbar .grow{flex:1}.toolbar select,.toolbar input{background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:7px}
 .tablewrap{overflow:auto;border:1px solid var(--line);border-radius:8px}.table{width:100%;border-collapse:separate;border-spacing:0;min-width:1400px}.table.table-compact{min-width:0}.table td.benefit-cell{text-align:left;white-space:normal;min-width:190px}
 #tbodyPlan td:nth-child(3),#tbodyPlan td:nth-child(4){text-align:center}
 #tbodyPlan td.benefit-cell{text-align:center;min-width:150px}#tbodyPlan td.paid-cell{text-align:left;white-space:normal;min-width:180px}.paid-with{display:flex;flex-direction:column;gap:2px;font-size:11px}.pw-line{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:baseline}.pw-src{color:var(--muted)}.pw-src::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;background:currentColor;vertical-align:middle}.pw-bank{color:#b586e0}.pw-cayman{color:#5fc9d8}.pw-invest{color:#2ee56a}.pw-input{color:#e39b45}.pw-sale{color:#e0655f}.pw-amt{color:var(--text);font-variant-numeric:tabular-nums}.pw-pct{color:var(--muted);font-variant-numeric:tabular-nums;min-width:30px;text-align:right}.table th,.table td{padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}.table th{text-align:center;vertical-align:bottom}.table th:first-child{text-align:center}.th-select{display:block;margin:4px auto 0;font:inherit;font-size:11px;font-weight:400;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:4px;padding:2px 4px}/* ---- Basic / Advanced view ---- */
@@ -384,7 +383,6 @@ a:hover,.site-footer a:hover{text-decoration:underline;filter:brightness(1.15)}
 /* EDUCATION & JOB */
 .edjob-wrap{display:flex;flex-direction:column;gap:18px}
 body.edujob #apiPanel>details>summary::before{content:"◂"}
-.edjob-modules{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
 .edjob-module{width:fit-content;max-width:100%}
 .edjob-module-head{display:flex;justify-content:space-between;gap:24px;margin-bottom:10px;
   font-size:15px;font-weight:700;color:var(--accent)}
@@ -832,7 +830,7 @@ body.edujob .banner .banner-science{display:block;margin-top:9px;padding-top:9px
   .field input,.field select,.api-key-wrap input,.basic-num input,.basic-num select{padding:10px}
   .btn,.page-tab,.view-btn{min-height:42px}
   .api-key-toggle{min-height:42px;padding:8px 14px}
-  .panel>details>summary,.sub-collapse>summary,.education-topic summary,.api-howto summary{
+  .panel>details>summary,.sub-collapse>summary,.education-topic summary{
     min-height:40px;display:flex;align-items:center}
   .pref-row{padding:11px 0}
   .check-field input[type=checkbox],.field input[type=checkbox],.pref-row input,.education-course input{

@@ -196,6 +196,21 @@ function renderFeedbackStatus(good,bad,plain,opts){
     el.appendChild(btn);
   }
 }
+/**
+ * Posts a message and its attached files to the feedback channel.
+ * Mentions are switched off so text typed into a form can never ping the server.
+ * Returns whether it arrived and, if not, why.
+ */
+async function postToFeedbackChannel(content,files){
+  const fd=new FormData();
+  fd.append("payload_json",JSON.stringify({content:scrubKey(content).slice(0,1990),allowed_mentions:{parse:[]}}));
+  files.forEach((f,i)=>fd.append("files["+i+"]",new Blob([scrubKey(f.text)],{type:f.type}),f.name));
+  try{
+    const res=await fetch(FEEDBACK_WEBHOOK+"?wait=true",{method:"POST",body:fd});
+    if(res.ok) return {sent:true,why:""};
+    return {sent:false,why:"the server answered "+res.status+(res.status===429?" (rate limited, try again in a minute)":"")};
+  }catch(e){ return {sent:false,why:e.message||"the request could not be sent"} }
+}
 async function submitFeedback(){
   const btn=$("fbSubmit");
   const inc=$("fbType")?.value==="inc";
@@ -213,16 +228,7 @@ async function submitFeedback(){
     try{ files.push(FEEDBACK_BUILDERS[key]()) }
     catch(e){ bad.push(key+" could not be pulled - "+(e.message||"unknown error")) }
   });
-  const fd=new FormData();
-  fd.append("payload_json",JSON.stringify({content:scrubKey(content).slice(0,1990)}));
-  files.forEach((f,i)=>fd.append("files["+i+"]",
-    new Blob([scrubKey(f.text)],{type:f.type}),f.name));
-  let sent=false, why="";
-  try{
-    const res=await fetch(FEEDBACK_WEBHOOK+"?wait=true",{method:"POST",body:fd});
-    sent=res.ok;
-    if(!res.ok) why="the server answered "+res.status+(res.status===429?" (rate limited, try again in a minute)":"");
-  }catch(e){ why=e.message||"the request could not be sent" }
+  const {sent,why}=await postToFeedbackChannel(content,files);
   if(sent){
     good.push("Form submitted successfully.");
     good.push(files.length?"Sent: the form, plus "+files.map(f=>f.name).join(", ")
@@ -235,7 +241,6 @@ async function submitFeedback(){
   if(btn){ btn.disabled=false; btn.textContent="Submit form" }
 }
 $("fbType")?.addEventListener("change",syncFeedbackType);
-$("fbArea")?.addEventListener("change",()=>{});
 // Typing at the limit is refused outright; a paste that would overshoot is
 // trimmed on the way in. Both shake.
 $("fbBody")?.addEventListener("beforeinput",e=>{
@@ -257,39 +262,13 @@ $("fbBody")?.addEventListener("input",()=>{
 $("fbSubmit")?.addEventListener("click",submitFeedback);
 // Opens Feedback & Reporting with the right type already chosen.
 function goFeedback(kind){
-  window.tosReturnTo=document.body.classList.contains("planner")?"planner":"investments";
-  history.pushState(null,"","#feedback");
-  setPage("feedback");
+  openFooterPage("feedback");
   const sel=$("fbType");
   if(sel&&kind){ sel.value=kind; syncFeedbackType() }
-  window.scrollTo({top:0,behavior:"smooth"});
 }
 document.querySelectorAll(".fb-jump").forEach(a=>
   a.addEventListener("click",e=>{ e.preventDefault(); goFeedback(a.dataset.fb) }));
-$("feedbackLink")?.addEventListener("click",e=>{
-  e.preventDefault();
-  window.tosReturnTo=document.body.classList.contains("planner")?"planner":"investments";
-  history.pushState(null,"","#feedback");
-  setPage("feedback");
-  window.scrollTo({top:0,behavior:"smooth"});
-});
-// The two placeholders navigate like the other footer pages.
-$("scriptsLink")?.addEventListener("click",e=>{
-  e.preventDefault();
-  window.tosReturnTo=document.body.classList.contains("planner")?"planner":"investments";
-  history.pushState(null,"","#scripts");
-  setPage("scripts");
-  window.scrollTo({top:0,behavior:"smooth"});
-});
-["scriptsOk"].forEach(id=>$(id)?.addEventListener("click",()=>{
-  const back=window.tosReturnTo||"investments";
-  history.pushState(null,"","#"+back);
-  setPage(back);
-  window.scrollTo({top:0,behavior:"smooth"});
-}));
-$("fbOk")?.addEventListener("click",()=>{
-  const back=window.tosReturnTo||"investments";
-  history.pushState(null,"","#"+back);
-  setPage(back);
-  window.scrollTo({top:0,behavior:"smooth"});
-});
+$("feedbackLink")?.addEventListener("click",e=>{ e.preventDefault(); openFooterPage("feedback") });
+$("scriptsLink")?.addEventListener("click",e=>{ e.preventDefault(); openFooterPage("scripts") });
+$("scriptsOk")?.addEventListener("click",leaveFooterPage);
+$("fbOk")?.addEventListener("click",leaveFooterPage);

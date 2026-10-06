@@ -44,7 +44,7 @@ function setPage(page){
     const el=$(id);
     if(el) el.hidden=key!==page;
   });
-  // These three live in other files, and a file can fail to load on its own now
+  // These live in other files, and a file can fail to load on its own now
   // that they are separate requests. The check is what keeps a missing one to a
   // page that does not fill in, rather than a half-switched page with no way
   // back. Anything defined in this file is called without one.
@@ -101,6 +101,31 @@ document.querySelectorAll(".plan-extra").forEach(cb=>cb.addEventListener("change
 // mark it out of date, and the button does the work.
 ["planGoal","planTarget","planTargetBlock","planTci","planIncMax","planPiOwn","planPiRent","planCayman","planCityBank"]
   .forEach(id=>$(id)?.addEventListener("change",planSettingChanged));
+/** The pages a footer page can return to: wherever the reader was working. */
+const WORK_PAGES=["investments","planner","banking","edujob"];
+/** Returns the page currently on screen. */
+function currentPage(){
+  return PAGES.find(p=>$(PAGE_ELS[p])&&!$(PAGE_ELS[p]).hidden)||"investments";
+}
+/** Moves to a page, recording it in the history and scrolling to the top. */
+function goToPage(page){
+  history.pushState(null,"","#"+page);
+  setPage(page);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+/**
+ * Opens a footer page, remembering the working page to come back to.
+ * Moving between footer pages keeps the original working page, so OK always returns there.
+ */
+function openFooterPage(page){
+  const here=currentPage();
+  if(WORK_PAGES.includes(here)) window.tosReturnTo=here;
+  goToPage(page);
+}
+/** Returns from a footer page to the working page it was opened from. A direct link falls back to Investments. */
+function leaveFooterPage(){
+  goToPage(window.tosReturnTo||"investments");
+}
 // One button per page rather than a toggle, so the page you are on is always
 // shown filled in rather than being inferred from another button's label.
 $("goInvestments")?.addEventListener("click",()=>setPage("investments"));
@@ -108,27 +133,11 @@ $("goPlanner")?.addEventListener("click",()=>setPage("planner"));
 $("goBanking")?.addEventListener("click",()=>setPage("banking"));
 // Education & Job and the orange button that leaves it again are the same kind
 // of move as the three above, so they push a hash the same way.
-["goEduJob","eduJobLink"].forEach(id=>$(id)?.addEventListener("click",e=>{
-  e.preventDefault();
-  history.pushState(null,"","#edujob");
-  setPage("edujob");
-  window.scrollTo({top:0,behavior:"smooth"});
-}));
-["goInvestmentsEduJob","investmentsLink"].forEach(id=>$(id)?.addEventListener("click",e=>{
-  e.preventDefault();
-  history.pushState(null,"","#investments");
-  setPage("investments");
-  window.scrollTo({top:0,behavior:"smooth"});
-}));
+["goEduJob","eduJobLink"].forEach(id=>$(id)?.addEventListener("click",e=>{ e.preventDefault(); goToPage("edujob") }));
+["goInvestmentsEduJob","investmentsLink"].forEach(id=>$(id)?.addEventListener("click",e=>{ e.preventDefault(); goToPage("investments") }));
 // The ToS is reached by the footer link and left by the back button, so the
 // hash is the single source of truth for which page is showing.
-$("docsLink")?.addEventListener("click",e=>{
-  e.preventDefault();
-  window.tosReturnTo=document.body.classList.contains("planner")?"planner":"investments";
-  history.pushState(null,"","#docs");
-  setPage("docs");
-  window.scrollTo({top:0,behavior:"smooth"});
-});
+$("docsLink")?.addEventListener("click",e=>{ e.preventDefault(); openFooterPage("docs") });
 // A Beautiful Secret picks a fresh video on every click. The href is set before
 // the browser follows the link, so the anchor still works with JS disabled and
 // a middle-click or "open in new tab" gets a real URL rather than a popup.
@@ -148,48 +157,18 @@ function pickSecret(el){
 // whichever working page you came from, which keeps the Basic/Advanced view
 // you had. On a working page there is nowhere to go, so it does nothing.
 function goHome(){
-  if(!document.body.classList.contains("tos")) return;
-  const back=window.tosReturnTo||"investments";
-  history.pushState(null,"","#"+back);
-  setPage(back);
-  window.scrollTo({top:0,behavior:"smooth"});
+  if(document.body.classList.contains("tos")) leaveFooterPage();
 }
 $("homeBtn")?.addEventListener("click",goHome);
-$("docsOk")?.addEventListener("click",()=>{
-  const back=window.tosReturnTo||"investments";
-  history.pushState(null,"","#"+back);
-  setPage(back);
-  window.scrollTo({top:0,behavior:"smooth"});
-});
-$("tosLink")?.addEventListener("click",e=>{
-  e.preventDefault();
-  // Remembered so OK can return here. A direct link to #tos has no previous
-  // page of ours, so that case falls back to Investments.
-  window.tosReturnTo=document.body.classList.contains("planner")?"planner":"investments";
-  history.pushState(null,"","#tos");
-  setPage("tos");
-  window.scrollTo({top:0,behavior:"smooth"});
-});
+$("docsOk")?.addEventListener("click",leaveFooterPage);
+$("tosLink")?.addEventListener("click",e=>{ e.preventDefault(); openFooterPage("tos") });
 // OK goes back the way the reader came. history.back() would work when they
-// arrived by the link, but not on a direct #tos load, so the page is set
-// explicitly and the hash kept in step.
-$("tosOk")?.addEventListener("click",()=>{
-  const back=window.tosReturnTo||"investments";
-  history.pushState(null,"","#"+back);
-  setPage(back);
-  window.scrollTo({top:0,behavior:"smooth"});
-});
+// arrived by the link, but not on a direct #tos load, so the page is set explicitly.
+$("tosOk")?.addEventListener("click",leaveFooterPage);
 addEventListener("hashchange",()=>setPage(location.hash.replace("#","")||"investments"));
 // Whichever page is on screen is the one the jump-to-top tab measures against.
 function activePageEl(){
-  if(!$("pageDocs").hidden) return $("pageDocs");
-  if(!$("pageTos").hidden) return $("pageTos");
-  if($("pageFeedback")&&!$("pageFeedback").hidden) return $("pageFeedback");
-  if($("pageTesting")&&!$("pageTesting").hidden) return $("pageTesting");
-  if($("pageScripts")&&!$("pageScripts").hidden) return $("pageScripts");
-  if($("pageEduJob")&&!$("pageEduJob").hidden) return $("pageEduJob");
-  if($("pageBanking")&&!$("pageBanking").hidden) return $("pageBanking");
-  return document.body.classList.contains("planner")?$("pagePlanner"):$("pageInvestments");
+  return $(PAGE_ELS[currentPage()]);
 }
 function syncToTop(){
   const btn=$("toTop"), el=activePageEl();

@@ -174,7 +174,6 @@ $("pickAllUndefined")?.addEventListener("change",e=>selectAll("undefined",e.targ
     toggleRow(key,cb.checked,row?exclusionGroup(row):null);
   });
 });
-// Clicking a plan row marks it bought, same store as the investments table.
 // Marking a plan step complete. Occurrences of the same investment are
 // independent, but they must be completed in order: clicking a later one when
 // an earlier is still outstanding marks the earlier one and says so.
@@ -419,8 +418,8 @@ $("toAdvanced")?.addEventListener("click",e=>{e.preventDefault();setView(false)}
   el.addEventListener("keydown",e=>{if(e.key==="Enter"){formatMoneyInput(el);applyBasicControls(id)}});
 });
 
-// The version now lives only in the footer, alongside the date.
-// Both read from the constants above, so a publish only ever edits those two.
+// The version lives only in the footer, alongside the date. Both come from
+// version.js, so a publish only ever edits those two constants.
 {
   const upEl=$("footerUpdated");
   if(upEl) upEl.textContent=APP_UPDATED;

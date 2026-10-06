@@ -49,10 +49,10 @@ function dismissStaleNote(){
 // and anything with no measurable return. Built from the tag lists so it stays
 // in step if a stock is retagged.
 function plannableStocks(){
-  const set=new Set([...SITUATIONAL_TICKERS,...UNDEFINED_ROI_TICKERS,...BOOSTER_TICKERS()]);
+  const set=new Set([...SITUATIONAL_TICKERS,...UNDEFINED_ROI_TICKERS,...boosterTickers()]);
   return STOCKS.filter(x=>set.has(x[0])).sort((a,b)=>a[1].localeCompare(b[1]));
 }
-function BOOSTER_TICKERS(){
+function boosterTickers(){
   return STOCKS.filter(x=>BOOSTER_TYPES.includes(x[3])).map(x=>x[0]);
 }
 // Tickers the user has ticked to plan for properly.
@@ -416,8 +416,6 @@ function daysToSave(target,cash,income,m){
   }
   return Infinity;
 }
-// A safety ceiling rather than a display limit: the plan is paged, so it can
-// run as long as it needs to, but it must still terminate.
 // The mirror of daysToSave: what a balance is worth after `days`, on the same
 // monthly-low-balance model. Used instead of assuming the target price was
 // somehow reached, which invented money whenever something was also sold.
@@ -436,6 +434,8 @@ const PAID_LABELS={
   input:"Capital and budget",
   sale:"Sold investments"
 };
+// A safety ceiling rather than a display limit: the plan is paged, so it can
+// run as long as it needs to, but it must still terminate.
 const PLAN_MAX_ACTIONS=2000;
 const PLAN_MAX_DAYS=365*100;
 
@@ -561,7 +561,6 @@ function planCandidates(){
 function dailyReturn(r){
   return (r.annual!=null&&isFinite(r.annual)&&r.annual>0)?r.annual/365:0;
 }
-// The order things should be acquired in.
 // Situational, no-ROI and booster stocks are only planned for if ticked.
 function isFlexibleStock(r){
   return SITUATIONAL_TICKERS.includes(r.ticker)
@@ -577,17 +576,17 @@ function deferredTickers(){
                               &&isFlexibleStock(r)&&!prio.has(r.ticker))
                      .map(r=>r.ticker));
 }
+// The order things should be acquired in.
 function planOrder(){
   const prio=prioritisedTickers();
   const cands=planCandidates();
-  const isFlexible=isFlexibleStock;
   // TCI Active earns nothing without a City Bank deposit to bonus, so with
   // the bank switched off it is demoted to an unticked no-ROI stock.
   const tciIdle=$("planTci")?.value==="active"&&!cityBankEnabled();
   const deferred=[],ranked=[],priced=[];
   for(const r of cands){
     if(tciIdle&&r.ticker==="TCI"){ deferred.push({...r,roi:null,annual:null}); continue; }
-    const flexible=isFlexible(r);
+    const flexible=isFlexibleStock(r);
     if(flexible&&!prio.has(r.ticker)){ deferred.push(r); continue; }
     if(r.roi!=null&&isFinite(r.roi)&&r.roi>0) ranked.push(r);
     else priced.push(r);

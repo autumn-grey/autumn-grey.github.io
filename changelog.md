@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.17.0 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.17.1 · Updated: 2026-10-06_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,20 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.17.1 — 2026-10-06
+
+- Pressing OK on Docs, the Terms of Service, Feedback & Reporting, Scripts or
+  Testing Feedback now takes you back to whichever page you came from. From
+  Basic Banking or Education & Job it used to drop you on Investments.
+- An Oil Rig employee's Tax Haven and Fat Cat specials are now picked up from
+  the company's star rating when your perks list does not spell them out.
+  Before, only a director's rating was read.
+- Feedback and testing reports can no longer ping anyone in the Discord
+  channel, whatever is typed into them.
+- Reordering Course Preferences now updates the Snapshot and Job Planner
+  straight away, and can be undone like any other course change.
+- Tidied the code throughout, with no other change to how the app works.
 
 ### v0.17.0 — 2026-10-06
 

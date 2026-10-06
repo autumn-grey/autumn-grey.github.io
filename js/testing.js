@@ -207,16 +207,7 @@ async function submitTestingFeedback(){
     try{ files.push(FEEDBACK_BUILDERS[key]()) }
     catch(e){ bad.push(key+" could not be pulled - "+(e.message||"unknown error")) }
   });
-  const fd=new FormData();
-  fd.append("payload_json",JSON.stringify({content:scrubKey(title).slice(0,1990)}));
-  files.forEach((f,i)=>fd.append("files["+i+"]",
-    new Blob([scrubKey(f.text)],{type:f.type}),f.name));
-  let sent=false, why="";
-  try{
-    const res=await fetch(FEEDBACK_WEBHOOK+"?wait=true",{method:"POST",body:fd});
-    sent=res.ok;
-    if(!res.ok) why="the server answered "+res.status+(res.status===429?" (rate limited, try again in a minute)":"");
-  }catch(e){ why=e.message||"the request could not be sent" }
+  const {sent,why}=await postToFeedbackChannel(title,files);
   if(sent){
     good.push("Form submitted successfully.");
     good.push("Sent: "+files.map(f=>f.name).join(", "));
@@ -230,17 +221,9 @@ $("tfSave")?.addEventListener("click",saveTestingForm);
 $("tfSubmit")?.addEventListener("click",submitTestingFeedback);
 /** Opens Testing Feedback and remembers where to come back to. */
 function goTesting(){
-  window.tosReturnTo=document.body.classList.contains("planner")?"planner":"investments";
-  history.pushState(null,"","#testing");
-  setPage("testing");
-  window.scrollTo({top:0,behavior:"smooth"});
+  openFooterPage("testing");
 }
 document.querySelectorAll(".tf-jump").forEach(a=>
   a.addEventListener("click",e=>{ e.preventDefault(); goTesting() }));
 $("testingCta")?.addEventListener("click",goTesting);
-$("tfOk")?.addEventListener("click",()=>{
-  const back=window.tosReturnTo||"investments";
-  history.pushState(null,"","#"+back);
-  setPage(back);
-  window.scrollTo({top:0,behavior:"smooth"});
-});
+$("tfOk")?.addEventListener("click",leaveFooterPage);

@@ -45,8 +45,6 @@ const SINGLE_BLOCK_TICKERS = ["ELT","IIL","IST","LOS","MSG","SYS","TCP","TGP","T
 const SITUATIONAL_TICKERS = ["YAZ","EVL","TCP","TGP","SYS","MSG","BAG","TCM","ELT","IIL"];
 // Benefits considered not worth the investment.
 const AWFUL_TICKERS = ["IST"];
-// Fixed benefit descriptions for stocks whose payout isn't a plain item/cash amount.
-// [main line, optional second line]
 // Private Island upgrade costs. ELT's benefit is a 10% discount on these
 // (it does not discount the property purchase price itself).
 const PI_UPGRADE_COSTS = {
@@ -55,6 +53,8 @@ const PI_UPGRADE_COSTS = {
   "Large Pool":500000,"Open Bar":9000,"Shooting Range":250000
 };
 const PI_UPGRADE_TOTAL = Object.values(PI_UPGRADE_COSTS).reduce((a,b)=>a+b,0);
+// Fixed benefit descriptions for stocks whose payout isn't a plain item/cash amount.
+// [main line, optional second line]
 const SPECIAL_BENEFITS = {
   ELT:["10% Property Upgrade Discount",`saves $${Math.round(PI_UPGRADE_TOTAL*0.10).toLocaleString("en-US")} per PI`],
   HRG:["1 x Random Property"],
@@ -97,7 +97,6 @@ function payoutKind(ticker,type){
   if(type==="item") return "items";
   return null;
 }
-// Education course costs (Torn wiki). Used to value IST's free-courses benefit.
 // Education course lengths in weeks (Torn wiki). Used to value WSU's time reduction.
 const COURSE_WEEKS={
 edu_biology_introduction_to_biochemistry:1,edu_biology_evolution:2,edu_biology_intermediate_biochemistry:4,
@@ -157,6 +156,7 @@ edu_sports_science_physiological_testing:3,edu_sports_science_human_movement_ana
 edu_sports_science_bio_mechanical_determinants_of_skill:3,edu_sports_science_sports_medicine:4,
 edu_sports_science_nutritional_science:3,edu_sports_science_analysis_and_performance:3,
 edu_sports_science_sports_administration:1,edu_sports_science_bachelor_of_sports_science:6};
+// Education course costs (Torn wiki). Used to value IST's free-courses benefit.
 const COURSE_COSTS={
 edu_biology_introduction_to_biochemistry:200,edu_biology_evolution:2000,
 edu_biology_intermediate_biochemistry:2500,edu_biology_advanced_biochemistry:2750,

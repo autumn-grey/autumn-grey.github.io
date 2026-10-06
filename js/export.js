@@ -1,5 +1,5 @@
 // ======================================================================
-// CSV EXPORT  ·  Both tables in one file, raw numbers for spreadsheets
+// TSV EXPORT  ·  Both tables in one file, raw numbers for spreadsheets
 // ======================================================================
 // Excel opens a .csv in the machine's legacy code page unless something tells
 // it otherwise, and then every byte of a UTF-8 character becomes its own

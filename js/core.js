@@ -260,7 +260,6 @@ function restoreEducationCourseState(state){
   });
 }
 
-// Persists settings, selections, course ticks and the current view.
 // Fields on the Investments page. Changing one rebuilds the investment rows.
 const INVESTMENT_FIELDS=[
   "merits",
@@ -320,6 +319,7 @@ const BANKING_FIELDS=[...Object.keys(BANKING_MIRROR),"bkDetailTerm"];
 window.bankingTouched=new Set();
 // Everything persisted to localStorage, which is the three lists together.
 const SAVED_FIELDS=[...INVESTMENT_FIELDS,...PLANNER_FIELDS,...BANKING_FIELDS];
+// Persists settings, selections, course ticks and the current view.
 // Every write is guarded: a browser in private mode, or one whose storage is
 // full, throws on setItem. Left unhandled that threw straight out of the Save
 // button and the page looked like it had saved when nothing had.
@@ -591,8 +591,7 @@ async function fetchStocks(){
 // ======================================================================
 // Only members of this faction can load data at all.
 const REQUIRED_FACTION="The ZOO - Night Shift";
-// Star ratings at which an Oil Rig unlocks each of the two specials this app
-// cares about.
+// Star ratings at which an Oil Rig unlocks each of the specials this app cares about.
 const OIL_RIG_SPECIALS={taxHaven:7,fatCat:10,oilMogul:5};
 // Torn's company_type ids. Only the four with specials this app cares about
 // are listed; a company can be renamed by its director, so the name is not
@@ -641,14 +640,13 @@ function applyJobSpecials(d,ok,miss){
   ok("Job point specials",notes.length?`${name||"company"} ${stars}★ · ${notes.join(", ")}`
     :`${name||"company"} ${stars}★ · none apply`);
 }
-// Everything the customised key asks for, in one request.
-// Fetched one at a time on purpose. Torn fails a whole request if the key
+// The v1 user selections the customised key asks for, fetched one at a time on purpose. Torn fails a whole request if the key
 // lacks any one selection in it, so batching these would mean a single
 // missing permission wiped out every setting instead of just its own.
 // "job" is absent here on purpose: API v1 answers it with "This selection is
 // only available in API v2", so asking for it in this loop only ever produced
 // a failed request. It is fetched from v2 separately below, because the app
-// does need it — it carries the company type, star rating and the user's
+// does need it: it carries the company type, star rating and the user's
 // position, which decide the company stock ticks and the job point specials.
 const USER_SELECTION_LIST=["stocks","education","merits","money","properties","perks"];
 // A request that reports failure instead of throwing, so one missing
@@ -915,7 +913,7 @@ function applyUserData(d){
   const bankLimitPerk=perks.find(p=>/bank/i.test(p.text)&&/(investment|limit|maximum)/i.test(p.text));
   const caymanJobPerk=jobPerks.find(p=>/cayman/i.test(p.text));
   const companyType=+(d.job?.company_type||d.company?.company_type||0);
-  const stars=+(d.company?.rating||d.company?.stars||0);
+  const stars=+(d.company?.rating||d.company?.stars||d.job?.company_rating||0);
   const isOilRig=companyType===COMPANY_TYPE.OIL_RIG;
   let perkReport=null;
   if(perks.length){
@@ -1193,7 +1191,6 @@ function updatePlanBankHelp(){
     // same way rather than explaining the inference.
     +` | Term length is set manually`;
 }
-// The faction upgrade that raises Cayman interest, as a percentage.
 // TCP, TGP and SYS all buff a company you work at, so they are worth nothing
 // to the unemployed. Employment is the switch: ticked when in a company,
 // unticked when not. Only ever applied when the job data actually arrived,
@@ -1204,7 +1201,7 @@ function applyCompanyStocks(d,ok,miss){
   const name=String(job.company_name||d.company?.name||"").trim();
   // Ownership, not employment. Torn reports the director's position as
   // "Director"; every other position is an employee, for whom these stocks
-  // are no use. Position is the only reliable signal — the company profile
+  // are no use. Position is the only reliable signal, since the company profile
   // endpoint answers for employees as well, so its presence proves nothing.
   const position=String(job.position||"").trim();
   const owns=/^director$/i.test(position);

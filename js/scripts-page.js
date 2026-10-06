@@ -141,7 +141,7 @@ async function loadScripts(){
   if(isScriptsOwner()){
     try{
       const draft=JSON.parse(localStorage.getItem(SCRIPTS_DRAFT_KEY)||"null");
-      if(Array.isArray(draft)&&draft.length!==undefined){
+      if(Array.isArray(draft)){
         window.scriptsList=normaliseScripts(draft);
         window.scriptsDirty=true;
         scriptsStatus("Showing unpublished local changes. Press Publish to write them to the repo.");
@@ -371,7 +371,7 @@ async function publishScripts(message){
     if(!res.ok){
       const detail=await res.json().catch(()=>({}));
       throw new Error((detail.message||"GitHub answered "+res.status)
-        +(res.status===409?" — the file changed in the repo, reload and redo this":""));
+        +(res.status===409?". The file changed in the repo, so reload and redo this":""));
     }
     clearScriptsDraft();
     scriptsStatus("Published. The live site updates within a minute or so.","ok");

@@ -57,7 +57,6 @@ function stockRows(){
         : ticker==="WSU"
         ? [`${formatDuration(remainingCourseDays()*0.10)} saved`]
         : STOCK_NOTES[ticker] || [label+" · valuation deferred"];
-      if(ticker==="ELT") unresolvedNotes[0]="Calculation based on fully upgrading one new PI per year";
       const unresolvedDesc = unresolvedNotes.join(" · ");
       out.push({...stockFlags(ticker,name,1,type,label,qty,days),cost:price*b1,days:0,annual:null,roi:null,ret7:null,ret31:null,notes:unresolvedNotes,desc:unresolvedDesc});
       continue;
@@ -146,8 +145,8 @@ function stockRows(){
       if(ticker==="HRG"){
         // A property you're given is only worth what you can get back for it,
         // and the estate agents pay 75% of the purchase price, no upgrades.
-        const prices=Object.values(propertyPriceTable());
-        const avg=prices.reduce((a,b)=>a+b,0)/prices.length;
+        const values=Object.values(propertyPriceTable());
+        const avg=values.reduce((a,b)=>a+b,0)/values.length;
         benefit=avg*PROPERTY_SELLBACK;
         desc=`Average estate agent sale value of all purchasable properties · ${(PROPERTY_SELLBACK*100).toFixed(0)}% of purchase price, unupgraded`;
       }
@@ -280,16 +279,13 @@ function incrementRow(s,n,cost,roi,annual){
 }
 // Is the Law course that discounts property purchases studied?
 function propertyLawStudied(){ return !!$(PROPERTY_LAW_COURSE)?.checked }
-// What a fully-upgraded Private Island costs, after the two discounts that
-// can apply to it: Property Law takes 10% off the purchase price only, an
-// owned ELT block takes 10% off the upgrades only.
-// Upgrade list price, before any discount. Every Private Island is costed
-// fully upgraded, Private Yacht included, so this is simply the whole list.
 // Total discount currently applied to upgrades, as a fraction. ELT and
 // Interior Connections are 10% each and stack additively.
 function piUpgradeDiscount(){
   return (boolVal("eltOwned")?0.10:0)+(boolVal("propertyBroker")?0.10:0);
 }
+// What a fully-upgraded Private Island costs, Private Yacht included, after the discounts that can
+// apply: Property Law takes 10% off the purchase price only, ELT and Interior Connections off the upgrades.
 function privateIslandCost(opts={}){
   const law=opts.propertyLaw!==undefined?opts.propertyLaw:propertyLawStudied();
   const elt=opts.elt!==undefined?opts.elt:boolVal("eltOwned");
@@ -367,10 +363,6 @@ function updateMeritsHelp(){
   const bd=$("bannerDays");
   if(bd&&bd.value!==""&&+bd.value>365) bd.value="365";
 }
-function updateColumnHeaders(){
-  // Headers now carry their own dropdowns, so the selected period is already
-  // visible, so there is nothing to rewrite here (rewriting would destroy the selects).
-}
 
 // A row's return for whichever period a column is showing.
 function periodValue(annual,period){
@@ -426,7 +418,6 @@ function rankRoi(r){
 // Rebuilds every row from the current settings, then re-renders. Called on
 // any input change, so it must stay cheap.
 function calculate(){
-  updateColumnHeaders();
   updateMeritsHelp();
   const bank=bankRows(), stocks=stockRows(), others=[...islandRows(),caymanRow()];
   rows=[...stocks,...bank,...others];
@@ -492,8 +483,6 @@ window.planDone=window.planDone||new Set();
 // Groups of parking steps folded away. The current goal stays open by default.
 window.planCollapsed=window.planCollapsed||new Set();
 window.planExpanded=window.planExpanded||new Set();
-// Blocks are cumulative: owning B3 means owning B1 and B2. Marking a block
-// marks everything below it; unmarking one unmarks everything above.
 function rowState(key){
   if(window.ownedRows.has(key)) return "owned";
   if(window.skippedRows.has(key)) return "skipped";
@@ -579,8 +568,7 @@ function pushUndo(){
   if(window.undoStack.length>UNDO_LIMIT) window.undoStack.shift();
   window.redoStack.length=0;
 }
-// Both directions repaint whichever page is showing and re-save, so the change
-// survives a reload the same way the original click would have.
+// Both directions repaint whichever page is showing, the same way the original click would have.
 function applyRestore(snap){
   restoreRows(snap);
   if(window.planResult) renderPlan();
@@ -629,7 +617,6 @@ function totalsFor(keys,period){
   const roi=cost>0?annual/cost:null;
   return {n:sel.length,cost,ret,roi};
 }
-// Both Portfolio panels are the same two lines; only the period differs.
 // What the plan says you are holding right now: what you started with, plus
 // everything a ticked step bought, minus everything a ticked step sold. A
 // step that sells to fund a purchase takes those holdings back off the tally.
@@ -644,6 +631,7 @@ function planHeldKeys(){
   });
   return keys;
 }
+// Both Portfolio panels are the same two lines; only the period differs.
 function paintTotals(bodyId,headerId,period,ownedOnly){
   const body=$(bodyId);
   if(!body) return;
@@ -837,8 +825,6 @@ function breakEvenText(r){
   return formatDuration(Math.ceil(r.cost/(r.annual/365)));
 }
 
-// Basic view drops the tags and tints the whole row instead. One category per
-// row, most important first.
 // Cells whose only content is an em dash read better centred.
 function markEmptyCells(){
   document.querySelectorAll("#tbody td, #tbodyUndefined td, #tbodyTotals td").forEach(td=>{
@@ -846,6 +832,8 @@ function markEmptyCells(){
   });
 }
 
+// Basic view drops the tags and tints the whole row instead. One category per
+// row, most important first.
 function rowTint(r){
   if(r.awful) return "tint-awful";
   if(r.bank) return "tint-bank";
@@ -860,10 +848,8 @@ function rowTint(r){
 // ownership and selection state.
 function render(){
   renderPlan();
-  // Until stock prices load there's nothing to show, so swap the tables for a
-  // prompt to enter an API key.
-  // Nothing worth exporting until share prices have loaded, the same
-  // condition that swaps the tables for the "enter a key" prompt.
+  // Until share prices load there is nothing to show or export, so the tables
+  // give way to a prompt to enter an API key.
   const noData=!Object.keys(prices).length;
   document.body.classList.toggle("no-data",noData);
   ["csvInvestments","csvPlan"].forEach(id=>{ const el=$(id); if(el) el.disabled=noData });
@@ -875,17 +861,17 @@ function render(){
     mainRows=mainRows.filter(r=>(r.block==null||r.block<=3) && !/ - Active$/.test(r.name||""));
   }
   renderBuyNext(mainRows);
-  $("tbody").innerHTML=mainRows.map(r=>`<tr data-key="${rowKey(r)}" class="${window.ownedRows.has(rowKey(r))?"owned ":""}${window.skippedRows.has(rowKey(r))?"skipped ":""}${r.depri?"depri ":""}${basic?rowTint(r)+" ":""}${r.kind==="stock" && r.block===1 ? "stock-first" : ""} ${["cayman","bankbonus","pi","bank","property"].includes(r.kind) || /city bank|^pi$|private island/i.test(String(r.name||"")) ? "special-purple" : ""}">
-<td class="pick"><input type="checkbox" class="row-pick" data-key="${rowKey(r)}"${window.selectedRows.has(rowKey(r))?" checked":""}></td>
-<td title="${esc(r.tip||r.desc||"")}"><span class="ticker">${r.ticker}</span> <strong>${r.name}${basic&&r.block&&!r.singleBlock?` – Increment ${r.block}`:""}</strong>${basic?"":`${r.block?`<span class="tag">${r.singleBlock?"Single":"B"+r.block}</span>`:""}${window.skippedRows.has(rowKey(r))?`<span class="tag skipped">Skipped</span>`:""}${r.situational?`<span class="tag situational">Situational</span>`:""}${r.awful?`<span class="tag awful">Awful</span>`:""}${r.payout==="money"?`<span class="tag money">$$$</span>`:""}${r.payout==="items"?`<span class="tag items">Items</span>`:""}${r.bank?`<span class="tag bank">Bank</span>`:""}${r.booster?`<span class="tag booster">Booster</span>`:""}`}<div class="sub row-desc">${r.desc||""}</div></td>
-<td class="benefit-cell">${r.benefit&&r.benefit[0]?r.benefit[0]:"—"}${r.benefit&&r.benefit[1]?`<div class="sub">${r.benefit[1]}</div>`:""}</td>
+  $("tbody").innerHTML=mainRows.map(r=>`<tr data-key="${esc(rowKey(r))}" class="${window.ownedRows.has(rowKey(r))?"owned ":""}${window.skippedRows.has(rowKey(r))?"skipped ":""}${r.depri?"depri ":""}${basic?rowTint(r)+" ":""}${r.kind==="stock" && r.block===1 ? "stock-first" : ""} ${["cayman","bankbonus","pi","bank","property"].includes(r.kind) || /city bank|^pi$|private island/i.test(String(r.name||"")) ? "special-purple" : ""}">
+<td class="pick"><input type="checkbox" class="row-pick" data-key="${esc(rowKey(r))}"${window.selectedRows.has(rowKey(r))?" checked":""}></td>
+<td title="${esc(r.tip||r.desc||"")}"><span class="ticker">${esc(r.ticker)}</span> <strong>${esc(r.name)}${basic&&r.block&&!r.singleBlock?` – Increment ${r.block}`:""}</strong>${basic?"":`${r.block?`<span class="tag">${r.singleBlock?"Single":"B"+r.block}</span>`:""}${window.skippedRows.has(rowKey(r))?`<span class="tag skipped">Skipped</span>`:""}${r.situational?`<span class="tag situational">Situational</span>`:""}${r.awful?`<span class="tag awful">Awful</span>`:""}${r.payout==="money"?`<span class="tag money">$$$</span>`:""}${r.payout==="items"?`<span class="tag items">Items</span>`:""}${r.bank?`<span class="tag bank">Bank</span>`:""}${r.booster?`<span class="tag booster">Booster</span>`:""}`}<div class="sub row-desc">${r.desc||""}</div></td>
+<td class="benefit-cell">${r.benefit&&r.benefit[0]?esc(r.benefit[0]):"—"}${r.benefit&&r.benefit[1]?`<div class="sub">${esc(r.benefit[1])}</div>`:""}</td>
 <td>${basic?moneyShort(r.cost):money(r.cost)}</td><td>${r.days?`${r.days}d`:"—"}</td><td>${basic?moneyShort(returnValue(r)):money(returnValue(r))}</td><td class="${r.roi!=null?(r.roi>=0?'good':'bad'):''}">${pct(r.roi)}</td><td class="basic-col">${breakEvenText(r)}</td><td class="${r.compare!=null?(r.compare>=0?'good':'bad'):''}">${money(r.compare)}</td>
 </tr>`).join("");
-  $("tbodyUndefined").innerHTML=undefinedRows.map(r=>`<tr data-key="${rowKey(r)}" class="${window.ownedRows.has(rowKey(r))?"owned ":""}${window.skippedRows.has(rowKey(r))?"skipped ":""}${basic&&r.awful?"tint-awful ":basic&&r.situational?"tint-situational ":""}${r.block===1?"stock-first":""}">
-<td class="pick"><input type="checkbox" class="row-pick" data-key="${rowKey(r)}"${window.selectedRows.has(rowKey(r))?" checked":""}></td>
-<td><span class="ticker">${r.ticker}</span> <strong>${r.name}</strong>${r.block?`<span class="tag">${r.singleBlock?"Single":"B"+r.block}</span>`:""}${window.skippedRows.has(rowKey(r))?`<span class="tag skipped">Skipped</span>`:""}${r.situational?`<span class="tag situational">Situational</span>`:""}${r.awful?`<span class="tag awful">Awful</span>`:""}${r.payout==="money"?`<span class="tag money">$$$</span>`:""}${r.payout==="items"?`<span class="tag items">Items</span>`:""}${r.bank?`<span class="tag bank">Bank</span>`:""}${r.booster?`<span class="tag booster">Booster</span>`:""}</td>
-<td class="benefit-cell">${r.benefit&&r.benefit[0]?r.benefit[0]:"—"}${r.benefit&&r.benefit[1]?`<div class="sub">${r.benefit[1]}</div>`:""}</td>
-<td>${basic?moneyShort(r.cost):money(r.cost)}</td><td class="benefit-cell">${r.notes&&r.notes[0]?r.notes[0]:(r.desc||"")}${r.notes&&r.notes[1]?`<div class="sub">${r.notes[1]}</div>`:""}</td>
+  $("tbodyUndefined").innerHTML=undefinedRows.map(r=>`<tr data-key="${esc(rowKey(r))}" class="${window.ownedRows.has(rowKey(r))?"owned ":""}${window.skippedRows.has(rowKey(r))?"skipped ":""}${basic&&r.awful?"tint-awful ":basic&&r.situational?"tint-situational ":""}${r.block===1?"stock-first":""}">
+<td class="pick"><input type="checkbox" class="row-pick" data-key="${esc(rowKey(r))}"${window.selectedRows.has(rowKey(r))?" checked":""}></td>
+<td><span class="ticker">${esc(r.ticker)}</span> <strong>${esc(r.name)}</strong>${r.block?`<span class="tag">${r.singleBlock?"Single":"B"+r.block}</span>`:""}${window.skippedRows.has(rowKey(r))?`<span class="tag skipped">Skipped</span>`:""}${r.situational?`<span class="tag situational">Situational</span>`:""}${r.awful?`<span class="tag awful">Awful</span>`:""}${r.payout==="money"?`<span class="tag money">$$$</span>`:""}${r.payout==="items"?`<span class="tag items">Items</span>`:""}${r.bank?`<span class="tag bank">Bank</span>`:""}${r.booster?`<span class="tag booster">Booster</span>`:""}</td>
+<td class="benefit-cell">${r.benefit&&r.benefit[0]?esc(r.benefit[0]):"—"}${r.benefit&&r.benefit[1]?`<div class="sub">${esc(r.benefit[1])}</div>`:""}</td>
+<td>${basic?moneyShort(r.cost):money(r.cost)}</td><td class="benefit-cell">${esc(r.notes&&r.notes[0]?r.notes[0]:(r.desc||""))}${r.notes&&r.notes[1]?`<div class="sub">${esc(r.notes[1])}</div>`:""}</td>
 </tr>`).join("");
   // Keep each header checkbox in step with its table's rows.
   const syncHead=(id,list)=>{
