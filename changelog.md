@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.18.0 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.0 · Updated: 2026-10-06_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,19 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.19.0 — 2026-10-06
+
+- **Education & Job on phones.** On narrow screens the page becomes one
+  column: the settings panels first, then Subject List, Upcoming Courses,
+  Completed Courses, the Job Planner and On This Day. Folded panels stay as
+  flat bars rather than turning into upright tabs.
+- On narrow screens, tap a course in the Subject List to add it to your
+  Upcoming Courses, and tap it again to take it off. Dragging still works in
+  Upcoming and Completed Courses.
+- With every panel in the left column of the Education & Job page folded,
+  the column now shrinks to fit its tabs instead of keeping the width you
+  last dragged it to. Unfold a panel and that width comes back.
 
 ### v0.18.0 — 2026-10-06
 

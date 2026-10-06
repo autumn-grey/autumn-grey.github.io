@@ -1196,6 +1196,20 @@ $("edJobCourses")?.addEventListener("click",e=>{
   if(event){ edJobShowEvent(event); return }
   if(e.target.closest("#edJobCatalogueTab")){ setEdJobCatalogueFolded(false); return }
   if(e.target.closest("input")) return;
+  // Dragging needs a mouse or the grip, so on a phone a tap on a course plans it or takes it back off.
+  const tapped=e.target.closest("#edJobCatalogue .edjob-course");
+  if(tapped&&window.matchMedia("(max-width:950px)").matches){
+    const id=tapped.dataset.id;
+    if(/\b(done|current)\b/.test(tapped.className)) return;
+    if(edJobAuto(edJobCourses()).includes(id)){
+      if(typeof floatOverElement==="function") floatOverElement(tapped,"Planned by your Course Preferences");
+      return;
+    }
+    pushEdJobUndo();
+    window.edJobPlan=window.edJobPlan.includes(id)?window.edJobPlan.filter(x=>x!==id):[...window.edJobPlan,id];
+    renderEdJob();
+    return;
+  }
   const head=e.target.closest(".edjob-faculty-head");
   if(head){ toggleEdJobFaculty(head); return }
   const li=e.target.closest("#edJobTodo .edjob-course.blocked");

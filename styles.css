@@ -516,6 +516,8 @@ select.edjob-emp-input{width:70px;background:#101215;color:var(--text);border:1p
 .edjob-resizer:hover::after,.edjob-resizer.dragging::after{opacity:1;background:var(--accent)}
 .edjob-courses-area.catalogue-folded>.edjob-resizer[data-for="catalogue"]{display:none}
 #eduJobGrid>.grid-left.sized #apiPanel{width:auto}
+/* A dragged width is set inline, so only !important can let a fully folded column shrink to its tabs. */
+#eduJobGrid>.grid-left.all-folded{width:auto!important}
 .edjob-catalogue.sized,.edjob-plan-col.sized{grid-template-columns:minmax(0,1fr)}
 .edjob-catalogue.sized .edjob-courses,.edjob-courses.sized{min-width:0}
 .edjob-plan-pair>.edjob-courses.sized{flex:none}
@@ -523,7 +525,26 @@ select.edjob-emp-input{width:70px;background:#101215;color:var(--text);border:1p
 .edjob-foldable.no-plan .edjob-plan-pair>.edjob-resizer,.edjob-foldable.no-plan #edJobClearPlan{display:none}
 #edJobClearPlan{margin-left:auto;margin-right:10px;font-weight:400}
 body.edjob-resizing{cursor:col-resize;user-select:none}
-@media(max-width:950px){#eduJobGrid>.grid-left{position:sticky;overflow-y:auto;padding-right:6px}#pageEduJob .config-tab{writing-mode:vertical-rl;width:auto;position:sticky}}
+/* Narrow screens: one column in reading order, the left panels first, then Subject List, the course columns,
+   the Job Planner and On This Day. Saved column widths are set inline, so they need !important to be set aside. */
+@media(max-width:950px){
+  #eduJobGrid{grid-template-columns:minmax(0,1fr)}
+  #eduJobGrid>.grid-left,#eduJobGrid>.grid-right{grid-column:1}
+  #eduJobGrid>.grid-left{position:static;max-height:none!important;overflow:visible;padding-right:0;width:auto!important}
+  #pageEduJob .edjob-resizer{display:none}
+  body.edujob #apiPanel{width:auto}
+  #pageEduJob .edjob-foldable.collapsed{width:100%}
+  #pageEduJob .edjob-foldable.collapsed>.config-tab,#pageEduJob .edjob-courses-area.catalogue-folded>.edjob-catalogue-tab{
+    writing-mode:horizontal-tb!important;position:static;width:100%;padding:10px 12px;text-align:left;font-size:13px}
+  #pageEduJob .edjob-foldable.collapsed>.config-tab::before,#pageEduJob .edjob-catalogue-tab::before{content:"▸ ";color:var(--accent)}
+  .edjob-courses-area{flex-direction:column;align-items:stretch}
+  .edjob-catalogue,.edjob-plan-col{position:static;max-height:none!important;overflow:visible;padding-right:0;
+    width:auto!important;grid-template-columns:minmax(0,1fr)}
+  .edjob-courses,#pageEduJob .edjob-courses.sized{min-width:0;width:auto!important}
+  .edjob-plan-pair{flex-direction:column;align-items:stretch}
+  .edjob-jobplan{min-width:0}
+  #edJobPlanner,#edJobOnDay{overflow-x:auto;max-width:none}
+}
 #eduJobGrid>.grid-left .edjob-module,#eduJobApiSlot{width:auto;flex:1;min-width:0}
 body.edujob #apiPanel{width:340px;max-width:100%}
 .edjob-fold{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
