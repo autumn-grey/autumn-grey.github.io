@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.0 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.1 · Updated: 2026-10-06_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,16 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.19.1 — 2026-10-06
+
+- On narrow screens, each upcoming course now shows when it completes and
+  your running Manual Labour, Intelligence and Endurance from courses on a
+  line of its own, with any event such as Awareness Week underneath, instead
+  of a separate timeline table below the list.
+- The Subject List now explains how to use it: drag courses into Upcoming
+  Courses on a computer, or tap them on a phone, and tick a course's box to
+  mark it complete.
 
 ### v0.19.0 — 2026-10-06
 

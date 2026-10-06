@@ -758,7 +758,7 @@ function edJobBlocked(plan,list){
   return out;
 }
 /** Returns one course row. */
-function edJobRow(c,cls,removable){
+function edJobRow(c,cls,removable,extra){
   const fac="fac-"+c.faculty.toLowerCase().replace(/[^a-z]+/g,"-");
   return `<li class="edjob-course ${fac}${cls}" data-id="${esc(c.id)}">`
     +`<span class="edjob-course-grip" aria-hidden="true">⠿</span>`
@@ -768,6 +768,7 @@ function edJobRow(c,cls,removable){
     +`<span class="edjob-course-time">${esc(edJobShort(edJobCourseDays(c)))}</span>`
     +`<span class="edjob-course-perk">${esc(c.perk)}</span>`
     +(removable?`<button type="button" class="edjob-course-remove" aria-label="Take ${esc(c.name)} off the plan">×</button>`:"")
+    +(extra||"")
     +`</li>`;
 }
 try{ window.edJobFacultyFolds=JSON.parse(localStorage.getItem("tornEdJobFacultyFolds")||"[]") }
@@ -844,6 +845,8 @@ function renderEdJobCourses(list){
   const current=list.find(c=>c.id===window.edJobCurrent&&!c.done);
   const faculties=[...new Set(list.map(c=>c.faculty))];
   cat.innerHTML=`<div class="edjob-col-head"><button type="button" class="edjob-fold" id="edJobCatalogueFold" aria-label="Hide subject list">Subject List</button></div>`
+    +`<p class="help edjob-col-help edjob-help-wide">Drag courses into upcoming courses to organise your completion order. Tick the box to mark the course as complete.</p>`
+    +`<p class="help edjob-col-help edjob-help-narrow">Tap a course to add/remove it from course planner. Tick the box to mark the course as complete.</p>`
     +faculties.map(f=>{
     const items=list.filter(c=>c.faculty===f);
     const rows=items.map(c=>edJobRow(c,c.done?" done":c===current?" current"
@@ -867,7 +870,8 @@ function renderEdJobCourses(list){
   const n=v=>v.toLocaleString("en-US");
   const timeline=[], rows=[];
   const currentEnd=current?new Date(start.getTime()+sched[current.id].day*86400000):null;
-  todo.innerHTML=plan.map(c=>{
+  // Each planned course also carries its own completion line, which narrow screens show in place of the timeline.
+  const items=plan.map(c=>{
     const e=sched[c.id];
     const days=e.end;
     const d=new Date(start);
@@ -883,9 +887,11 @@ function renderEdJobCourses(list){
     rows.push({id:c.id,finish,at:timeline.length});
     timeline.push(`<li class="edjob-tl-row"><span class="edjob-tl-end">${esc(edJobFinishDate(days))}</span>`
       +`<span>${n(stats.man)}</span><span>${n(stats.int)}</span><span>${n(stats.end)}</span></li>`);
-    return (head?`<li class="edjob-year">${h.label}</li>`:"")
-      +edJobRow(c,(pinned?" auto":"")+(blocked.has(c.id)?" blocked":aqua(c)),!pinned);
-  }).join("");
+    return {c,head:head?`<li class="edjob-year">${h.label}</li>`:"",cls:(pinned?" auto":"")+(blocked.has(c.id)?" blocked":aqua(c)),
+      removable:!pinned,at:timeline.length-1,
+      line:`<span class="edjob-course-when">Completes <span class="edjob-tl-end">${esc(edJobFinishDate(days))}</span>`
+        +` · MAN ${n(stats.man)} · INT ${n(stats.int)} · END ${n(stats.end)}</span>`};
+  });
   const marks={};
   edJobEvents(list,rows,start,currentEnd).forEach(m=>{
     (marks[m.row]=marks[m.row]||[]).push(`<span class="edjob-tl-event ${m.met?"met":"unmet"}" tabindex="0" role="button"`
@@ -895,6 +901,8 @@ function renderEdJobCourses(list){
   Object.entries(marks).forEach(([i,spans])=>{
     timeline[i]=timeline[i].replace("</li>",`<span class="edjob-tl-events">${spans.join("")}</span></li>`);
   });
+  todo.innerHTML=items.map(x=>x.head+edJobRow(x.c,x.cls,x.removable,
+    x.line+(marks[x.at]?`<span class="edjob-course-events">${marks[x.at].join("")}</span>`:""))).join("");
   const tl=$("edJobTimeline");
   if(tl) tl.innerHTML=timeline.join("");
   $("edJobTodoWrap")?.classList.toggle("no-plan",!plan.length);

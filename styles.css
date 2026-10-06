@@ -525,6 +525,11 @@ select.edjob-emp-input{width:70px;background:#101215;color:var(--text);border:1p
 .edjob-foldable.no-plan .edjob-plan-pair>.edjob-resizer,.edjob-foldable.no-plan #edJobClearPlan{display:none}
 #edJobClearPlan{margin-left:auto;margin-right:10px;font-weight:400}
 body.edjob-resizing{cursor:col-resize;user-select:none}
+.edjob-course-when,.edjob-course-events{display:none;grid-column:1/-1;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.edjob-course-events{flex-wrap:wrap;gap:2px 10px}
+.edjob-course-events .edjob-tl-event{font-weight:700}
+.edjob-col-help{margin:0;max-width:420px}
+.edjob-help-narrow{display:none}
 /* Narrow screens: one column in reading order, the left panels first, then Subject List, the course columns,
    the Job Planner and On This Day. Saved column widths are set inline, so they need !important to be set aside. */
 @media(max-width:950px){
@@ -541,7 +546,11 @@ body.edjob-resizing{cursor:col-resize;user-select:none}
   .edjob-catalogue,.edjob-plan-col{position:static;max-height:none!important;overflow:visible;padding-right:0;
     width:auto!important;grid-template-columns:minmax(0,1fr)}
   .edjob-courses,#pageEduJob .edjob-courses.sized{min-width:0;width:auto!important}
-  .edjob-plan-pair{flex-direction:column;align-items:stretch}
+  .edjob-plan-pair>.edjob-timeline{display:none}
+  .edjob-course-when{display:block!important}
+  .edjob-help-wide{display:none}
+  .edjob-help-narrow{display:block}
+  .edjob-course-events{display:flex!important}
   .edjob-jobplan{min-width:0}
   #edJobPlanner,#edJobOnDay{overflow-x:auto;max-width:none}
 }
