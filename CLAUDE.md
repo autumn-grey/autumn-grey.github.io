@@ -34,6 +34,7 @@ did. Order matters: a file can call anything defined in a file above it, and
 | `js/entry.js` | Refresh, sorting and the Investments page wiring |
 | `js/banking.js` | Basic Banking |
 | `js/edjob.js` | Education & Job Planner |
+| `js/jobplan.js` | Job Planner: the fastest route to a city job target |
 | `js/pages.js` | Start-up, page switching, the top buttons and footer links |
 | `js/feedback.js` | Feedback & Reporting form |
 | `js/testing.js` | Testing feedback survey |

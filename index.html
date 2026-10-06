@@ -43,8 +43,8 @@
   <summary>API Key</summary>
   <div class="api-blurb">
     <p>Use <a href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPIAccessOnly&amp;user=profile&amp;torn=bank,items,stocks,education,properties,companies&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPIAccessOnly</strong></a> to use the app with only public investment data. The app is set with default settings and can be manually configured and updated by the user.</p>
-    <p>Use <a href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPICustomised&amp;user=profile,stocks,education,merits,money,properties,job,perks,races,workstats&amp;company=profile&amp;torn=bank,items,stocks,education,properties,companies&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPICustomised</strong></a> to preconfigure settings with your personal statistics including, stocks owned, available funds, job perks, merits, and education courses studied.</p>
-    <p class="api-update">API requirements have been updated with v0.16.4, please generate a new custom key.</p>
+    <p>Use <a href="https://www.torn.com/preferences.php#tab=api?step=addNewKey&amp;title=AutumnAPICustomised&amp;user=profile,stocks,education,merits,money,properties,job,perks,races,workstats,jobranks,jobpoints&amp;company=profile,employees&amp;torn=bank,items,stocks,education,properties,companies&amp;market=pointsmarket" target="_blank" rel="noopener noreferrer"><strong>AutumnAPICustomised</strong></a> to preconfigure settings with your personal statistics including, stocks owned, available funds, job perks, merits, and education courses studied.</p>
+    <p class="api-update">API requirements have been updated with v0.17.0, please generate a new custom key.</p>
     <p class="api-note">Click your preferred access level to generate a new custom key, then paste it below</p>
     <p class="api-privacy">All keys and saved data are stored locally on your device, this app sends no data, and saves no sensitive information.</p>
   </div>
@@ -624,10 +624,6 @@
     <button type="button" class="config-tab" aria-label="Show snapshot">Snapshot</button>
     <section class="panel edjob-module" id="edJobProgress"></section>
   </div>
-  <div class="edjob-foldable" id="edJobPerksWrap">
-    <button type="button" class="config-tab" aria-label="Show course preferences">Course preferences</button>
-    <section class="panel edjob-module" id="edJobPerks"></section>
-  </div>
   <div class="edjob-foldable" id="edJobBoostersWrap">
     <button type="button" class="config-tab" aria-label="Show education boosters">Education Boosters</button>
     <section class="panel edjob-module" id="edJobBoosters">
@@ -643,6 +639,10 @@
       </div>
     </section>
   </div>
+  <div class="edjob-foldable" id="edJobPerksWrap">
+    <button type="button" class="config-tab" aria-label="Show course preferences">Course Preferences</button>
+    <section class="panel edjob-module" id="edJobPerks"></section>
+  </div>
   <div class="edjob-foldable" id="edJobJobWrap">
     <button type="button" class="config-tab" aria-label="Show job settings">Job Settings</button>
     <section class="panel edjob-module" id="edJobJob">
@@ -652,6 +652,7 @@
         <select id="ejEmployer" class="edjob-job-select" aria-label="Employer"></select>
         <div class="edjob-stat-title">Position</div>
         <select id="ejPosition" class="edjob-job-select" aria-label="Position"></select>
+        <label class="edjob-trains" id="ejTrainsRow"><span>Trains per week</span><input type="text" inputmode="numeric" id="ejTrains" class="edjob-trains-input"></label>
         <div class="edjob-stat-title">Work stats</div>
         <div class="edjob-ws">
           <label><span>Manual Labour</span><input type="text" inputmode="numeric" id="ejWsMan" class="edjob-ws-input" data-stat="man"></label>
@@ -659,7 +660,54 @@
           <label><span>Endurance</span><input type="text" inputmode="numeric" id="ejWsEnd" class="edjob-ws-input" data-stat="end"></label>
         </div>
         <div class="edjob-ws-total"><span>Total work stats</span><strong id="ejWsTotal">0</strong></div>
+        <div class="edjob-stat-title">Company details</div>
+        <div id="ejEmployeeDetails" class="edjob-boosts">
+        <label class="edjob-trains"><span>Employee Effectiveness merits</span><select id="ejEffMerits" class="edjob-emp-input" data-field="merits"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></label>
+        <label class="edjob-trains"><span>Director education</span><select id="ejDirectorEdu" class="edjob-emp-input" data-field="director"><option value="0">0</option><option value="5">5</option><option value="7">7</option><option value="12">12</option></select></label>
+        <label class="edjob-trains"><span>Human Resource Management</span><select id="ejDirectorHr" class="edjob-emp-input" data-field="hr"><option value="0">No</option><option value="1">Yes</option></select></label>
+        <label class="edjob-trains"><span>Managers</span><input type="text" inputmode="numeric" id="ejManagers" class="edjob-trains-input edjob-emp-input" data-field="managers"></label>
+        <label class="edjob-trains" id="ejGenderRow" hidden><span>Gender</span><select id="ejGender" class="edjob-emp-input" data-field="gender" data-text="1"><option value=""></option><option>Male</option><option>Female</option><option>Enby</option></select></label>
+        </div>
+        <div class="edjob-boosts" id="ejBuyTrains">
+          <div class="edjob-stat-title">Buying Trains</div>
+          <label class="edjob-trains"><span>Train Costs</span><input type="text" inputmode="numeric" id="ejTrainCost" class="money-input edjob-trains-input edjob-money-input"></label>
+          <label class="edjob-trains"><span>Trains bought per week</span><input type="text" inputmode="numeric" id="ejTrainsBought" class="edjob-trains-input"></label>
+        </div>
+        <label class="edjob-trains" id="ejStarsRow" hidden><span>Company stars</span><select id="ejStars" class="edjob-emp-input" data-field="stars"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></label>
         <p class="help edjob-job-note" id="ejJobNote" hidden></p>
+      </div>
+    </section>
+  </div>
+  <div class="edjob-foldable" id="edJobPrefsWrap">
+    <button type="button" class="config-tab" aria-label="Show job preferences">Job Preferences</button>
+    <section class="panel edjob-module" id="edJobPrefs">
+      <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide job preferences">Job Preferences</button></div>
+      <div class="edjob-boosts">
+        <div class="edjob-stat-title">Target</div>
+        <select id="ejTarget" class="edjob-job-select" aria-label="Target"><option value="">Choose a target</option><option value="city">City Jobs</option><option value="stats">Certain Work Stats</option><option value="job">Particular Job</option></select>
+        <div class="edjob-boosts" id="ejTargetCity" hidden>
+          <div class="edjob-stat-title">Which job</div>
+          <select id="ejTargetCityJob" class="edjob-job-select" aria-label="Which city job"><option value="Education">Education</option><option value="Law">Law</option><option value="Medical">Medicine</option><option value="All">All Three</option></select>
+        </div>
+        <div class="edjob-boosts" id="ejTargetStats" hidden>
+          <div class="edjob-stat-title">Work stats</div>
+          <div class="edjob-ws">
+            <label><span>Manual Labour</span><input type="text" inputmode="numeric" class="edjob-ws-input ej-target-stat" data-stat="man"></label>
+            <label><span>Intelligence</span><input type="text" inputmode="numeric" class="edjob-ws-input ej-target-stat" data-stat="int"></label>
+            <label><span>Endurance</span><input type="text" inputmode="numeric" class="edjob-ws-input ej-target-stat" data-stat="end"></label>
+          </div>
+        </div>
+        <div class="edjob-boosts" id="ejTargetJob" hidden>
+          <div class="edjob-stat-title">Company</div>
+          <select id="ejTargetEmployer" class="edjob-job-select" aria-label="Target company"></select>
+          <div class="edjob-stat-title">Position</div>
+          <select id="ejTargetPosition" class="edjob-job-select" aria-label="Target position"></select>
+        </div>
+        <div class="edjob-boosts" id="ejTargetExtra" hidden>
+          <label class="edjob-check"><input type="checkbox" id="ejEdMaxed" data-mirror="edJobPerk"><span>Education job maxed</span></label>
+          <label class="edjob-check" id="ejStayRow"><input type="checkbox" id="ejStayRole"><span>Stay in current role</span></label>
+          <p class="edjob-jp-impossible" id="ejStayWarn" hidden>Target stats cannot be achieved in this role</p>
+        </div>
       </div>
     </section>
   </div>
@@ -691,6 +739,15 @@
           <section class="panel edjob-module edjob-courses">
             <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide completed courses">Completed Courses</button><span id="edJobDoneCount"></span></div>
             <ul class="edjob-course-list" id="edJobDone"></ul>
+          </section>
+        </div>
+      </div>
+      <div class="edjob-plan-col" id="edJobPlannerCol">
+        <div class="edjob-foldable" id="edJobPlannerWrap">
+          <button type="button" class="config-tab" aria-label="Show job planner">Job Planner</button>
+          <section class="panel edjob-module edjob-jobplan">
+            <div class="edjob-module-head"><button type="button" class="edjob-fold" aria-label="Hide job planner">Job Planner</button></div>
+            <div id="edJobPlanner"></div>
           </section>
         </div>
       </div>
@@ -857,6 +914,7 @@
 <script src="js/entry.js"></script>
 <script src="js/banking.js"></script>
 <script src="js/edjob.js"></script>
+<script src="js/jobplan.js"></script>
 <script src="js/pages.js"></script>
 <script src="js/feedback.js"></script>
 <script src="js/testing.js"></script>

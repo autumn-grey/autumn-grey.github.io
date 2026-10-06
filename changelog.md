@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.16.5 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.17.0 · Updated: 2026-10-06_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,74 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.17.0 — 2026-10-06
+
+- **Please make a new custom key.** It now also asks for your company's
+  employee list, where Torn reports your effectiveness, and for your rank and
+  unspent points in each city job, so the planner picks up where you left off.
+- **Job gains** joins the Snapshot on the Education & Job page. For the job set
+  in Job Settings it shows the work stats you earn each day, out of the most
+  that position pays, and how many days until you earn the full amount. It
+  assumes your daily gain is your effectiveness as a share of the position's
+  full amount, adds the work stats from your current and planned courses on
+  the days they complete, and leaves out drug addiction, which can make the
+  wait up to twice as long.
+- City jobs show their daily gains for every rank of all six jobs, and always
+  pay the full amount. The Casino's entry rank, Dealer, is now in the list.
+- **Director** is a position at every company type. Choosing it swaps the
+  company details for **Company stars**, and the Snapshot shows what a
+  director gains each day: 5, 10, 20 or 35 of every work stat at 1 to 4 stars,
+  and 50 from 5 stars up.
+- **Trains per week** joins Job Settings, up to 140. Each train gives 50 of
+  your position's main stat and 25 of its second.
+- **Buying Trains** joins Job Settings: what a train costs you and how many you
+  buy a week, up to 280. Bought trains count towards your gains, and the
+  Snapshot shows what they cost each week, and, with a Job Preference set,
+  how many you will buy in total to reach it and what that costs. Trains are
+  only bought on days you work in a company, not in a city job.
+- **Company details** joins Job Settings, under Work stats: your Employee
+  Effectiveness merits (0 to 10), your director's education (0, 5, 7 or 12,
+  from their Communication and Corporate Strategy courses), whether your
+  director has Human Resource Management (which raises your work stats by a
+  fifth for effectiveness), and how many Managers your company has. Each
+  manager makes up a quarter of whatever is still missing below 100, so one
+  takes 60 to 70 and a second to 77; managers do not boost someone in the
+  Manager position. For the Stripper and Male Stripper positions it also asks
+  your gender, and the wrong gender takes 90% off your effectiveness. With
+  the new key, **Refresh all API data** fills all of this in from your
+  account; without it, the API Key panel says so and you can enter it
+  yourself.
+- **Job Preferences** joins the left column under Job Settings. Choose a
+  **Target**: City Jobs (Education, Law, Medicine or all three), Certain Work
+  Stats (any of the three, left blank for any you do not mind about), or a
+  Particular Job at any company. **Education job maxed** (ticked for you when
+  your account has the Principal perk) and, for work stats, **Stay in current
+  role** fine-tune the plan. Choosing an option scrolls the column so the
+  whole panel is in view.
+- **Job Planner** joins the Education & Job page as a new column beside your
+  courses. It works out the fastest way to your target: which company
+  position to move to, the day to switch into each city job, each promotion,
+  when a Principal should spend Education points on work stats, and whether
+  to go back to your company between city jobs (only for 5 days or more, with
+  no trains for your first 3 days back). For a particular job it also
+  considers moving to that company straight away. It lists each of those days
+  with your stats, your position and stats each Sunday after payday in weeks
+  with nothing else to do, and ends with the day you get there. With no
+  target chosen it shows where your current job takes you each Sunday for the
+  next year. The Snapshot shows the days until your first move and until you
+  reach the target.
+- **Stay in current role** says in red when your current role cannot reach
+  the target stats.
+- While your plan is working towards Principal, the Education Job Perk booster
+  is unticked and locked, and courses that start after the day you reach
+  Principal take 10% less time, in both the plan and Upcoming Courses.
+- Upcoming Courses now counts Bachelor Of General Studies, which adds 10% to
+  the work stats from every course completed after it.
+- **Education Boosters** now sits above **Course Preferences**, which gains a
+  capital P.
+- On every page, scrolling past the top or bottom of a column carries
+  straight on to the page, in the same movement.
 
 ### v0.16.5 — 2026-10-06
 

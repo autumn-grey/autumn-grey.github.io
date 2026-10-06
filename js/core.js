@@ -340,6 +340,7 @@ function saveLocal(){
     if(window.edJobCourseOrder) localStorage.setItem("tornInvCourseOrder",JSON.stringify(window.edJobCourseOrder));
     if(window.edJobPlan) localStorage.setItem("tornInvCoursePlan",JSON.stringify(window.edJobPlan));
     if(window.edJobJob) localStorage.setItem("tornInvJob",JSON.stringify(window.edJobJob));
+    if(window.edJobPrefs) localStorage.setItem("tornInvJobPrefs",JSON.stringify(window.edJobPrefs));
     if(window.edJobCurrent) localStorage.setItem("tornInvCurrentCourse",JSON.stringify({id:window.edJobCurrent,until:window.edJobCurrentUntil||0}));
     else localStorage.removeItem("tornInvCurrentCourse");
     if($("apiKey").value)localStorage.setItem("tornInvApiKey",$("apiKey").value);
@@ -352,7 +353,7 @@ function saveLocal(){
 }
 // Wipes everything this page has stored, on screen and in localStorage.
 function clearLocal(){
-  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched","tornInvScriptsDraft","tornInvGhToken","tornInvPerkPrefs","tornInvCourseOrder","tornInvCoursePlan","tornInvCurrentCourse","tornInvJob",MARKET_CACHE_KEY]
+  ["tornInvSettings","tornInvApiKey","tornInvStockPrio","tornInvOwned","tornInvSkipped","tornInvSelected","tornInvBankTerm","tornInvCourses","tornInvView","tornInvPrio","tornInvPlanDone","tornInvConfigCollapsed","tornInvBankPrincipal","tornInvPinned","tornInvStaleNote","tornInvBankingTouched","tornInvScriptsDraft","tornInvGhToken","tornInvPerkPrefs","tornInvCourseOrder","tornInvCoursePlan","tornInvCurrentCourse","tornInvJob","tornInvJobPrefs",MARKET_CACHE_KEY]
     .forEach(k=>localStorage.removeItem(k));
   window.ownedRows.clear();
   window.skippedRows.clear();
@@ -370,6 +371,7 @@ function clearLocal(){
   window.edJobCurrent=null;
   window.edJobCurrentUntil=0;
   window.edJobJob=null;
+  window.edJobPrefs={};
   if(typeof renderEdJob==="function"&&!$("pageEduJob")?.hidden) renderEdJob();
   $("apiKey").value="";
   window.savedBoosters=null;
@@ -481,10 +483,15 @@ async function fetchCompanyTypes(){
   const j=await tornTry("https://api.torn.com/v2/torn/companies",
     "Company list unavailable. Your key may need the torn > companies permission");
   if(j.__error){ window.companyTypesError=j.__error; return }
-  const list=(Array.isArray(j.companies)?j.companies:[]).map(c=>({id:+c.id,name:String(c.name||"").trim(),
-    positions:(Array.isArray(c.positions)?c.positions:[]).map(p=>String(p.name||"").trim()).filter(Boolean)}))
-    .filter(c=>c.id&&c.name).sort((a,b)=>a.name.localeCompare(b.name));
+  const three=o=>({man:+o?.manual_labor||0,int:+o?.intelligence||0,end:+o?.endurance||0});
+  const stats={};
+  const list=(Array.isArray(j.companies)?j.companies:[]).map(c=>{
+    const positions=(Array.isArray(c.positions)?c.positions:[]).filter(p=>String(p.name||"").trim());
+    positions.forEach(p=>{ stats[`${+c.id}|${String(p.name).trim()}`]={req:three(p.working_stats?.required),gains:three(p.working_stats?.daily_gains)} });
+    return {id:+c.id,name:String(c.name||"").trim(),positions:positions.map(p=>String(p.name).trim())};
+  }).filter(c=>c.id&&c.name).sort((a,b)=>a.name.localeCompare(b.name));
   window.live.companyTypes=list.length?list:null;
+  window.live.positionStats=list.length?stats:null;
   window.companyTypesError=null;
 }
 async function fetchEducationIndex(){
@@ -715,11 +722,29 @@ async function fetchUserData(profile){
         company_type:company.type_id??company.company_type??src.company_type,
         company_rating:company.rating??company.stars??src.company_rating,
         position:src.position??src.job_position??company.position,
+        days_in_company:src.days_in_company??company.days_in_company,
         kind:src.type==="job"?"job":"company",
         job_name:src.type==="job"?src.name:null
       };
       data.job=job;
       data.parts.job=job;
+    }
+  }
+  {
+    const [r,p]=await Promise.all([tornTry("https://api.torn.com/v2/user/jobranks",false),tornTry("https://api.torn.com/v2/user/jobpoints",false)]);
+    if(r.__error) data.errors.jobranks=r.__error;
+    else data.jobRanks=r.jobranks||r.data?.jobranks||null;
+    if(p.__error) data.errors.jobpoints=p.__error;
+    else data.jobPoints=(p.jobpoints||p.data?.jobpoints)?.jobs||null;
+  }
+  if(data.job?.kind==="company"){
+    const j=await tornTry("https://api.torn.com/v2/company/employees",false);
+    if(j.__error) data.errors.employees=j.__error;
+    else {
+      const staff=j.employees||j.data?.employees||[];
+      const row=(Array.isArray(staff)?staff:Object.entries(staff).map(([id,e])=>({id:+id,...e})))
+        .find(e=>+e.id===window.userId);
+      if(row?.effectiveness){ data.effectiveness=row.effectiveness; data.parts.employees=row.effectiveness }
     }
   }
   {
@@ -1015,6 +1040,14 @@ function applyUserData(d){
     const w=d.workstats;
     ok("Work stats",`${(w.man+w.int+w.end).toLocaleString("en-US")} total`);
   } else miss("Work stats",failed("workstats")?`needs User → workstats (${failed("workstats")})`:"not reported");
+  if(typeof edJobSetEffectiveness==="function") edJobSetEffectiveness(d.effectiveness||null);
+  if(typeof edJobSetGender==="function") edJobSetGender(d.profile?.gender);
+  if(typeof edJobSetCityHistory==="function") edJobSetCityHistory(d.jobRanks||null,d.jobPoints||null);
+  if(d.jobRanks&&d.jobPoints) ok("City job ranks and points","read");
+  else miss("City job ranks and points",`needs User → jobranks and jobpoints (${failed("jobranks")||failed("jobpoints")||"not reported"})`);
+  if(d.effectiveness) ok("Effectiveness",`${d.effectiveness.total} total · company details filled in`);
+  else if(d.job?.kind==="company") miss("Effectiveness",(failed("employees")?`needs Company → employees (${failed("employees")})`:"not reported")
+    +" · fill in Company details yourself");
 
   // --- private islands ---
   const pi=privateIslandsFrom(d.properties);

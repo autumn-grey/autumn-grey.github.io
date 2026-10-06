@@ -232,6 +232,32 @@ function queueFitLeft(){
   fitLeftQueued=true;
   requestAnimationFrame(()=>{ fitLeftQueued=false; fitLeftColumns() });
 }
+/**
+ * Carries the wheel on to the next box out, and then the page, once a scrolling box reaches its top or bottom.
+ * Browsers keep a wheel gesture latched to the box it started in, so without this the page would not move
+ * until the next gesture began.
+ */
+addEventListener("wheel",e=>{
+  if(e.defaultPrevented||e.ctrlKey||!e.deltaY) return;
+  const chain=[];
+  for(let el=e.target instanceof Element?e.target:null;el&&el!==document.body&&el!==document.documentElement;el=el.parentElement){
+    if(/(auto|scroll)/.test(getComputedStyle(el).overflowY)&&el.scrollHeight>el.clientHeight+1) chain.push(el);
+  }
+  if(!chain.length) return;
+  // deltaMode 1 counts lines and 2 counts pages; convert both to pixels.
+  const dy=e.deltaMode===1?e.deltaY*16:e.deltaMode===2?e.deltaY*innerHeight:e.deltaY;
+  const room=el=>dy>0?el.scrollHeight-el.clientHeight-el.scrollTop:el.scrollTop;
+  if(room(chain[0])>=Math.abs(dy)) return;
+  e.preventDefault();
+  let rest=Math.abs(dy);
+  for(const el of chain){
+    const take=Math.min(rest,Math.max(0,room(el)));
+    el.scrollTop+=Math.sign(dy)*take;
+    rest-=take;
+    if(!rest) break;
+  }
+  if(rest) window.scrollBy(0,Math.sign(dy)*rest);
+},{passive:false});
 addEventListener("scroll",queueFitLeft,{passive:true});
 addEventListener("resize",queueFitLeft);
 addEventListener("hashchange",queueFitLeft);

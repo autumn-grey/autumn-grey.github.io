@@ -13,7 +13,7 @@ body.tos .home-btn:hover{color:var(--accent)}
 .home-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 .head-row .tagline{flex-basis:100%;order:3}
 @media(max-width:760px){.head-row h1{order:1}.head-row .tagline{order:2}.head-row .head-controls{order:3}}
-main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}.grid-left{display:flex;flex-direction:column;gap:18px;align-self:start;grid-column:1;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px}.grid-left::-webkit-scrollbar{width:8px}.grid-left::-webkit-scrollbar-track{background:transparent}.grid-left::-webkit-scrollbar-thumb{background:#2f353d;border-radius:4px}.grid-left::-webkit-scrollbar-thumb:hover{background:#3d4550}.grid-right{display:flex;flex-direction:column;gap:18px;align-self:start;min-width:0;grid-column:2}.config-tab{display:none;grid-column:1;grid-row:1;align-self:start;writing-mode:vertical-rl;background:var(--panel);color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:14px 8px;cursor:pointer;font:inherit;font-weight:700;letter-spacing:.06em;position:sticky;top:20px}.config-tab:hover{color:var(--text);border-color:var(--accent)}.grid.config-collapsed{grid-template-columns:38px 1fr}.grid.config-collapsed .grid-left{display:none}.grid.config-collapsed .config-tab{display:block}
+main{padding:20px 28px;max-width:1800px;margin:auto}.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}.grid-left{display:flex;flex-direction:column;gap:18px;align-self:start;grid-column:1;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;padding-right:6px}.grid-left::-webkit-scrollbar{width:8px}.grid-left::-webkit-scrollbar-track{background:transparent}.grid-left::-webkit-scrollbar-thumb{background:#2f353d;border-radius:4px}.grid-left::-webkit-scrollbar-thumb:hover{background:#3d4550}.grid-right{display:flex;flex-direction:column;gap:18px;align-self:start;min-width:0;grid-column:2}.config-tab{display:none;grid-column:1;grid-row:1;align-self:start;writing-mode:vertical-rl;background:var(--panel);color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:14px 8px;cursor:pointer;font:inherit;font-weight:700;letter-spacing:.06em;position:sticky;top:20px}.config-tab:hover{color:var(--text);border-color:var(--accent)}.grid.config-collapsed{grid-template-columns:38px 1fr}.grid.config-collapsed .grid-left{display:none}.grid.config-collapsed .config-tab{display:block}
 /* With the config column hidden, let the table shrink to the available width
    instead of forcing its 1400px minimum and scrolling horizontally. */
 .grid.config-collapsed .table{min-width:0}
@@ -404,6 +404,7 @@ body.edujob #apiPanel>details>summary::before{content:"◂"}
 .edjob-perk-grip{width:10px;color:var(--accent);font-size:12px}
 .edjob-perk-rank{margin-left:auto;padding-left:14px;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums}
 .edjob-boosts{display:flex;flex-direction:column;gap:4px}
+.edjob-boosts[hidden]{display:none}
 .edjob-boosts .edjob-stat-title{margin-top:6px}
 .edjob-boosts .edjob-stat-title:first-child{margin-top:0}
 .edjob-boost-row{display:flex;align-items:center;gap:8px}
@@ -412,10 +413,21 @@ body.edujob #apiPanel>details>summary::before{content:"◂"}
 .edjob-job-note{margin:6px 0 0}
 .edjob-ws{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .edjob-ws label{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--muted);min-width:0}
-.edjob-ws-input{width:100%;min-width:0;box-sizing:border-box;background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:6px 7px;font:inherit;font-variant-numeric:tabular-nums;text-align:right}
+.edjob-ws-input,.edjob-trains-input{width:100%;min-width:0;box-sizing:border-box;background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:6px 7px;font:inherit;font-variant-numeric:tabular-nums;text-align:right}
 .edjob-ws-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;font-size:12px;color:var(--muted)}
 .edjob-ws-total strong{font-size:14px;color:var(--accent);font-variant-numeric:tabular-nums}
 .edjob-boost-row select{background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:4px 6px;font:inherit}
+.edjob-trains{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;font-size:12px;color:var(--muted)}
+.edjob-trains[hidden]{display:none}
+.edjob-check{display:inline-flex;align-items:center;gap:8px;margin-top:6px;cursor:pointer;align-self:flex-start}
+.edjob-check[hidden]{display:none}
+.edjob-check input{margin:0;accent-color:var(--accent);cursor:pointer}
+.edjob-jp-impossible{margin:4px 0 0;color:var(--bad);font-size:12px}
+.edjob-trains-input{width:70px}
+.edjob-money-input{width:120px}
+.edjob-trains-input:disabled,select.edjob-emp-input:disabled{opacity:.5}
+select.edjob-emp-input{width:70px;background:#101215;color:var(--text);border:1px solid #3a4048;border-radius:6px;padding:5px 6px;font:inherit}
+#ejGender{width:90px}
 .edjob-boost-unit{color:var(--muted);font-size:12px}
 .edjob-boost-effect{margin-left:auto;padding-left:14px;color:var(--accent);font-weight:700;white-space:nowrap}
 .edjob-boost-toggle{position:relative}
@@ -423,6 +435,7 @@ body.edujob #apiPanel>details>summary::before{content:"◂"}
 .edjob-boost-toggle .edjob-perk-rank{color:var(--muted)}
 .edjob-boost-toggle:has(input:checked){background:color-mix(in srgb,var(--accent) 16%,var(--panel2));border-color:var(--accent)}
 .edjob-boost-toggle:has(input:checked) .edjob-perk-rank{color:var(--accent)}
+.edjob-boost-toggle:has(input:disabled){opacity:.45;cursor:not-allowed}
 .edjob-boost-toggle:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:1px}
 .edjob-stat-date{grid-column:1/-1;text-align:center;color:var(--accent)}
 .edjob-stat-num{color:var(--accent)}
@@ -431,14 +444,17 @@ body.edujob #apiPanel>details>summary::before{content:"◂"}
 .edjob-stat-saved{grid-column:1/-1;display:flex;justify-content:space-between;gap:18px}
 .edjob-stat-saved small{display:block;font-size:12px;font-weight:400}
 .edjob-stat-saved>span:last-child{text-align:right}
-.edjob-stat-label{color:var(--muted);font-size:12px}
+.edjob-gain-label{color:var(--text)}
+.edjob-gain-num{grid-column:2/-1;text-align:right;color:var(--accent)}
+.edjob-stat-msg{grid-column:1/-1;text-align:center;color:var(--muted);font-size:12px;font-weight:400}
+.edjob-stat-note{grid-column:1/-1;margin:8px 0 0;font-weight:400;max-width:260px;justify-self:center;text-align:center}
 .edjob-courses{min-width:min(100%,420px)}
 .edjob-foldable{display:flex;align-items:flex-start;max-width:100%}
 .edjob-courses-area{display:flex;flex-wrap:nowrap;gap:18px;align-items:flex-start;user-select:none}
 .edjob-catalogue,.edjob-plan-col,.edjob-catalogue-tab{flex:none}
 .edjob-catalogue,.edjob-plan-col{display:grid;grid-template-columns:minmax(0,max-content);gap:18px;align-content:start}
 .edjob-courses-area .edjob-module{width:auto;flex:1}
-.edjob-catalogue,.edjob-plan-col{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px}
+.edjob-catalogue,.edjob-plan-col{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;padding-right:6px}
 .edjob-col-head{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:-8px}
 .edjob-catalogue-tab{display:none}
 .edjob-courses-area.catalogue-folded>.edjob-catalogue-tab{display:block}
@@ -832,3 +848,17 @@ body.edujob .banner .banner-science{display:block;margin-top:9px;padding-top:9px
   .tablewrap{-webkit-overflow-scrolling:touch}
   .table th,.table td{padding:11px 10px}
 }
+
+.edjob-jobplan{min-width:300px}
+#edJobPlanner{user-select:text}
+.edjob-jp-msg{margin:0;color:var(--muted);font-size:12px;max-width:280px}
+.edjob-jp-table{border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.edjob-jp-table th{color:var(--muted);font-weight:400;text-align:right;padding:0 0 6px 10px;white-space:nowrap}
+.edjob-jp-table th:nth-child(-n+2){text-align:left}
+.edjob-jp-table td{padding:5px 0 5px 10px;border-top:1px solid var(--line);text-align:right;vertical-align:top;white-space:nowrap}
+.edjob-jp-table td:first-child,.edjob-jp-table th:first-child{padding-left:0}
+.edjob-jp-table td:nth-child(2){text-align:left;white-space:normal;min-width:180px;max-width:260px}
+.edjob-jp-week td{color:var(--muted)}
+.edjob-jp-event td{color:var(--text)}
+.edjob-jp-event td:nth-child(2){color:var(--accent)}
+.edjob-jp-final td{color:var(--accent);font-weight:700}
