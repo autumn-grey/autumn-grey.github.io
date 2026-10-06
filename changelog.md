@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.17.1 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.17.2 · Updated: 2026-10-06_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,15 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.17.2 — 2026-10-06
+
+- The Job Planner now says exactly which work stat to buy with Education
+  points and when: each purchase gets its own row on the day the points for
+  it arrive, such as "Buy 100 Intelligence (10 Education Points)".
+- While climbing Education, points you do not need for your next promotion
+  now buy the stat holding that promotion back, so you reach Principal
+  sooner. In testing that took 70 days instead of 102.
 
 ### v0.17.1 — 2026-10-06
 

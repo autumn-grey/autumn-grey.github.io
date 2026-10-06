@@ -55,7 +55,7 @@ function jpCourses(ctx,s){
 }
 /** Records an action the player should take. */
 function jpEvent(s,log,text){
-  if(log) log.events.push({day:s.day,text,stats:{...s.stats}});
+  if(log) log.events.push({day:s.day,text,stats:{...s.stats},seq:log.seq=(log.seq||0)+1});
 }
 /** Closes a day after payday, recording where the player stands. */
 function jpEndDay(s,log,label){
@@ -148,6 +148,8 @@ function jpFixedDay(ctx,s,log,gain,label){
   JP_STATS.forEach(k=>{ s.stats[k]+=gain[k] });
   jpEndDay(s,log,label);
 }
+/** The Education job special that buys each work stat (100 for 10 points), and the rank index that unlocks it. */
+const JP_STAT_SPECIALS={man:["Manual Labour","Recess Supervisor",0],int:["Intelligence","Professor",4],end:["Endurance","Elementary Teacher",2]};
 /** Works one day at the top of a city job, spending Education points on needed stats. */
 function jpTopDay(ctx,s,log,job){
   const ranks=ctx.ranks[job], top=ranks.length-1;
@@ -158,9 +160,9 @@ function jpTopDay(ctx,s,log,job){
     while(s.points[job]>=10){
       const k=JP_STATS.reduce((a,b)=>jpGap(ctx,s,b)>jpGap(ctx,s,a)?b:a);
       if(jpGap(ctx,s,k)<=0) break;
-      if(!s.buying){ s.buying=true; jpEvent(s,log,"Spend Education points on work stats as they come in: 100 of a stat per 10 points") }
       s.stats[k]+=100;
       s.points[job]-=10;
+      if(log) log.buys.push({day:s.day,stat:k,stats:{...s.stats},seq:log.seq=(log.seq||0)+1});
     }
   }
   jpEndDay(s,log,`${ranks[top].name} (${CITY_TARGETS[job]})`);
@@ -175,7 +177,6 @@ function jpJoin(ctx,s,job,log,from){
   s.inJob=job;
   s.company=null;
   s.settled=0;
-  s.buying=false;
   jpEvent(s,log,`${from?`Quit ${from} and ${returning?"rejoin":"join"}`:returning?"Rejoin":"Join"} ${CITY_TARGETS[job]} as ${ranks[s.rank[job]].name}`);
   return true;
 }
@@ -184,11 +185,23 @@ function jpClimbDay(ctx,s,job,log){
   const ranks=ctx.ranks[job], top=ranks.length-1;
   jpCourses(ctx,s);
   let r=s.rank[job];
-  while(r<top&&s.points[job]>=5*(r+1)&&jpMeets(s.stats,ranks[r+1].req)){
-    s.points[job]-=5*(r+1);
-    r++;
-    s.rank[job]=r;
-    jpEvent(s,log,`Spend ${5*r} ${CITY_TARGETS[job]} points to become ${ranks[r].name}`);
+  for(;;){
+    while(r<top&&s.points[job]>=5*(r+1)&&jpMeets(s.stats,ranks[r+1].req)){
+      s.points[job]-=5*(r+1);
+      r++;
+      s.rank[job]=r;
+      jpEvent(s,log,`Spend ${5*r} ${CITY_TARGETS[job]} points to become ${ranks[r].name}`);
+    }
+    // Points beyond the next promotion's cost buy the stat holding it back, using the specials this rank has
+    // unlocked. Later promotions are paid from what each rank earns, so only the next one needs keeping.
+    if(job!=="Education"||r>=top||s.points[job]-10<5*(r+1)) break;
+    const req=ranks[r+1].req;
+    const k=JP_STATS.filter(x=>JP_STAT_SPECIALS[x][2]<=r&&s.stats[x]<req[x])
+      .sort((a,b)=>(req[b]-s.stats[b])-(req[a]-s.stats[a]))[0];
+    if(!k) break;
+    s.stats[k]+=100;
+    s.points[job]-=10;
+    if(log) log.buys.push({day:s.day,stat:k,stats:{...s.stats},seq:log.seq=(log.seq||0)+1});
   }
   if(r===top){
     if(job==="Education"&&s.principal==null) s.principal=s.day;
@@ -317,7 +330,7 @@ function jpPlanCity(ctx,start,startKind,jobs){
     if(r&&(!best||r.finish<best.finish)) best={...r,order};
   });
   if(!best) return {kind:"city",jobs};
-  const log={days:[],events:[]};
+  const log={days:[],events:[],buys:[]};
   let s=start;
   best.legs.forEach(leg=>{
     ctx.need=ctx.ranks[leg.job][ctx.ranks[leg.job].length-1].req;
@@ -371,7 +384,7 @@ function jpPlanGoal(ctx,start,startKind,goal){
     if(b&&(!best||b.finish<best.finish)) best={...r,...b};
   });
   if(!best) return {kind:goal.kind,impossible:true};
-  const log={days:[],events:[]};
+  const log={days:[],events:[],buys:[]};
   const s=jpClone(start);
   if(best.joinTarget) jpJoinCompany(ctx,s,goal.company,log,jpFrom(ctx,first));
   if(best.switch!=null){
@@ -453,7 +466,7 @@ function jpPlanWith(list,job,goal,principalDay){
     bought:Math.min(MAX_TRAINS_BOUGHT_PER_WEEK,Math.max(0,+job.trainsBought||0)),ranks,
     homeKind:startKind==="company"||startKind==="director"?startKind:null,need:goal.need||null};
   const start={day:0,stats:{man:+job.man||0,int:+job.int||0,end:+job.end||0},settled:Math.min(10,+job.days||0),
-    tenure:+job.days||0,company:kind==="company"?type:null,pos:job.position,rank:{},points:{},buying:false,inJob:null,principal:null};
+    tenure:+job.days||0,company:kind==="company"?type:null,pos:job.position,rank:{},points:{},inJob:null,principal:null};
   Object.keys(CITY_TARGETS).forEach(j=>{
     const r=job.cityRanks?.[j];
     if(r!=null){ start.rank[j]=Object.keys(CITY_JOBS[j]).indexOf(r); start.points[j]=+job.cityPoints?.[j]||0 }
@@ -470,7 +483,7 @@ function jpPlanWith(list,job,goal,principalDay){
   }
   if(Object.values(companies).some(c=>!c.positions.length)) return {kind:goal.kind,unloaded:true};
   if(goal.kind==="weeks"){
-    const log={days:[],events:[]};
+    const log={days:[],events:[],buys:[]};
     const s=jpClone(start);
     const kind=startKind==="company"?"fixed":startKind;
     while(s.day<365) jpStayDay(ctx,s,kind,log);
@@ -531,8 +544,21 @@ function renderJobPlanner(list){
     return;
   }
   if(plan.impossible||plan.finish==null) return msg("No way to reach the target within 10 years from where you are.");
-  plan.log.events.forEach(e=>rows.push({day:e.day,order:0,html:`<tr class="edjob-jp-event"><td>${esc(edJobFinishDate(e.day))}</td><td>${esc(e.text)}</td>${cells(e.stats)}</tr>`}));
-  const busy=new Set([...plan.log.events.map(e=>e.day),plan.finish]);
+  plan.log.events.forEach(e=>rows.push({day:e.day,order:0,seq:e.seq,html:`<tr class="edjob-jp-event"><td>${esc(edJobFinishDate(e.day))}</td><td>${esc(e.text)}</td>${cells(e.stats)}</tr>`}));
+  // Each purchase is shown on the day the points for it arrive; several of one stat on the same day share a row.
+  const buys=new Map();
+  plan.log.buys.forEach(b=>{
+    const key=`${b.day}|${b.stat}`;
+    const g=buys.get(key)||{day:b.day,stat:b.stat,count:0,seq:b.seq};
+    g.count++;
+    g.stats=b.stats;
+    buys.set(key,g);
+  });
+  buys.forEach(g=>{
+    const text=`Buy ${(100*g.count).toLocaleString("en-US")} ${JP_STAT_SPECIALS[g.stat][0]} (${10*g.count} Education Points)`;
+    rows.push({day:g.day,order:0,seq:g.seq,html:`<tr class="edjob-jp-event"><td>${esc(edJobFinishDate(g.day))}</td><td>${esc(text)}</td>${cells(g.stats)}</tr>`});
+  });
+  const busy=new Set([...plan.log.events.map(e=>e.day),...plan.log.buys.map(b=>b.day),plan.finish]);
   plan.log.days.forEach(d=>{
     if(jpDate(d.day).getDay()!==0) return;
     for(let k=d.day-6;k<=d.day;k++) if(busy.has(k)) return;
@@ -540,7 +566,7 @@ function renderJobPlanner(list){
   });
   rows.push({day:plan.finish,order:2,html:`<tr class="edjob-jp-final"><td>${esc(edJobFinishDate(plan.finish))}</td>`
     +`<td>${esc(plan.title)} reached. Wowsers!</td>${cells(plan.end.stats)}</tr>`});
-  rows.sort((a,b)=>a.day-b.day||a.order-b.order);
+  rows.sort((a,b)=>a.day-b.day||a.order-b.order||(a.seq||0)-(b.seq||0));
   box.innerHTML=`<table class="edjob-jp-table"><thead><tr><th>Date</th><th>What to do</th><th>MAN</th><th>INT</th><th>END</th></tr></thead>`
     +`<tbody>${rows.map(r=>r.html).join("")}</tbody></table>`;
 }
