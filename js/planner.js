@@ -737,6 +737,9 @@ function simulatePlan(){
     ?{...caymanRowActual,roi:caymanRoi,annual:caymanRowActual.cost*caymanRoi,
       desc:"+0.50% monthly base · no faction or Oil Rig bonus (Total Newbie)"}
     :caymanRowActual;
+  // Every step notes the cash it leaves behind, which is what sits in Cayman
+  // once that step is ticked. Each call site has already moved `cash`.
+  const addStep=s=>{ s.caymanAfter=useCayman?Math.max(0,cash):0; steps.push(s) };
   const useCityBank=cityBankEnabled();
   const bankCap=isNewbie?2e9:bankDepositCap();   // no Fat Cat perk for a newbie
   // A term already running: the money is untouchable until it matures, and no
@@ -806,7 +809,7 @@ function simulatePlan(){
     const p=pendingBank; pendingBank=null;
     cash+=p.payout;
     potCredit("bank",p.payout);
-    steps.push({row:{kind:"bank",ticker:"BANK",name:"City Bank – term matures",bank:true,
+    addStep({row:{kind:"bank",ticker:"BANK",name:"City Bank – term matures",bank:true,
                      days:0,cost:p.payout,roi:null,annual:null},
                 day,sold:[],unreachable:false,parking:false,depth:0,parentOcc:null,
                 occId:`mature${steps.length}`,cityBank:true,
@@ -891,7 +894,7 @@ function simulatePlan(){
       owned.delete(rowKey(r));
       const i=held.findIndex(h=>rowKey(h.row)===rowKey(r));
       if(i>=0) held.splice(i,1);
-      steps.push({row:r,day:0,sold:[],unreachable:false,parking:false,depth:0,
+      addStep({row:r,day:0,sold:[],unreachable:false,parking:false,depth:0,
                   parentOcc:null,occId:`sell${steps.length}`,sellHolding:true,sellFirst:true,
                   bankNote:`Sell · frees ${moneyShort(proceeds)} toward better investments`});
     });
@@ -921,7 +924,7 @@ function simulatePlan(){
       // Anything bought to fund this one is kept rather than left promised to
       // a purchase that will never happen.
       heldFor(occ).forEach(h=>{h.forOcc=null});
-      steps.push({row:target,day:null,unreachable:true,sold:[],parking:depth>0,parentOcc,depth});
+      addStep({row:target,day:null,unreachable:true,sold:[],parking:depth>0,parentOcc,depth});
       return false;
     }
     const advance=span=>{ day+=span; accrue(span,true); creditMaturedBank() };
@@ -936,7 +939,7 @@ function simulatePlan(){
       if(!isFinite(extra)||extra<=0) break;
       if(day+extra>PLAN_MAX_DAYS){
         heldFor(occ).forEach(h=>{h.forOcc=null});
-        steps.push({row:target,day:null,unreachable:true,sold:[],parking:depth>0,parentOcc,depth});
+        addStep({row:target,day:null,unreachable:true,sold:[],parking:depth>0,parentOcc,depth});
         return false;
       }
       advance(extra);
@@ -956,7 +959,7 @@ function simulatePlan(){
     owned.add(rowKey(target));
     if(target.ticker==="TCI"&&/ - Passive$/.test(target.name||"")) tciPassiveHeld=true;
     held.push({row:target,forOcc:null,net:0});
-    steps.push({row:target,day,sold:sold.map(h=>h.row),unreachable:false,
+    addStep({row:target,day,sold:sold.map(h=>h.row),unreachable:false,
                 parking:depth>0,occId:occ,parentOcc,depth,paidWith});
     return true;
   }
@@ -1012,7 +1015,7 @@ function simulatePlan(){
       const step={row:r,day,sold:[],unreachable:false,parking:true,depth:1,parentOcc:fund,
                   occId:`bankpark${parkSeq++}`,paidWith,parkForBank:true};
       held.push({row:r,forOcc:fund,net:c.net,step});
-      steps.push(step);
+      addStep(step);
     }
     return true;
   };
@@ -1092,7 +1095,7 @@ function simulatePlan(){
           const paidWith=potSpend(tciRow.cost);
           cash-=tciRow.cost;
           tciHeld=true;
-          steps.push({row:tciRow,day,sold:[],unreachable:false,parking:false,depth:0,
+          addStep({row:tciRow,day,sold:[],unreachable:false,parking:false,depth:0,
                       parentOcc:null,occId:`tci${steps.length}`,tciWindow:true,paidWith,
                       bankNote:`Held ${TCI_ACTIVATION_DAYS} days to lock in the bonus rate`});
           day+=TCI_ACTIVATION_DAYS;
@@ -1120,7 +1123,7 @@ function simulatePlan(){
         days:usingRow.days,roi:usingRoi,annual:bankDepositValue()*usingRoi};
       // Return on everything the deposit now holds, not just this top-up:
       // the whole balance earns the rate from here on.
-      steps.push({row:{...usingRowFull,cost:added,roi:usingRoi,annual:deposit*usingRoi},day,
+      addStep({row:{...usingRowFull,cost:added,roi:usingRoi,annual:deposit*usingRoi},day,
                   sold:soldForDeposit,unreachable:false,
                   parking:false,depth:0,parentOcc:null,paidWith,bankBalance:deposit,
                   occId:fundOcc||`bank${steps.length}`,cityBank:true,
@@ -1135,7 +1138,7 @@ function simulatePlan(){
         cash+=proceeds;
         potCredit("sale",proceeds);
         tciHeld=false;
-        steps.push({row:tciRow,day,sold:[],unreachable:false,parking:false,depth:0,
+        addStep({row:tciRow,day,sold:[],unreachable:false,parking:false,depth:0,
                     parentOcc:null,occId:`tcisell${steps.length}`,sellHolding:true,
                     bankNote:`Sold · rate locked, ${moneyShort(proceeds)} freed up`});
       }
@@ -1206,11 +1209,96 @@ function simulatePlan(){
   });
   // With everything bought, spare capital has nowhere better to go.
   if(useCayman&&caymanRow&&!outOfRoom){
-    steps.push({row:{...caymanRow,cost:Math.max(0,cash),annual:Math.max(0,cash)*(caymanRow.roi||0)},day,sold:[],
+    addStep({row:{...caymanRow,cost:Math.max(0,cash),annual:Math.max(0,cash)*(caymanRow.roi||0)},day,sold:[],
                 unreachable:false,parking:false,depth:0,parentOcc:null,
                 occId:"cayman-final",finalCayman:true});
   }
   return {steps,truncated:outOfRoom};
+}
+
+// ---- portfolio panel ------------------------------------------------
+
+// What the plan says you are holding right now: what you started with, plus
+// everything a ticked step bought, minus everything a ticked step sold. A
+// step that sells to fund a purchase takes those holdings back off the tally.
+function planHeldKeys(){
+  const keys=new Set(window.ownedRows);
+  (window.planStepOrder||[]).forEach(occ=>{
+    const s=(window.planStepIndex||{})[occ];
+    if(!s||!s.done) return;
+    if(s.sellHolding){ keys.delete(rowKey(s.row)); return }
+    (s.sold||[]).forEach(r=>keys.delete(rowKey(r)));
+    if(s.row.kind==="stock"||s.row.kind==="island") keys.add(rowKey(s.row));
+  });
+  return keys;
+}
+/** Returns the annual rate the plan earns on money left in Cayman. */
+function planCaymanRoi(){
+  if(newbieActive()) return newbieCaymanAnnualRoi();
+  const c=rows.find(r=>r.kind==="cayman");
+  return c&&c.roi!=null&&isFinite(c.roi)?c.roi:0;
+}
+/** Returns the City Bank deposit ({amount,days,roi} or null) and Cayman balance as of the ticked steps. */
+function planBalances(){
+  // A term already running when the plan starts is held until its maturity
+  // step is ticked. Its amount is what went in, not the payout.
+  const payout=numVal("planBankAmount");
+  let bank=payout>0
+    ? {amount:numVal("planBankInvested")||payout,days:planBankTerm(),roi:planBankApr()}
+    : null;
+  // Before anything is ticked the plan is saving from the starting capital.
+  let cayman=numVal("capital");
+  (window.planStepOrder||[]).forEach(occ=>{
+    const s=(window.planStepIndex||{})[occ];
+    if(!s||!s.done) return;
+    // Deposits only ever add to the balance, and a maturity step empties it.
+    if(s.cityBank) bank=s.bankBalance?{amount:s.bankBalance,days:s.row.days,roi:s.row.roi}:null;
+    if(s.caymanAfter!=null) cayman=s.caymanAfter;
+  });
+  return {bank,cayman:caymanEnabled()?Math.max(0,cayman):0};
+}
+// The planner's Portfolio panel: one line per kind of holding that has
+// anything in it, then a total across them all.
+function paintPlanPortfolio(){
+  const body=$("tbodyTotalsPlan");
+  if(!body) return;
+  const period=planPeriod();
+  const rh=$("totalReturnHeaderPlan");
+  if(rh) rh.textContent=`Return – ${periodLabel(period)}`;
+  const keys=planHeldKeys();
+  const held=rows.filter(r=>keys.has(rowKey(r)));
+  const sum=(list,f)=>list.reduce((a,r)=>a+(f(r)||0),0);
+  const lines=[];
+  const add=(label,what,cost,annual)=>lines.push({label,what,cost,annual});
+  // Owned bank rows on the Investments page are ignored: the plan takes its
+  // City Bank position from the Planner's own bank settings.
+  const stocks=held.filter(r=>r.kind==="stock");
+  if(stocks.length) add("Investments",stocks.length,sum(stocks,r=>r.cost),sum(stocks,r=>r.annual));
+  const {bank,cayman}=planBalances();
+  if(bank&&bank.amount>0){
+    add("City Bank",`${bankTermLabel(bank.days)} at ${(bank.roi*100).toFixed(2)}% APR`,
+        bank.amount,bank.amount*bank.roi);
+  }
+  const islands=held.filter(r=>r.kind==="island");
+  if(islands.length) add("Private Islands",islands.length,sum(islands,r=>r.cost),sum(islands,r=>r.annual));
+  // Under a dollar is rounding left over from a purchase, not a holding.
+  if(cayman>=1){
+    const roi=planCaymanRoi();
+    add("Cayman Bank",`${(roi*100).toFixed(2)}% APY`,cayman,cayman*roi);
+  }
+  const cost=sum(lines,l=>l.cost), annual=sum(lines,l=>l.annual);
+  const line=(l,cls="")=>{
+    const roi=l.cost>0?l.annual/l.cost:null;
+    return `<tr class="totals-row${cls?" "+cls:""}">
+<td>${l.label}</td>
+<td>${l.what}</td>
+<td>${money(l.cost)}</td>
+<td>${money(periodValue(l.annual,period))}</td>
+<td class="${roi!=null?(roi>=0?'good':'bad'):''}">${pct(roi)}</td>
+</tr>`;
+  };
+  body.innerHTML=lines.map(l=>line(l)).join("")
+    +line({label:"Total",what:"",cost,annual},"portfolio-total");
 }
 
 // ---- rendering ------------------------------------------------------
@@ -1317,7 +1405,7 @@ function renderPlan(){
   // point of the change: nothing here re-runs the simulation on its own.
   if(!rows.length||!window.planResult){
     window.planStepOrder=[]; window.planStepIndex={};
-    paintTotals("tbodyTotalsPlan","totalReturnHeaderPlan",planPeriod(),true);
+    paintPlanPortfolio();
     body.innerHTML=""; sum.innerHTML="";
     ["planNavTop","planNavBottom"].forEach(id=>{ const el=$(id); if(el) el.innerHTML="" });
     const fb=$("planFoldAll");
@@ -1485,5 +1573,5 @@ function renderPlan(){
   const missed=steps.filter(s=>s.unreachable).length;
   const skipped=missed?`${missed} investment${missed===1?" is":"s are"} further off than the 100 years the planner models, and ${missed===1?"was":"were"} stepped over. `:"";
   note.textContent=(truncated?`Plan stopped at ${steps.length} steps. It needs more than the planner will model. `:range)+skipped+basis;
-  paintTotals("tbodyTotalsPlan","totalReturnHeaderPlan",planPeriod(),true);
+  paintPlanPortfolio();
 }

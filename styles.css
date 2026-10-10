@@ -738,6 +738,8 @@ body.basic #pageInvestments .table-main thead th:nth-child(7),body.basic #pageIn
 .basic-col{display:none}
 body.basic #pageInvestments #tbodyTotals tr.plan-total,
 body.basic #pageInvestments #totalsPanel .buttons{display:none}
+/* The planner Portfolio total sums the lines above it, so it is ruled off from them. */
+#tbodyTotalsPlan tr.portfolio-total td{border-top:1px solid #3a4049}
 body.basic #pageInvestments .table th.pick,body.basic #pageInvestments .table td.pick{display:none}
 #tbody tr,#tbodyUndefined tr{cursor:pointer}
 #tbody tr:hover{background:#1a1f25}

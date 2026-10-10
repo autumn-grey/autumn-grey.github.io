@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.1 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.2 · Updated: 2026-10-10_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,22 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.19.2 — 2026-10-10
+
+- The Planner's Portfolio panel now counts everything the plan has you
+  holding, not just stocks. It has a line each for Investments, City Bank
+  (with the term and rate, such as "2 months at 72.58% APR"), Private
+  Islands and Cayman Bank, then a Total line with the combined cost, return
+  and ROI. A line only shows when something is in it.
+- The City Bank line counts the amount deposited, and its return now goes
+  into the total, so the overall ROI reflects money sitting in the bank.
+- Basic Banking now banks your daily budget once you have saved it. Each
+  term's savings go in with the next deposit, where before they were counted
+  from the start of the term they were saved in. That gave longer terms a
+  head start they don't have in the game, enough to rank 3 months above a
+  2-month term paying a higher rate. The One Year of Banking table should
+  now pick the term that pays the most for how you bank.
 
 ### v0.19.1 — 2026-10-06
 

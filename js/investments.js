@@ -617,22 +617,9 @@ function totalsFor(keys,period){
   const roi=cost>0?annual/cost:null;
   return {n:sel.length,cost,ret,roi};
 }
-// What the plan says you are holding right now: what you started with, plus
-// everything a ticked step bought, minus everything a ticked step sold. A
-// step that sells to fund a purchase takes those holdings back off the tally.
-function planHeldKeys(){
-  const keys=new Set(window.ownedRows);
-  (window.planStepOrder||[]).forEach(occ=>{
-    const s=(window.planStepIndex||{})[occ];
-    if(!s||!s.done) return;
-    if(s.sellHolding){ keys.delete(rowKey(s.row)); return }
-    (s.sold||[]).forEach(r=>keys.delete(rowKey(r)));
-    if(s.row.kind==="stock"||s.row.kind==="island") keys.add(rowKey(s.row));
-  });
-  return keys;
-}
-// Both Portfolio panels are the same two lines; only the period differs.
-function paintTotals(bodyId,headerId,period,ownedOnly){
+// The Investments page's Portfolio panel: what you own and what you have
+// ticked to plan. The planner has its own, paintPlanPortfolio().
+function paintTotals(bodyId,headerId,period){
   const body=$(bodyId);
   if(!body) return;
   const rh=$(headerId);
@@ -644,7 +631,6 @@ function paintTotals(bodyId,headerId,period,ownedOnly){
 <td>${money(t.ret)}</td>
 <td class="${t.roi!=null?(t.roi>=0?'good':'bad'):''}">${pct(t.roi)}</td>
 </tr>`;
-  if(ownedOnly){ body.innerHTML=line("Owned",totalsFor(planHeldKeys(),period)); return }
   body.innerHTML=line("Owned",totalsFor(window.ownedRows,period))
                 +line("Planned",totalsFor(window.selectedRows,period),"plan-total");
 }

@@ -86,7 +86,10 @@ function bkTermApr(days){
 //
 // Every term adds one term-length of the daily budget, so each row of the
 // comparison puts in about the same money across the year and the difference
-// between the rows is the banking, not the saving.
+// between the rows is the banking, not the saving. That money is saved while
+// the term runs, so it earns nothing until the next deposit. Crediting it at
+// the start of the term instead had a longer term banking savings earlier,
+// which was enough to rank 3 months over a 2-month term paying a higher APR.
 //
 // Anything over the deposit cap cannot earn, but it is still money, so it
 // stays in the amount returned and goes back round as capital next term
@@ -99,14 +102,12 @@ function bankingPlan(days){
   const deposits=span>0?Math.floor(BANKING_YEAR/span):0;
   const cap=bkCap(), budget=Math.max(0,numVal("bkBudget"));
   const lines=[];
-  let initial=Math.min(Math.max(0,numVal("bkDeposit")),cap), carry=0;
+  let initial=Math.min(Math.max(0,numVal("bkDeposit")),cap);
   for(let k=0;k<deposits;k++){
     const added=budget*span;
-    const pool=initial+added;
-    const principal=Math.min(cap,pool);
-    carry=pool-principal;
+    const principal=Math.min(cap,initial);
     const profit=principal*rate;
-    const total=principal+profit+carry;   // everything held once the term ends
+    const total=initial+profit+added;     // everything held once the term ends
     lines.push({initial,added,rate,profit,total,daily:span>0?profit/span:0});
     initial=total;
   }

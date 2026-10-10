@@ -1,6 +1,6 @@
 # Autumn's Stonking Awesome Torn App
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.1 · Updated: 2026-10-06_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.2 · Updated: 2026-10-10_
 
 A passive-investment planner for [Torn](https://www.torn.com). The app itself is a single self-contained HTML file, hosted on GitHub Pages, with no backend and nothing to install.
 
@@ -100,7 +100,7 @@ Works out the order to buy things in, and how long each step will take. Nothing 
 - A City Bank step's return is measured on everything the deposit holds after it, not on that step's top-up alone.
 - Indented steps with amber lines are bought to earn money while you save for something bigger, one line per level of nesting.
 - Red steps want selling: either a holding that's worth less than what the money could be doing, or something you ticked out of order.
-- The **Portfolio** panel underneath tracks what you own as the plan progresses.
+- The **Portfolio** panel underneath tracks what you hold as the plan progresses: stocks, City Bank, Private Islands and Cayman, each on its own line, with a total.
 - An amber note appears under the button when a setting has changed since the plan was built. Dismiss it with the × and it stays gone.
 
 The simulation has two hard ceilings: 2,000 steps and 100 simulated years. A target it can't reach inside a century is marked unreachable and stepped over, and the plan carries on. Only running out of steps truncates a plan, and it says so when it does.
