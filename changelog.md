@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.2 · Updated: 2026-10-10_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.3 · Updated: 2026-10-19_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,16 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.19.3 — 2026-10-19
+
+- Share prices now come straight from Torn's API instead of tornsy.com, which
+  had gone down and left the Investments table without prices. The app now
+  depends on nothing but Torn for market data.
+- This costs no extra API calls: the app already asked Torn for the stock list
+  to read benefit requirements, and the prices come in that same response.
+- The "stocks ... ago" age is now the time of your refresh, since Torn doesn't
+  stamp its stock prices.
 
 ### v0.19.2 — 2026-10-10
 

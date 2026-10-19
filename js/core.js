@@ -380,7 +380,7 @@ function clearLocal(){
 }
 
 // ======================================================================
-// DATA FETCHING  ·  Torn API and tornsy.com, with error reporting
+// DATA FETCHING  ·  Torn API, with error reporting
 // ======================================================================
 async function torn(url){
   const key=$("apiKey").value.trim(); if(!key) throw new Error("Enter a Torn API key.");
@@ -445,13 +445,9 @@ async function fetchItems(){
   const raw=j.items||j.data?.items||{}; items=Object.entries(raw).map(([id,x])=>({id:+id,name:x.name,market:+x.market_value||0,buy:+x.buy_price||0,sell:+x.sell_price||0,description:x.description||""}));
   lastUpdated.items=Date.now(); populateStatItems();
 }
-// Public reference lists: stock ids to tickers, and course ids to names.
-// Both are only needed to translate a user's own data, so a failure here is
-// reported rather than fatal.
-async function fetchStockMeta(){
-  const j=await tornTry("https://api.torn.com/torn/?selections=stocks");
-  if(j.__error){ window.stockMetaError=j.__error; return }
-  const raw=j.stocks||j.data?.stocks||{};
+// Stock ids to tickers, taken from the same response as the share prices.
+// Only needed to translate a user's own holdings.
+function applyStockMeta(raw){
   window.stockMeta=Object.fromEntries(Object.entries(raw)
     .map(([id,x])=>[String(id),{acronym:x.acronym||x.name,name:x.name}]));
   // Shares per benefit block, straight from the game rather than the table
@@ -572,20 +568,21 @@ async function fetchPoints(){
     logProblem("Points market price unavailable. Point-valued benefits can't be priced",e);
   }
 }
+/** Fetches share prices, stock names and benefit requirements in one Torn call. */
 async function fetchStocks(){
-  // Share prices come from tornsy.com, a third-party mirror, so failures here
-  // are separate from the Torn API being unavailable.
-  let r;
-  try{ r=await fetch("https://tornsy.com/api/stocks"); }
-  catch{ throw new Error("Can't reach tornsy.com for share prices · the service may be down."); }
-  if(!r.ok) throw new Error(`tornsy.com returned an error (HTTP ${r.status}) · share prices unavailable.`);
   let j;
-  try{ j=await r.json(); }
-  catch{ throw new Error("tornsy.com sent an unreadable response · share prices unavailable."); }
-  const data=j.data||[];
-  if(!data.length) throw new Error("tornsy.com returned no share prices.");
-  prices={};data.forEach(x=>prices[x.stock]=+x.price);
-  lastUpdated.stocks=(j.timestamp?j.timestamp*1000:Date.now());
+  try{ j=await torn("https://api.torn.com/torn/?selections=stocks"); }
+  catch(e){ window.stockMetaError=e.message||"Stock list unavailable"; throw e }
+  const raw=j.stocks||j.data?.stocks||{};
+  const next={};
+  Object.values(raw).forEach(x=>{
+    const p=+x.current_price;
+    if(x.acronym&&p>0) next[x.acronym]=p;
+  });
+  if(!Object.keys(next).length) throw new Error("The Torn API returned no share prices.");
+  prices=next;
+  lastUpdated.stocks=Date.now();
+  applyStockMeta(raw);
 }
 
 // ======================================================================

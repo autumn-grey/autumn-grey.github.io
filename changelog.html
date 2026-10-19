@@ -65,12 +65,22 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
     <a href="licence.html">Licence</a>
   </nav>
 <h1 id="changelog">Changelog</h1>
-<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.19.2 · Updated: 2026-10-10</em></p>
+<p><em>Reference for <a href="https://autumn-grey.github.io">autumn-grey.github.io</a> · v0.19.3 · Updated: 2026-10-19</em></p>
 <p>Newest first. Version numbers follow <a href="https://semver.org">semantic versioning</a>:
 <code>MAJOR.MINOR.PATCH</code>. Still on <code>0.x</code> because the app isn't deployment-ready
 until it has a real access layer.</p>
 <hr />
 <h2 id="released">Released</h2>
+<h3 id="v0193-2026-10-19">v0.19.3 — 2026-10-19</h3>
+<ul>
+<li>Share prices now come straight from Torn's API instead of tornsy.com, which
+  had gone down and left the Investments table without prices. The app now
+  depends on nothing but Torn for market data.</li>
+<li>This costs no extra API calls: the app already asked Torn for the stock list
+  to read benefit requirements, and the prices come in that same response.</li>
+<li>The "stocks ... ago" age is now the time of your refresh, since Torn doesn't
+  stamp its stock prices.</li>
+</ul>
 <h3 id="v0192-2026-10-10">v0.19.2 — 2026-10-10</h3>
 <ul>
 <li>The Planner's Portfolio panel now counts everything the plan has you
