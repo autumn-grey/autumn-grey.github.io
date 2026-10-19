@@ -21,10 +21,12 @@ function setMoneyInput(id,n){const el=$(id);if(el)el.value="$"+Math.round(n).toL
 // City Bank deposit cap: $2B normally, $3B with the Oil Rig "Fat Cat" special.
 function bankDepositCap(){return boolVal("fatCat")?3e9:2e9}
 function bankDepositValue(){return Math.min(Math.max(0,numVal("bankDeposit")),bankDepositCap())}
+// Rewrites the box only when it is over the cap. This runs on every keystroke,
+// and reformatting from the parsed number would turn "$000,000" (the first
+// digit just deleted) into "$0" mid-edit.
 function clampBankDeposit(){
   const cap=bankDepositCap();
-  const raw=Math.min(Math.max(0,numVal("bankDeposit")),cap);
-  setMoneyInput("bankDeposit",raw);
+  if(numVal("bankDeposit")>cap) setMoneyInput("bankDeposit",cap);
   const help=$("bankDepositHelp");
   if(help) help.textContent="Max $"+cap.toLocaleString("en-US");
 }

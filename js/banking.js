@@ -61,9 +61,10 @@ function applyBankingToAdvanced(){
 }
 // ---- Rates, read off this page's own settings -------------------------
 function bkCap(){ return boolVal("bkFatCat")?3e9:2e9 }
+// Over the cap only, for the same reason as clampBankDeposit: it runs on every
+// keystroke, and reformatting would strip the zeros left after a deleted digit.
 function clampBkDeposit(){
-  if(!$("bkDeposit")) return;
-  setMoneyInput("bkDeposit",Math.min(Math.max(0,numVal("bkDeposit")),bkCap()));
+  if(numVal("bkDeposit")>bkCap()) setMoneyInput("bkDeposit",bkCap());
 }
 function bkOilJp(){ return Math.max(0,Math.min(10,+($("bkOilJp")?.value||0))) }
 // Oil Mogul shortens the wait rather than raising the rate, so here it shows
@@ -80,16 +81,18 @@ function bkTermApr(days){
 }
 // ---- The year ---------------------------------------------------------
 // One term at a time, for as many whole terms as fit in a year. Each term
-// pays its interest at the end, and that payout plus everything put aside
-// while it was locked away goes straight back in, which is where the
+// pays its interest at the end, and that payout goes straight back in with
+// everything saved while the term was locked away, which is where the
 // compounding comes from.
 //
-// Every term adds one term-length of the daily budget, so each row of the
-// comparison puts in about the same money across the year and the difference
-// between the rows is the banking, not the saving. That money is saved while
-// the term runs, so it earns nothing until the next deposit. Crediting it at
-// the start of the term instead had a longer term banking savings earlier,
-// which was enough to rank 3 months over a 2-month term paying a higher APR.
+// The daily budget is saved while a term runs, so it can only go in at the
+// next deposit: the first deposit is the initial capital alone, and what is
+// saved during the last term is still waiting when the year ends. Crediting
+// savings at the start of a term instead had a longer term banking money not
+// yet earned, which was enough to rank 3 months over a 2-month term paying a
+// higher APR. Every row still saves the same per term, so the year-end total
+// counts that last term's savings and the difference between the rows is the
+// banking, not the saving.
 //
 // Anything over the deposit cap cannot earn, but it is still money, so it
 // stays in the amount returned and goes back round as capital next term
@@ -100,23 +103,22 @@ function bankingPlan(days){
   const span=bkTermRealDays(days);          // real days one term takes
   const rate=apr*days/BANKING_YEAR;         // interest paid at the end of one
   const deposits=span>0?Math.floor(BANKING_YEAR/span):0;
-  const cap=bkCap(), budget=Math.max(0,numVal("bkBudget"));
+  const cap=bkCap(), saved=Math.max(0,numVal("bkBudget"))*span;
   const lines=[];
-  let initial=Math.min(Math.max(0,numVal("bkDeposit")),cap);
+  let initial=Math.min(Math.max(0,numVal("bkDeposit")),cap), added=0;
   for(let k=0;k<deposits;k++){
-    const added=budget*span;
-    const principal=Math.min(cap,initial);
-    const profit=principal*rate;
-    const total=initial+profit+added;     // everything held once the term ends
+    const profit=Math.min(cap,initial+added)*rate;
+    const total=initial+added+profit;
     lines.push({initial,added,rate,profit,total,daily:span>0?profit/span:0});
-    initial=total;
+    initial=total; added=saved;
   }
   const firstInitial=lines.length?lines[0].initial:0;
-  const added=lines.reduce((a,l)=>a+l.added,0);
+  const unbanked=lines.length?saved:0;
+  const banked=lines.reduce((a,l)=>a+l.added,0);
   const profit=lines.reduce((a,l)=>a+l.profit,0);
-  const capitalIn=firstInitial+added;
+  const capitalIn=firstInitial+banked+unbanked;
   return {days,apr,span,rate,lines,
-          totals:{deposits,firstInitial,added,profit,
+          totals:{deposits,firstInitial,added:banked,unbanked,profit,
                   absolute:capitalIn+profit,
                   roi:capitalIn>0?profit/capitalIn:null}};
 }
@@ -170,11 +172,12 @@ function renderBankingDetail(){
 <td>${money(l.total)}</td>
 <td>${money(l.daily)}</td>
 </tr>`).join("");
-  // Its own table rather than a footer row, so the four figures get real
+  // Its own table rather than a footer row, so the figures get real
   // headings instead of borrowing the breakdown's columns.
   totals.innerHTML=`<tr>
 <td>${money(p.totals.firstInitial)}</td>
 <td>${money(p.totals.added)}</td>
+<td>${money(p.totals.unbanked)}</td>
 <td>${money(p.totals.profit)}</td>
 <td>${money(p.totals.absolute)}</td>
 </tr>`;

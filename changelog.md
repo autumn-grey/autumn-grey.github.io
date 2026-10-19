@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.3 · Updated: 2026-10-19_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.4 · Updated: 2026-10-19_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,21 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.19.4 — 2026-10-19
+
+- Basic Banking's breakdown now shows your savings going in after you have
+  earned them. The first deposit is your starting money alone, and what you
+  save during each term goes in at the next deposit. Before, each row showed
+  that term's savings as if they were deposited on day one. The profit
+  figures were already worked out this way, so they have not changed.
+- What you save during the last term of the year is shown in its own
+  "Saved During Last Term" column, since it never reaches the bank before
+  the year ends. It still counts towards the Absolute Total.
+- Basic Banking's "City Bank Deposit" box is now called "Initial Capital".
+- Deleting the first digit of the Initial Capital or City Bank Deposit box no
+  longer wipes the zeros after it, so $2,000,000,000 becomes $000,000,000
+  ready for a new first digit instead of $0.
 
 ### v0.19.3 — 2026-10-19
 
