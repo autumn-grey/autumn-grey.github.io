@@ -1,6 +1,6 @@
 # Changelog
 
-_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.4 · Updated: 2026-10-19_
+_Reference for [autumn-grey.github.io](https://autumn-grey.github.io) · v0.19.5 · Updated: 2026-10-19_
 
 Newest first. Version numbers follow [semantic versioning](https://semver.org):
 `MAJOR.MINOR.PATCH`. Still on `0.x` because the app isn't deployment-ready
@@ -9,6 +9,19 @@ until it has a real access layer.
 ---
 
 ## Released
+
+### v0.19.5 — 2026-10-19
+
+- Basic Banking's breakdown now keeps the bank at the deposit cap. Initial
+  Capital is what is in the bank when a term starts, so once the bank is full
+  it stays at $2,000,000,000 ($3,000,000,000 with Fat Cat) and the profit
+  comes out each term instead of piling up in that column.
+- Savings only top the bank up as far as the cap, so Amount Added drops to
+  $0 once it is full, whatever your daily budget.
+- The totals table's "Saved During Last Term" is now "Savings Not Banked". It
+  counts the savings that didn't fit under the cap as well as the last
+  term's, and the totals now add up to the Absolute Total. Profit and the
+  One Year of Banking table are unchanged.
 
 ### v0.19.4 — 2026-10-19
 

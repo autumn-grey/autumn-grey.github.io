@@ -90,14 +90,15 @@ function bkTermApr(days){
 // saved during the last term is still waiting when the year ends. Crediting
 // savings at the start of a term instead had a longer term banking money not
 // yet earned, which was enough to rank 3 months over a 2-month term paying a
-// higher APR. Every row still saves the same per term, so the year-end total
-// counts that last term's savings and the difference between the rows is the
-// banking, not the saving.
+// higher APR.
 //
-// Anything over the deposit cap cannot earn, but it is still money, so it
-// stays in the amount returned and goes back round as capital next term
-// rather than being added again. Interest is paid on the capped part only,
-// which is why the profit flattens out once the cap is reached.
+// The bank never holds more than the deposit cap. Initial Capital is what is
+// still in the bank when a term starts, and savings top it up only as far as
+// the cap, so once it is full nothing more is added. Anything a term returns
+// over the cap (its profit, once full) comes out as cash. That cash and any
+// savings that did not fit are still money, so they count in the year-end
+// total, but they earn nothing, which is why the profit flattens out once the
+// cap is reached.
 function bankingPlan(days){
   const apr=bkTermApr(days);
   const span=bkTermRealDays(days);          // real days one term takes
@@ -105,16 +106,19 @@ function bankingPlan(days){
   const deposits=span>0?Math.floor(BANKING_YEAR/span):0;
   const cap=bkCap(), saved=Math.max(0,numVal("bkBudget"))*span;
   const lines=[];
-  let initial=Math.min(Math.max(0,numVal("bkDeposit")),cap), added=0;
+  let initial=Math.min(Math.max(0,numVal("bkDeposit")),cap), waiting=0;
   for(let k=0;k<deposits;k++){
-    const profit=Math.min(cap,initial+added)*rate;
+    const added=Math.min(waiting,Math.max(0,cap-initial));
+    const profit=(initial+added)*rate;
     const total=initial+added+profit;
     lines.push({initial,added,rate,profit,total,daily:span>0?profit/span:0});
-    initial=total; added=saved;
+    initial=Math.min(cap,total); waiting=saved;
   }
   const firstInitial=lines.length?lines[0].initial:0;
-  const unbanked=lines.length?saved:0;
   const banked=lines.reduce((a,l)=>a+l.added,0);
+  // Every term saves the same, the last one included, so each row of the
+  // comparison puts in the same money and the difference is the banking.
+  const unbanked=saved*lines.length-banked;
   const profit=lines.reduce((a,l)=>a+l.profit,0);
   const capitalIn=firstInitial+banked+unbanked;
   return {days,apr,span,rate,lines,
